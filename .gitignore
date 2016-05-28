@@ -1,6 +1,10 @@
 
-target/maven-archiver/pom.properties
+target/
 
-target/tahmin-1.0-SNAPSHOT.jar
+.idea/
 
-*.class
+
+
+.idea/workspace.xml
+
+.idea/workspace.xml

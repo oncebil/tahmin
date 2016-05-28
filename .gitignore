@@ -2,3 +2,5 @@
 target/maven-archiver/pom.properties
 
 target/tahmin-1.0-SNAPSHOT.jar
+
+*.class

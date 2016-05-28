@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package com.oncebil.tahmin.otamasyon;
+package com.oncebil.tahmin.otamasyon.task;
 
 
 /**

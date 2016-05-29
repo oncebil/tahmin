@@ -110,9 +110,9 @@ public class WekaEvaluation extends AbstractTask {
                 logger.log(Level.INFO, "Iteration=" + i +" instance count=" + instances.numInstances());
 
                 // minumum 10 fold * 10 instances requires
-                if (instances.numInstances() < 10 * 10) {
-                    continue;
-                }
+//                if (instances.numInstances() < 10 * 10) {
+//                    continue;
+//                }
                 CostMatrix costMatrix = null;
                 Evaluation evaluation = null;
                 //EvaluationEx2 evaluation = null;
@@ -173,10 +173,30 @@ public class WekaEvaluation extends AbstractTask {
                 optionsArray = weka.core.Utils.splitOptions(options);
                 Classifier classifierObj2 = Classifier.forName(classifier, optionsArray);
                 classifierObj2.buildClassifier(instances);
-                if (inputInstancesList == null)
-                    weka.core.SerializationHelper.write(folderName + getName() + MODEL_FILE_NAME, classifierObj2);
-                else
-                    weka.core.SerializationHelper.write(folderName + getName() + "-" + i+ MODEL_FILE_NAME, classifierObj2);
+
+                String modelfile;
+                if (inputInstancesList == null) {
+                    modelfile = folderName + getName() + MODEL_FILE_NAME;
+                    File file = new File(modelfile);
+                    if ( ! file.getParentFile().exists() ) {
+                        file.getParentFile().mkdirs();
+                    }
+
+                    logger.log(Level.INFO, "WekaEvaluation modelfile={0} ", new Object[]{ modelfile });
+                    weka.core.SerializationHelper.write(modelfile, classifierObj2);
+                }
+                else {
+                    modelfile = folderName + getName() + "-" + i + MODEL_FILE_NAME;
+                    File file = new File(modelfile);
+                    if ( ! file.getParentFile().exists() ) {
+                        file.getParentFile().mkdirs();
+                    }
+
+                    logger.log(Level.INFO, "WekaEvaluation modelfile={0} ", new Object[]{ modelfile });
+                    weka.core.SerializationHelper.write(folderName + getName() + "-" + i + MODEL_FILE_NAME, classifierObj2);
+                }
+
+
 
                 
             }

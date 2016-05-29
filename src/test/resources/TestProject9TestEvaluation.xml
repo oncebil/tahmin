@@ -1,0 +1,19 @@
+<project>
+    <task name="LoadArffFromRepository" className="LoadArffFromRepository">
+        <property key="dataName">testdataname</property>
+        <property key="arffFilename">weather.nominal.arff</property>
+    </task>
+
+
+    <task name="SimpleNaiveBayesClassifier" className="WekaEvaluation">
+
+        <property key="classifier">weka.classifiers.meta.FilteredClassifier</property>
+        <property key="options">
+            -F "weka.filters.unsupervised.attribute.RemoveType -T string" -W weka.classifiers.bayes.NaiveBayes --
+
+        </property>
+        <property key="overrideResults">true</property>
+    </task>
+
+
+</project>

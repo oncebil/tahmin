@@ -29,6 +29,6 @@ public class LoadArffFromRepositoryTaskTest extends Base {
         Assert.assertNotNull(project.getLastOutput());
         Assert.assertTrue(project.getLastOutput() instanceof Instances);
         Instances instances = (Instances) project.getLastOutput();
-        Assert.assertTrue(instances.attribute(0).name().equals("MYCT"));
+        Assert.assertTrue(instances.attribute(0).name().equals("outlook"));
     }
 }

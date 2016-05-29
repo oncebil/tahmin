@@ -64,73 +64,45 @@ public class WekaEvaluation extends AbstractTask {
         if (inputInstances == null && inputInstancesList == null) {
             throw new IllegalArgumentException("instances can't be null. task does not have an input ? taskname=" + getName() + " projectName=" + getProjectName());
         }
-        
+        int iterationCount =1;
         if (inputInstances != null ) {
             output = new Instances(inputInstances);
         }
         else if(inputInstancesList!=null) {
-            List<Instances> outputInstancesList = new ArrayList<Instances>(inputInstancesList.size());
+            List<Instances> outputInstancesList = new ArrayList<>(inputInstancesList.size());
             for (Instances in:inputInstancesList) {
                 outputInstancesList.add(  new Instances(in));
             }
             output = outputInstancesList;
-        }
-
-        int iterationCount =1;
-        if (inputInstancesList != null) {
             iterationCount = inputInstancesList.size();
         }
         
-        String[] optionsArray = null;
+
         try {
 
             for (int i=0;i<iterationCount;i++) {
                 String folderName = ApplicationConstants.repositoryOut + getProjectName()+ File.separatorChar ;
-                String filename;
-                if (inputInstancesList == null)
-                    filename = folderName + getName() + RESULTS_XML_NAME;
-                else
-                    filename = folderName + getName() + "-" + i+ RESULTS_XML_NAME;
-
-               
+                String filename = (inputInstancesList == null) ? folderName + getName() + RESULTS_XML_NAME :
+                        folderName + getName() + "-" + i+ RESULTS_XML_NAME;
                 if (!overrideResults && new File(filename).exists()) {
-                    
                     continue;
                 }
-                
                 long start = System.nanoTime();
-                Instances instances= null;
-                if (inputInstancesList==null) {
-                    instances = inputInstances;
-                }else {
-                    instances = inputInstancesList.get(i);
-                }
-
-                
+                Instances instances= (inputInstancesList == null) ?inputInstances:inputInstancesList.get(i);
                 logger.log(Level.INFO, "Iteration=" + i +" instance count=" + instances.numInstances());
-
                 // minumum 10 fold * 10 instances requires
 //                if (instances.numInstances() < 10 * 10) {
 //                    continue;
 //                }
                 CostMatrix costMatrix = null;
-                Evaluation evaluation = null;
-                //EvaluationEx2 evaluation = null;
                 if (evaluationCostMatrix != null) {
                     StringReader stringReader = new StringReader(evaluationCostMatrix);
                     costMatrix = new CostMatrix(stringReader);
                 }
-                optionsArray = weka.core.Utils.splitOptions(options);
-                Classifier classifierObj = Classifier.forName(classifier, optionsArray);
+
+                Classifier classifierObj = Classifier.forName(classifier, weka.core.Utils.splitOptions(options));
                 StringBuffer predsBuff = new StringBuffer();
-
-                if (costMatrix == null) {
-                    evaluation = new Evaluation(instances);
-                } else {
-                    evaluation = new Evaluation(instances, costMatrix);
-                }
-
-
+                Evaluation evaluation = (costMatrix == null)  ? new Evaluation(instances): new Evaluation(instances, costMatrix);
                 boolean classification = (instances.classAttribute().isNominal()) ? true : false;
                 evaluation.crossValidateModel(classifierObj, instances, 10, new Random(1), predsBuff, new Range(attributesToOutput), true);
                 BufferedReader input = new BufferedReader(new StringReader(predsBuff.toString()));
@@ -160,49 +132,32 @@ public class WekaEvaluation extends AbstractTask {
 //                NominalEvaluationResults evaluationResults = new NominalEvaluationResults(getProjectName(),
 //                        getName() + "-" + i, instances.numInstances() , evaluation,analiz,(double)(end -start) / 1000000000.0 / 60.0,classification);
 //                // save evaluation results
-//                File f = new File(folderName);
-//                if (!f.exists()) {
-//                    f.mkdirs();
-//                }
-//
+                File f = new File(folderName);
+                if (!f.exists()) {
+                    f.mkdirs();
+                }
+
 //                Serializer serializer = new Persister();
 //                File source = new File(filename);
 //                serializer.write(evaluationResults, source);
 
                 // save model
-                optionsArray = weka.core.Utils.splitOptions(options);
-                Classifier classifierObj2 = Classifier.forName(classifier, optionsArray);
+
+                Classifier classifierObj2 = Classifier.forName(classifier, weka.core.Utils.splitOptions(options));
                 classifierObj2.buildClassifier(instances);
+                String modelfile = (inputInstancesList == null) ?folderName + getName() + MODEL_FILE_NAME:
+                        folderName + getName() + "-" + i + MODEL_FILE_NAME;
+                weka.core.SerializationHelper.write(modelfile, classifierObj2);
+                logger.log(Level.INFO, "WekaEvaluation modelfile={0} ", new Object[]{ modelfile });
 
-                String modelfile;
-                if (inputInstancesList == null) {
-                    modelfile = folderName + getName() + MODEL_FILE_NAME;
-                    File file = new File(modelfile);
-                    if ( ! file.getParentFile().exists() ) {
-                        file.getParentFile().mkdirs();
-                    }
-
-                    logger.log(Level.INFO, "WekaEvaluation modelfile={0} ", new Object[]{ modelfile });
-                    weka.core.SerializationHelper.write(modelfile, classifierObj2);
-                }
-                else {
-                    modelfile = folderName + getName() + "-" + i + MODEL_FILE_NAME;
-                    File file = new File(modelfile);
-                    if ( ! file.getParentFile().exists() ) {
-                        file.getParentFile().mkdirs();
-                    }
-
-                    logger.log(Level.INFO, "WekaEvaluation modelfile={0} ", new Object[]{ modelfile });
-                    weka.core.SerializationHelper.write(folderName + getName() + "-" + i + MODEL_FILE_NAME, classifierObj2);
-                }
-
-
-
-                
             }
         } catch (Exception ex) {
             throw new TahminException("failed to run task", ex);
         }
+
+    }
+
+    void createModelFileDir() {
 
     }
 

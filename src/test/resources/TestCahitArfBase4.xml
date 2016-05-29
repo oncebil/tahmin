@@ -1,0 +1,107 @@
+<task name="TestCahitArfBase4" className="CahitArf">
+	<property key="jdbcDriver">org.sqlite.JDBC</property>
+	<property key="jdbcUser"></property>
+	<property key="cahitarf-properties-file">cahitarf-properties-file.properties</property>
+	<property key="output-arff-file">output-arff-file.arff</property>
+    <property key="createIfExists">true</property>
+		<property key="relation">TestCahitArfBase4</property>
+		<property key="selectClause">
+<![CDATA[
+SELECT
+d.gm_KosuId KosuId,
+d.gm_AtId AtId,
+Son2BuPistMesafeTipiMax,
+Son34BuPistOrtalamasi,
+Son3BuPistMesafeTipiPistDurumuMax,
+Son5BuPistOrtalamasi,
+Son3Ortalamasi,
+Son21BuPistMesafeTipiPistDurumuMax,
+d.AtinToplam21KosusundakiKazanciOrtalamasi,
+d.AtinToplam8KosusundakiKazanciOrtalamasi,
+d.AtinToplam5KosusundakiKazanci,
+d.AtinToplam2KosusundakiKazanci,
+HipodromId,
+CASE WHEN (AtCinsi = 'Arap' ) THEN 'Arap' ELSE 'Ingiliz' END AS AtCinsi,
+BabaId,
+AnneId,
+gm_KosuCinsiId as KosuCinsiId,
+gm_AtGrubuId as AtGrubuId,
+gm_KiloGrubu as KiloGrubu,
+b.gm_Pist AS Pist,
+b.gm_CimPistDurumu AS CimPistDurumu,
+b.gm_KumPistDurumu  AS KumPistDurumu,
+gm_CikisYeri as Cikisyeri,
+gm_JokeyId as JokeyId,
+gm_AntrenorId as AntrenorId,
+gm_AtSahipId as AtSahipId,
+gm_AtKilo as AtKilo,
+b.gm_Mesafe as Mesafe,
+AtKacGundurKosmuyor,
+CASE WHEN (d.gm_Kacinci = 1 ) THEN 'Y' ELSE 'N' END AS Kacinci
+]]>
+		</property>
+		<property key="fromClause">
+<![CDATA[
+                FROM At a, gm_Kosu b ,gm_KosuyaKatilanAt  c, gm_KosuyaKatilanAtKazanclar d , gm_KosuyaKatilanAtKosuDereceleri e , KosuProgrami f,  gm_KosuRandom100 g
+]]>
+		</property>
+		<property key="whereClause">
+<![CDATA[
+WHERE
+a.AtId = c.gm_AtId
+and b.gm_KosuId = c.gm_KosuId
+and d.gm_AtId = a.AtId
+and d.gm_KosuId = b.gm_KosuId
+and e.gm_AtId = a.AtId
+and e.gm_KosuId = b.gm_KosuId
+and f.KosuProgramiId = b.gm_KosuProgramiId
+and f.KosuProgramiId = b.gm_KosuProgramiId
+and d.gm_Kacinci is not null
+and e.gm_Derece is not null
+and g.gm_KosuId = b.gm_KosuId
+and b.gm_KosuId not in (select gm_KosuSonucuId from gm_GaripKosular)
+and f.KosuProgramiId < 6563
+and f.KosuProgramiId > 1900
+]]>
+		</property>
+        <property key="otherClauses">
+
+        </property>
+		<property key="attributes">
+<![CDATA[
+attr.0=KosuId:string
+attr.1=AtId:string
+attr.2=Son2BuPistMesafeTipiMax:numeric
+attr.3=Son34BuPistOrtalamasi:numeric
+attr.4=Son3BuPistMesafeTipiPistDurumuMax:numeric
+attr.5=Son5BuPistOrtalamasi:numeric
+attr.6=Son3Ortalamasi:numeric
+attr.7=Son21BuPistMesafeTipiPistDurumuMax:numeric
+attr.8=AtinToplam21KosusundakiKazanciOrtalamasi:numeric
+attr.9=AtinToplam8KosusundakiKazanciOrtalamasi:numeric
+attr.10=AtinToplam5KosusundakiKazanci:numeric
+attr.11=AtinToplam2KosusundakiKazanci:numeric
+attr.12=HipodromId:class
+attr.13=AtCinsi:class
+attr.14=BabaId:class
+attr.15=AnneId:class
+attr.16=KosuCinsiId:class
+attr.17=AtGrubuId:class
+attr.18=KiloGrubu:class
+attr.19=Pist:class
+attr.20=CimPistDurumu:class
+attr.21=KumPistDurumu:class
+attr.22=CikisYeri:class
+attr.23=JokeyId:class
+attr.24=AntrenorId:class
+attr.25=AtSahipId:class
+attr.26=AtKilo:numeric
+attr.27=Mesafe:numeric
+attr.28=AtKacGundurKosmuyor:numeric
+attr.29=BirinciMi:class
+
+]]>
+
+	</property>
+
+</task>

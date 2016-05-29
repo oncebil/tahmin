@@ -1,0 +1,4 @@
+<task name="TestCahitArfBase" className="CahitArf" >
+	<property key="jdbcDriver">org.sqlite.JDBC</property>
+	<property key="jdbcUser"></property>
+</task>

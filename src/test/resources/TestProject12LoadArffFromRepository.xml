@@ -1,0 +1,6 @@
+<project>
+<task name="LoadArffFromRepository" className="LoadArffFromRepository">
+        <property key="dataName">testdataname</property>
+        <property key="arffFilename">cpu.arff</property>
+</task>
+</project>

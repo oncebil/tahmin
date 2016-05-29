@@ -1,0 +1,8 @@
+<project parent="TestProject5TwoParentProject">
+<task name="CahitArfExtended3" overriding="CahitArfExtended2">
+        <!-- override only this attribute otherClauses but get all the items from project-->
+		<property key="otherClauses">overridden third</property>
+        <property key="fromClause">overridden twice</property>
+        <property key="whereClause">overridden</property>
+</task>
+</project>

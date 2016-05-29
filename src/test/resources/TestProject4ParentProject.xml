@@ -1,0 +1,21 @@
+<project parent="TestProject3ParentTask">
+<!-- name is important overridding task named CahitArf-->
+    <task name="CahitArfExtended" overriding="CahitArf">
+        <!-- override only this attribute otherClauses but get all the items from project-->
+        <property key="otherClauses">overridden</property>
+        <!-- add additional whereClause property -->
+        <property key="whereClause">whereClause</property>
+    </task>
+
+    <task name="CahitArf3" parent="TestCahitArfBase">
+        <property key="jdbcDriver">overridden</property>
+        <property key="cahitarf-properties-file">cahitarf-properties-file</property>
+        <property key="output-arff-file">output-arff-file</property>
+        <property key="selectClause">select AtId from At</property>
+        <property key="fromClause">from At</property>
+        <property key="whereClause"></property>
+        <property key="otherClauses">limit 10</property>
+        <property key="attributes">attr.AtId=gm_AtId:numeric</property>
+    </task>
+
+</project>

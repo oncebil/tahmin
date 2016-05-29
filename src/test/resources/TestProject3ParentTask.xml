@@ -1,0 +1,42 @@
+
+<project>
+
+
+    <task name="CahitArf0" parent="TestCahitArfBase">
+        <property key="jdbcDriver">overridden</property>
+        <property key="cahitarf-properties-file">cahitarf-properties-file</property>
+        <property key="output-arff-file">output-arff-file</property>
+        <property key="selectClause">select AtId from At</property>
+        <property key="fromClause">from At</property>
+        <property key="whereClause"></property>
+        <property key="otherClauses">limit 10</property>
+        <property key="attributes">attr.AtId=gm_AtId:numeric</property>
+    </task>
+    
+
+    <task name="CahitArf" parent="TestCahitArfBase">
+        <property key="jdbcDriver">overridden</property>
+        <property key="cahitarf-properties-file">cahitarf-properties-file</property>
+        <property key="output-arff-file">output-arff-file</property>
+        <property key="selectClause">select AtId from At</property>
+        <property key="fromClause">from At</property>
+        <!-- where clause is added in child -->
+        <!--
+        <property key="whereClause"></property>
+        -->
+        <!-- otherClauses will be overidden in child -->
+        <property key="otherClauses">limit 10</property>
+        <property key="attributes">attr.AtId=gm_AtId:numeric</property>
+    </task>
+
+    <task name="CahitArf2" parent="TestCahitArfBase">
+        <property key="jdbcDriver">overridden2</property>
+        <property key="cahitarf-properties-file">cahitarf-properties-file</property>
+        <property key="output-arff-file">output-arff-file</property>
+        <property key="selectClause">select AtId from At</property>
+        <property key="fromClause">from At</property>
+        <property key="whereClause"></property>
+        <property key="otherClauses">limit 10</property>
+        <property key="attributes">attr.AtId=gm_AtId:numeric</property>
+    </task>
+</project>

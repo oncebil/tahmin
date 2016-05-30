@@ -15,6 +15,7 @@ import java.util.List;
  */
 public class ClassificationPredictions {
     List<ClassificationPrediction> classificationPredictions = new ArrayList<>();
+    ClassificationPredictionDAO dao = WeldGlobal.get(ClassificationPredictionDAO.class);
 
     public static ClassificationPredictions createFromPredictionsOutput(String experimentName,
                                                                         String predictionsOutput,
@@ -63,11 +64,17 @@ public class ClassificationPredictions {
 
 
     public void save() {
-        ClassificationPredictionDAO dao = WeldGlobal.get(ClassificationPredictionDAO.class);
-        System.out.println( classificationPredictions.size());
+
+
         for (ClassificationPrediction classificationPrediction : classificationPredictions) {
             dao.merge(classificationPrediction);
         }
+    }
+    public static ClassificationPredictions loadWithExperiment(String experiment) {
+        ClassificationPredictions predictions = new ClassificationPredictions();
+        predictions.classificationPredictions =predictions.dao.findByExperimentName(experiment);
+        return predictions;
+
     }
 
 }

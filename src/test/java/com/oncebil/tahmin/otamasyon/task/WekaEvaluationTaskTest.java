@@ -24,14 +24,15 @@ import java.io.IOException;
 public class WekaEvaluationTaskTest extends Base {
 
     @Test
-    public void runTestProject10TestClassifier() throws IOException, Exception {
+    public void runTestProject10TestRegression() throws IOException, Exception {
         Project project = Project.loadProject("TestProject10Regression");
         Assert.assertNotNull(project);
         project.run();
+        Assert.assertTrue( new File(ApplicationConstants.repositoryOut+ "TestProject10Regression" + File.separator + "LinearRegression-Model.model").exists());
 
     }
     @Test
-    public void runTestProject9TestClassifier() throws IOException, Exception {
+    public void runTestProject9TestClassification() throws IOException, Exception {
         Project project = Project.loadProject("TestProject9TestEvaluation");
         Assert.assertNotNull(project);
         project.run();

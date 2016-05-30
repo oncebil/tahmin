@@ -1,16 +1,25 @@
 package com.oncebil.tahmin.entity;
 
+import javax.persistence.*;
 import java.math.BigDecimal;
 
 /**
  * Created by erkinkarincaoglu on 30/05/2016.
  */
+@Entity
+@IdClass(ExperimentInstanceIdPK.class)
+@Table(name = "RegressionPrediction")
 public class RegressionPrediction {
 
+    @Id
     private String experiment;
+    @Id
     private String instanceId;
+    @Column(name = "actual")
     private BigDecimal actual;
+    @Column(name = "predicted")
     private BigDecimal predicted;
+    @Column(name = "error")
     private BigDecimal error;
 
     public String getExperiment() {

@@ -1,5 +1,7 @@
 package com.oncebil.tahmin.otamasyon.task;
 
+import com.oncebil.tahmin.WeldGlobal;
+import com.oncebil.tahmin.dao.RegressionPredictionDAO;
 import com.oncebil.tahmin.entity.ClassificationPrediction;
 import com.oncebil.tahmin.entity.Distribution;
 import com.oncebil.tahmin.entity.RegressionPrediction;
@@ -13,6 +15,7 @@ import java.util.List;
  * Created by erkinkarincaoglu on 30/05/2016.
  */
 public class RegressionPredictions {
+    private RegressionPredictionDAO dao = WeldGlobal.get(RegressionPredictionDAO.class);
     List<RegressionPrediction> regressionPredictions = new ArrayList<>();
 
     public static RegressionPredictions createFromPredictionsOutput(String experimentName,
@@ -41,4 +44,19 @@ public class RegressionPredictions {
         }
         return predictions;
     }
+
+    public void save() {
+
+        for (RegressionPrediction p : regressionPredictions) {
+            dao.merge(p);
+        }
+    }
+
+    public static RegressionPredictions loadWithExperiment(String experiment) {
+        RegressionPredictions predictions = new RegressionPredictions();
+        predictions.regressionPredictions =predictions.dao.findbyExperimentName(experiment);
+        return predictions;
+
+    }
+
 }

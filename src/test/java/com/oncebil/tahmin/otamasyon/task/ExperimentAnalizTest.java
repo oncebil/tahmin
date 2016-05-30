@@ -2,9 +2,7 @@ package com.oncebil.tahmin.otamasyon.task;
 
 import com.oncebil.tahmin.ApplicationConstants;
 import com.oncebil.tahmin.Base;
-import com.oncebil.tahmin.WeldGlobal;
-import com.oncebil.tahmin.dao.AtKosuDAO;
-import com.oncebil.tahmin.entity.RegressionPrediction;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.dbunit.DatabaseUnitException;
 import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.IDatabaseConnection;
@@ -15,10 +13,7 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -35,7 +30,9 @@ public class ExperimentAnalizTest {
     @Test
     public void testExperimentAnaliz() throws Exception {
         RegressionPredictions predictions = RegressionPredictions.loadWithExperiment("test-son7kosu-kstar-experiment");
-        Assert.assertTrue( predictions.regressionPredictions.size() > 0 );
+        Assert.assertTrue( predictions.getRegressionPredictions().size() > 0 );
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.writerWithDefaultPrettyPrinter().writeValue( new File(Base.getTestFilesPath() + File.separator + "son7kosu_predictions_with_atkosu_obj.json") ,predictions);
     }
 
     @Test

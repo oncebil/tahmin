@@ -2,11 +2,8 @@ package com.oncebil.tahmin.otamasyon.task;
 
 import com.oncebil.tahmin.WeldGlobal;
 import com.oncebil.tahmin.dao.RegressionPredictionDAO;
-import com.oncebil.tahmin.entity.ClassificationPrediction;
-import com.oncebil.tahmin.entity.Distribution;
 import com.oncebil.tahmin.entity.RegressionPrediction;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +13,7 @@ import java.util.List;
  */
 public class RegressionPredictions {
     private RegressionPredictionDAO dao = WeldGlobal.get(RegressionPredictionDAO.class);
-    List<RegressionPrediction> regressionPredictions = new ArrayList<>();
+    private List<RegressionPrediction> regressionPredictions = new ArrayList<>();
 
     public static RegressionPredictions createFromPredictionsOutput(String experimentName,
                                                                     String predictionsOutput) {
@@ -39,7 +36,7 @@ public class RegressionPredictions {
             rp.setActual(new BigDecimal(values[2]));
             rp.setPredicted(new BigDecimal(values[3]));
             rp.setError(new BigDecimal(values[4]));
-            predictions.regressionPredictions.add(rp);
+            predictions.getRegressionPredictions().add(rp);
 
         }
         return predictions;
@@ -47,16 +44,23 @@ public class RegressionPredictions {
 
     public void save() {
 
-        for (RegressionPrediction p : regressionPredictions) {
+        for (RegressionPrediction p : getRegressionPredictions()) {
             dao.merge(p);
         }
     }
 
     public static RegressionPredictions loadWithExperiment(String experiment) {
         RegressionPredictions predictions = new RegressionPredictions();
-        predictions.regressionPredictions =predictions.dao.findbyExperimentName(experiment);
+        predictions.setRegressionPredictions(predictions.dao.findbyExperimentName(experiment));
         return predictions;
 
     }
 
+    public List<RegressionPrediction> getRegressionPredictions() {
+        return regressionPredictions;
+    }
+
+    public void setRegressionPredictions(List<RegressionPrediction> regressionPredictions) {
+        this.regressionPredictions = regressionPredictions;
+    }
 }

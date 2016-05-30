@@ -27,8 +27,8 @@ public class RegressionPredictionsTest {
     @Test
     public void testCreateFromWekaEvaluationOutput() throws IOException {
         Assert.assertNotNull( predictions);
-        Assert.assertFalse( predictions.regressionPredictions.isEmpty());
-        RegressionPrediction prediction = predictions.regressionPredictions.get(0);
+        Assert.assertFalse( predictions.getRegressionPredictions().isEmpty());
+        RegressionPrediction prediction = predictions.getRegressionPredictions().get(0);
         Assert.assertEquals( prediction.getInstanceId(), "194" );
         Assert.assertEquals( prediction.getExperiment(), "test-regression-predictions" );
         Assert.assertEquals( prediction.getActual(), new BigDecimal("70") );
@@ -40,6 +40,6 @@ public class RegressionPredictionsTest {
     public void testSave () {
         predictions.save();
         RegressionPredictions loadedPredicitons = RegressionPredictions.loadWithExperiment("test-regression-predictions");
-        Assert.assertTrue( loadedPredicitons.regressionPredictions.size() > 0);
+        Assert.assertTrue( loadedPredicitons.getRegressionPredictions().size() > 0);
     }
 }

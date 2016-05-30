@@ -114,6 +114,8 @@ public class AtKosu implements Serializable {
     private BigDecimal son7ucunculukYuzdesi;
     @Column(name = "son7bitirisOrtalamasi")
     private BigDecimal son7bitirisOrtalamasi;
+    @Column(name = "kosuKoduAtKodu")
+    private String kosuKoduAtkodu;
 
     /**
      * @return the KOSUTARIHI
@@ -726,5 +728,13 @@ public class AtKosu implements Serializable {
 
     public void setKosuIdAtId(KosuIdAtId kosuIdAtId) {
         this.kosuIdAtId = kosuIdAtId;
+    }
+
+    public String getKosuKoduAtkodu() {
+        return kosuKoduAtkodu;
+    }
+
+    public void setKosuKoduAtkodu(String kosuKoduAtkodu) {
+        this.kosuKoduAtkodu = kosuKoduAtkodu;
     }
 }

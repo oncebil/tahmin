@@ -21,6 +21,11 @@ public class RegressionPrediction {
     private BigDecimal predicted;
     @Column(name = "error")
     private BigDecimal error;
+    @OneToOne( fetch=FetchType.EAGER)
+    @JoinColumns({
+            @JoinColumn(name = "instanceId", referencedColumnName = "KosuKoduAtKodu",insertable = false,updatable = false)
+    })
+    private AtKosu atKosu;
 
     public String getExperiment() {
         return experiment;
@@ -60,5 +65,13 @@ public class RegressionPrediction {
 
     public void setError(BigDecimal error) {
         this.error = error;
+    }
+
+    public AtKosu getAtKosu() {
+        return atKosu;
+    }
+
+    public void setAtKosu(AtKosu atKosu) {
+        this.atKosu = atKosu;
     }
 }

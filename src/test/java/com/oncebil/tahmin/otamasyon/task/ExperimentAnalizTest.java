@@ -74,7 +74,6 @@ public class ExperimentAnalizTest {
                         "  order by b.KosuKodu desc, predicted asc ");
 
         String filename = Base.getTestFilesPath() + "/test_son7kosu_kstar_predictions_data.xml";
-        System.out.println(filename);
         FlatXmlDataSet.write(partialDataSet,
                 new FileOutputStream( filename) );
 

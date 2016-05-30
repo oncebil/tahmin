@@ -1,5 +1,7 @@
 package com.oncebil.tahmin.otamasyon.task;
 
+import com.oncebil.tahmin.WeldGlobal;
+import com.oncebil.tahmin.dao.ClassificationPredictionDAO;
 import com.oncebil.tahmin.entity.ClassificationPrediction;
 import com.oncebil.tahmin.entity.Distribution;
 
@@ -57,6 +59,15 @@ public class ClassificationPredictions {
             predictions.classificationPredictions.add(p);
         }
        return predictions;
+    }
+
+
+    public void save() {
+        ClassificationPredictionDAO dao = WeldGlobal.get(ClassificationPredictionDAO.class);
+        System.out.println( classificationPredictions.size());
+        for (ClassificationPrediction classificationPrediction : classificationPredictions) {
+            dao.merge(classificationPrediction);
+        }
     }
 
 }

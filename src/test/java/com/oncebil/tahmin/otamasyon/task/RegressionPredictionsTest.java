@@ -17,7 +17,7 @@ public class RegressionPredictionsTest {
     public void testCreateFromWekaEvaluationOutput() throws IOException {
 
         RegressionPredictions predictions = RegressionPredictions.
-                createFromPredictionsOutput("testexperiment",
+                createFromPredictionsOutput("test-regression-predictions",
                         Base.readTestFile("Cpu-LinearRegression-Predictions.txt"));
         Assert.assertNotNull( predictions);
         Assert.assertFalse( predictions.regressionPredictions.isEmpty());
@@ -25,7 +25,7 @@ public class RegressionPredictionsTest {
         // this is the first attribute. this will be kosuId+atId usually
         //  first attribute  has been selected as instance id for testing purposes
         Assert.assertEquals( prediction.getInstanceId(), "116" );
-        Assert.assertEquals( prediction.getExperiment(), "testexperiment" );
+        Assert.assertEquals( prediction.getExperiment(), "test-regression-predictions" );
         Assert.assertEquals( prediction.getActual(), new BigDecimal("70") );
         Assert.assertEquals( prediction.getPredicted(), new BigDecimal("87.282") );
         Assert.assertEquals( prediction.getError(), new BigDecimal("17.282") );

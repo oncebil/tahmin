@@ -1,7 +1,7 @@
 <project>
     <task name="LoadArffFromRepository" className="LoadArffFromRepository">
         <property key="dataName">arffs</property>
-        <property key="arffFilename">soybean.arff</property>
+        <property key="arffFilename">soybean-withid.arff</property>
     </task>
 
 
@@ -9,7 +9,7 @@
 
         <property key="classifier">weka.classifiers.meta.FilteredClassifier</property>
         <property key="options">
-            -F "weka.filters.unsupervised.attribute.RemoveType -T string" -W weka.classifiers.bayes.NaiveBayes --
+            -F "weka.filters.unsupervised.attribute.Remove -R 1" -W weka.classifiers.bayes.NaiveBayes --
 
         </property>
         <property key="overrideResults">true</property>

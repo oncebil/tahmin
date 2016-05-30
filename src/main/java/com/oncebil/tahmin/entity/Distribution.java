@@ -1,16 +1,23 @@
 package com.oncebil.tahmin.entity;
 
+import javax.persistence.*;
 import java.math.BigDecimal;
 
 /**
  * Created by erkinkarincaoglu on 30/05/2016.
  */
+@Entity
+@IdClass(ExperimentInstanceIdClassPK.class)
+@Table(name = "Distribution")
 public class Distribution {
 
-
+    @Id
     private String instanceId;
+    @Id
     private String experiment;
+    @Id
     private String classificationClass;
+    @Column(name = "distribution")
     private BigDecimal distribution;
 
     public Distribution() {

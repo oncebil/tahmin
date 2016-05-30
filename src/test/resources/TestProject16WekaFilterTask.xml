@@ -1,0 +1,11 @@
+<project>
+        <task name="LoadArffFromRepository" className="LoadArffFromRepository">
+                <property key="dataName">arffs</property>
+                <property key="arffFilename">soybean.arff</property>
+        </task>
+
+        <task name="WekaFilterAddID" className="WekaFilter">
+                <property key="wekafilter">weka.filters.unsupervised.attribute.AddID</property>
+                <property key="options">-C first -N ID</property>
+        </task>
+</project>

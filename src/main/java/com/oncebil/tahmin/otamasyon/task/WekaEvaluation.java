@@ -8,6 +8,7 @@ package com.oncebil.tahmin.otamasyon.task;
 
 import com.oncebil.tahmin.ApplicationConstants;
 import com.oncebil.tahmin.TahminException;
+import com.oncebil.tahmin.Util;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
 import weka.classifiers.Classifier;
@@ -43,9 +44,9 @@ public class WekaEvaluation extends AbstractTask {
     private Object output;
     private final boolean saveExperimentResults;
     private final boolean overrideResults;
-    
+    private final boolean writePredictions;
 
-    public WekaEvaluation(String projectName, String name, String classifier, String options, int random, String attributesToOutput, String evaluationCostMatrix, boolean saveExperimentResults, boolean overrideResults) {
+    public WekaEvaluation(String projectName, String name, String classifier, String options, int random, String attributesToOutput, String evaluationCostMatrix, boolean saveExperimentResults, boolean overrideResults, boolean writePredictions) {
         super(projectName, name);
         this.classifier = classifier;
         this.options = options;
@@ -54,10 +55,12 @@ public class WekaEvaluation extends AbstractTask {
         this.evaluationCostMatrix = evaluationCostMatrix;
         this.saveExperimentResults = saveExperimentResults;
         this.overrideResults = overrideResults;
+        this.writePredictions = writePredictions;
     }
 
     public final static  String RESULTS_XML_NAME = "-EvaluationResults.xml";
     public final static  String MODEL_FILE_NAME = "-Model.model";
+    public final static  String PREDICTIONS_FILE_NAME = "-Predictions.txt";
     @Override
     public void run() {
         logger.log(Level.INFO, "WekaEvaluation projectname={0} name={1} classifier={2} options={3} random={4} attrattributesToOutput={5} evaluationCostMatrix={6}", new Object[]{getProjectName(), getName(), classifier, options, random, attributesToOutput,evaluationCostMatrix});
@@ -99,13 +102,23 @@ public class WekaEvaluation extends AbstractTask {
                     StringReader stringReader = new StringReader(evaluationCostMatrix);
                     costMatrix = new CostMatrix(stringReader);
                 }
-
+                File f = new File(folderName);
+                if (!f.exists()) {
+                    f.mkdirs();
+                }
                 Classifier classifierObj = Classifier.forName(classifier, weka.core.Utils.splitOptions(options));
                 StringBuffer predsBuff = new StringBuffer();
                 Evaluation evaluation = (costMatrix == null)  ? new Evaluation(instances): new Evaluation(instances, costMatrix);
                 boolean classification = (instances.classAttribute().isNominal()) ? true : false;
                 evaluation.crossValidateModel(classifierObj, instances, 10, new Random(1), predsBuff, new Range(attributesToOutput), true);
-                BufferedReader input = new BufferedReader(new StringReader(predsBuff.toString()));
+
+                if (writePredictions) {
+                    String predictionsFile = (inputInstancesList == null) ? folderName + getName() + PREDICTIONS_FILE_NAME :
+                            folderName + getName() + "-" + i + PREDICTIONS_FILE_NAME;
+                    Util.writeToFile(predictionsFile , predsBuff.toString(),"UTF-8" );
+                    logger.log(Level.INFO, "WekaEvaluation predictionsFile={0} ", new Object[]{ predictionsFile });
+                }
+
 
                 //System.out.println("al=" + evaluation.predictions());
 //                Path path = FileSystems.getDefault().getPath("/Users/erkinkarincaoglu/Documents/code/repository/predictions.txt");
@@ -121,7 +134,7 @@ public class WekaEvaluation extends AbstractTask {
 //                    }
 //                }
 
-//                Predictions preds = Predictions.createPredictionsFromWekaEvaluationOutput(getProjectName(),
+//                Predictions preds = Predictions.createByWekaEvaluationOutput(getProjectName(),
 //                        input);
 //
 //                ExperimentKazanciAnalizBuilder builder =
@@ -132,10 +145,7 @@ public class WekaEvaluation extends AbstractTask {
 //                NominalEvaluationResults evaluationResults = new NominalEvaluationResults(getProjectName(),
 //                        getName() + "-" + i, instances.numInstances() , evaluation,analiz,(double)(end -start) / 1000000000.0 / 60.0,classification);
 //                // save evaluation results
-                File f = new File(folderName);
-                if (!f.exists()) {
-                    f.mkdirs();
-                }
+
 
 //                Serializer serializer = new Persister();
 //                File source = new File(filename);
@@ -194,7 +204,8 @@ public class WekaEvaluation extends AbstractTask {
         private String saveExperimentResults;
         @Parameter("overrideResults")
         private String overrideResults;
-        
+        @Parameter("writePredictions")
+        private String writePredictions;
         
         public Builder(String projectName,String name,TaskDefinition taskDefinition ) {
             super(projectName, name, taskDefinition);
@@ -216,11 +227,8 @@ public class WekaEvaluation extends AbstractTask {
                 intrandom = Integer.parseInt(random);
             }
             if (attributesToOutput == null) {
-                // First 2 attributes are usually kosu id and at id
-                attributesToOutput = "1,2";
-
-
-
+                // First attribute is the instance id
+                attributesToOutput = "1";
             }
 
             
@@ -236,9 +244,11 @@ public class WekaEvaluation extends AbstractTask {
                 throw new IllegalArgumentException("overrideResults can be true or false");
 
             }
-            
-
-            return new WekaEvaluation(getProjectName(), getName(), classifier, options, intrandom, attributesToOutput, evaluationCostMatrix, (saveExperimentResults != null && Boolean.parseBoolean(overrideResults)) ? true : false, (overrideResults != null && Boolean.parseBoolean(overrideResults)) ? true : false );
+            return new WekaEvaluation(getProjectName(), getName(), classifier, options, intrandom,
+                    attributesToOutput, evaluationCostMatrix,
+                    (saveExperimentResults != null && Boolean.parseBoolean(overrideResults)) ? true : false,
+                    (overrideResults != null && Boolean.parseBoolean(overrideResults)) ? true : false,
+                    (writePredictions != null && Boolean.parseBoolean(writePredictions)) ? true : false);
 
         }
     }

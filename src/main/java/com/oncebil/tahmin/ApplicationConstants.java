@@ -15,8 +15,14 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class ApplicationConstants {
 
-   public static String repositoryFolder = "/Users/erkinkarincaoglu/Documents/code/repository/";
-   public static String repositoryOut = "/Users/erkinkarincaoglu/Documents/code/repository/";
+
+    public static String driverClass = "org.postgresql.Driver";
+    public static String jdbcUrl = "jdbc:postgresql://localhost/KOSUTAHMIN";
+    public static String username = "postgres";
+    public static String password = "";
+
+    public static String repositoryFolder = "/Users/erkinkarincaoglu/Documents/code/repository/";
+    public static String repositoryOut = "/Users/erkinkarincaoglu/Documents/code/repository/";
   
     public static final String TRUE = "true";
     public static final String FALSE = "false";

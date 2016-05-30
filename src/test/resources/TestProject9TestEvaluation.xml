@@ -1,7 +1,7 @@
 <project>
     <task name="LoadArffFromRepository" className="LoadArffFromRepository">
         <property key="dataName">testdataname</property>
-        <property key="arffFilename">weather.nominal.arff</property>
+        <property key="arffFilename">soybean.arff</property>
     </task>
 
 
@@ -13,6 +13,7 @@
 
         </property>
         <property key="overrideResults">true</property>
+        <property key="writePredictions">true</property>
     </task>
 
 

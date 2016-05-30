@@ -241,5 +241,15 @@ public class Util {
 
         Util.writeToFile(cahitArfPropertiesfile, out.toString(), "UTF8");
     }
+
+    public static String bufferedReaderToString(BufferedReader reader) throws IOException {
+        StringBuilder builder = new StringBuilder();
+        String aux = "";
+        while ((aux = reader.readLine()) != null) {
+            builder.append(aux);
+            builder.append( System.getProperty("line.separator"));
+        }
+        return builder.toString();
+    }
     
 }

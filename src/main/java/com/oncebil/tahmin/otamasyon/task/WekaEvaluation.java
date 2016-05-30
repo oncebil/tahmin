@@ -9,6 +9,8 @@ package com.oncebil.tahmin.otamasyon.task;
 import com.oncebil.tahmin.ApplicationConstants;
 import com.oncebil.tahmin.TahminException;
 import com.oncebil.tahmin.Util;
+import com.oncebil.tahmin.entity.ClassificationPrediction;
+import com.oncebil.tahmin.entity.RegressionPrediction;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
 import weka.classifiers.Classifier;
@@ -111,12 +113,18 @@ public class WekaEvaluation extends AbstractTask {
                 Evaluation evaluation = (costMatrix == null)  ? new Evaluation(instances): new Evaluation(instances, costMatrix);
                 boolean classification = (instances.classAttribute().isNominal()) ? true : false;
                 evaluation.crossValidateModel(classifierObj, instances, 10, new Random(1), predsBuff, new Range(attributesToOutput), true);
-
                 if (writePredictions) {
                     String predictionsFile = (inputInstancesList == null) ? folderName + getName() + PREDICTIONS_FILE_NAME :
                             folderName + getName() + "-" + i + PREDICTIONS_FILE_NAME;
                     Util.writeToFile(predictionsFile , predsBuff.toString(),"UTF-8" );
                     logger.log(Level.INFO, "WekaEvaluation predictionsFile={0} ", new Object[]{ predictionsFile });
+                }
+                if (classification) {
+                    ClassificationPredictions.createFromPredictionsOutput( getName(),
+                            predsBuff.toString(),Util.getInstancesClassValues(instances) ).save();
+                } else {
+                    RegressionPredictions.createFromPredictionsOutput( getName() , predsBuff.toString() ).save();
+
                 }
 
 

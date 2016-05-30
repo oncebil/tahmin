@@ -24,7 +24,15 @@ import java.io.IOException;
 public class WekaEvaluationTaskTest extends Base {
 
     @Test
-    public void runTestProject10TestRegression() throws IOException, Exception {
+    public void runSon7Kosular() throws IOException, Exception {
+        Project project = Project.loadProject("Son7Kosu");
+        Assert.assertNotNull(project);
+        project.run();
+        Assert.assertTrue( new File(ApplicationConstants.repositoryOut+ "Son7Kosu" + File.separator + "KStar-Model.model").exists());
+    }
+
+    @Test
+    public void testProject10TestRegression() throws IOException, Exception {
         Project project = Project.loadProject("TestProject10Regression");
         Assert.assertNotNull(project);
         project.run();
@@ -32,7 +40,7 @@ public class WekaEvaluationTaskTest extends Base {
 
     }
     @Test
-    public void runTestProject9TestClassification() throws IOException, Exception {
+    public void testProject9TestClassification() throws IOException, Exception {
         Project project = Project.loadProject("TestProject9TestEvaluation");
         Assert.assertNotNull(project);
         project.run();

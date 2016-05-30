@@ -1,0 +1,21 @@
+<project>
+
+    <task name="LoadArffFromRepository" className="LoadArffFromRepository">
+        <property key="dataName">arffs</property>
+        <property key="arffFilename">son7kosular.arff</property>
+
+    </task>
+
+
+    <task name="KStar" className="WekaEvaluation">
+        <property key="classifier">weka.classifiers.meta.FilteredClassifier</property>
+        <property key="options">
+            -F "weka.filters.unsupervised.attribute.RemoveType -T string"  -W weka.classifiers.lazy.KStar --  -B 17 -M a
+        </property>
+        <property key="saveExperimentResults">true</property>
+        <property key="overrideResults">true</property>
+        <property key="writePredictions">true</property>
+
+    </task>
+
+</project>

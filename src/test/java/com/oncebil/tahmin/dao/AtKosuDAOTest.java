@@ -26,13 +26,13 @@ public class AtKosuDAOTest extends Base {
     @Before
     public void before() throws Exception {
         atKosuDAO = WeldGlobal.get(AtKosuDAO.class);
-        Base.insertTestData("atkosu.xml");
+        Base.insertTestData("test_son7kosu_kstar_predictions_data.xml");
     }
 
     @Test
     @Transactional
     public void testSelectByKosuKodu() {
-        Assert.assertNotNull( atKosuDAO.getAtKosu(80047947L,80018374L) );
+        Assert.assertNotNull( atKosuDAO.getAtKosu(80048955L,80024494L) );
     }
     
 }

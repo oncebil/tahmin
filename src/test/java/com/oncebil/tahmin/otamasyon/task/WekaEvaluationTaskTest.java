@@ -24,6 +24,13 @@ import java.io.IOException;
 public class WekaEvaluationTaskTest extends Base {
 
     @Test
+    public void runTestProject10TestClassifier() throws IOException, Exception {
+        Project project = Project.loadProject("TestProject10Regression");
+        Assert.assertNotNull(project);
+        project.run();
+
+    }
+    @Test
     public void runTestProject9TestClassifier() throws IOException, Exception {
         Project project = Project.loadProject("TestProject9TestEvaluation");
         Assert.assertNotNull(project);

@@ -1,6 +1,6 @@
 <project>
     <task name="LoadArffFromRepository" className="LoadArffFromRepository">
-        <property key="dataName">testdataname</property>
+        <property key="dataName">arffs</property>
         <property key="arffFilename">weather.nominal.arff</property>
     </task>
 </project>

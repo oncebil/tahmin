@@ -1,0 +1,20 @@
+<project>
+    <task name="LoadArffFromRepository" className="LoadArffFromRepository">
+        <property key="dataName">arffs</property>
+        <property key="arffFilename">cpu.arff</property>
+    </task>
+
+
+    <task name="LinearRegression" className="WekaEvaluation">
+
+        <property key="classifier">weka.classifiers.meta.FilteredClassifier</property>
+        <property key="options">
+            -F "weka.filters.unsupervised.attribute.RemoveType -T string" -W weka.classifiers.functions.LinearRegression --  -S 0 -R 1.0E-8
+
+        </property>
+        <property key="overrideResults">true</property>
+        <property key="writePredictions">true</property>
+    </task>
+
+
+</project>

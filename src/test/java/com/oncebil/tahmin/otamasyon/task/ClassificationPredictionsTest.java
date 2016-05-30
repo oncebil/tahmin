@@ -19,7 +19,7 @@ public class ClassificationPredictionsTest {
 
     @Test
     public void testCreateFromWekaEvaluationOutput() throws IOException {
-        Instances instances = Util.loadInstances( Base.getTestFile("data/testdataname/soybean.arff") );
+        Instances instances = Util.loadInstances( Base.getTestFile("data/arffs/soybean.arff") );
         instances.setClassIndex( instances.numAttributes() -1);
         List<String> classes = Util.getInstancesClassValues(instances);
         ClassificationPredictions predictions = ClassificationPredictions.
@@ -29,15 +29,15 @@ public class ClassificationPredictionsTest {
         Assert.assertNotNull( predictions);
         Assert.assertFalse( predictions.classificationPredictions.isEmpty());
         ClassificationPrediction prediction = predictions.classificationPredictions.get(0);
+        // this is the first attribute. this will be kosuId+atId usually
+        //  first attribute  has been selected as instance id for testing purposes
+        Assert.assertEquals( prediction.getInstanceId(), "october" );
+        Assert.assertEquals( prediction.getExperiment(), "testexperiment" );
         Assert.assertEquals( prediction.getActualIndex(), 2 );
         Assert.assertEquals( prediction.getActual(), "charcoal" );
         Assert.assertEquals( prediction.getPredictedIndex(), 2 );
         Assert.assertEquals( prediction.getPredicted(), "charcoal" );
         Assert.assertEquals( prediction.isError(), false );
-        // this is the first attribute. this will be kosuId+atId usually
-        // test purposes first attribute  has been selected as instance id
-        Assert.assertEquals( prediction.getInstanceId(), "october" );
-        Assert.assertEquals( prediction.getExperiment(), "testexperiment" );
         Assert.assertEquals(new Distribution("october","testexperiment","diaporthe-stem-canker",new BigDecimal(0.0)),prediction.getDistributions().get(0));
         Assert.assertEquals(new Distribution("october","testexperiment","charcoal-rot",new BigDecimal(1.0)),prediction.getDistributions().get(1));
         Assert.assertTrue( predictions.classificationPredictions.get(14).isError() );

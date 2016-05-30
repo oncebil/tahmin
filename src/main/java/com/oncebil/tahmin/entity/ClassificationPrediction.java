@@ -1,11 +1,12 @@
 package com.oncebil.tahmin.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by erkinkarincaoglu on 30/05/2016.
  */
-public class Classification {
+public class ClassificationPrediction {
     private String experiment;
     private String instanceId;
     private String actual;
@@ -13,7 +14,7 @@ public class Classification {
     private String predicted;
     private int predictedIndex;
     private boolean error;
-    private List<Distribution> distributions;
+    private List<Distribution> distributions = new ArrayList<>();
 
     public List<Distribution> getDistributions() {
         return distributions;

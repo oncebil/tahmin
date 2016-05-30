@@ -20,17 +20,16 @@ public class Base {
         ApplicationConstants.repositoryOut = ApplicationConstants.repositoryPath + File.separator;
     }
 
-    public static BufferedReader readTestResource(String file) throws UnsupportedEncodingException {
-        return new BufferedReader(
-                new InputStreamReader(Base.class.getResourceAsStream(file), "UTF-8"));
-    }
 
-    public static String  readTestFile(String file) throws IOException {
-        return Util.bufferedReaderToString( readTestResource(file));
+    public static File getTestFile(String file) throws UnsupportedEncodingException {
+        return new File(Base.class.getClassLoader().getResource(file).getFile());
+    }
+    public static String readTestFile(String file) throws UnsupportedEncodingException, FileNotFoundException {
+        return new Scanner(getTestFile(file)).useDelimiter("\\Z").next();
     }
 
     public static void insertTestData(String file) throws Exception{
-        IDataSet dataset = new FlatXmlDataSetBuilder().setColumnSensing(true).build(readTestResource(file));
+        IDataSet dataset = new FlatXmlDataSetBuilder().setColumnSensing(true).build( getTestFile(file));
         IDatabaseTester databaseTester = new JdbcDatabaseTester(ApplicationConstants.driverClass,
                 ApplicationConstants.jdbcUrl, ApplicationConstants.username, ApplicationConstants.password);
         databaseTester.setSetUpOperation(DatabaseOperation.REFRESH);

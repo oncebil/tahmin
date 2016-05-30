@@ -13,6 +13,16 @@ public class Distribution {
     private String classificationClass;
     private BigDecimal distribution;
 
+    public Distribution() {
+    }
+
+    public Distribution(String instanceId, String experiment, String classificationClass, BigDecimal distribution) {
+        this.instanceId = instanceId;
+        this.experiment = experiment;
+        this.classificationClass = classificationClass;
+        this.distribution = distribution;
+    }
+
     public String getInstanceId() {
         return instanceId;
     }
@@ -45,6 +55,26 @@ public class Distribution {
         this.distribution = distribution;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
+        Distribution that = (Distribution) o;
 
+        if (!instanceId.equals(that.instanceId)) return false;
+        if (!experiment.equals(that.experiment)) return false;
+        if (!classificationClass.equals(that.classificationClass)) return false;
+        return distribution.equals(that.distribution);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = instanceId.hashCode();
+        result = 31 * result + experiment.hashCode();
+        result = 31 * result + classificationClass.hashCode();
+        result = 31 * result + distribution.hashCode();
+        return result;
+    }
 }

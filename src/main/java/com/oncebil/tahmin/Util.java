@@ -11,6 +11,8 @@ import weka.core.converters.ArffSaver;
 
 import java.io.*;
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -215,6 +217,13 @@ public class Util {
 
     }
 
+    public static Instances loadInstances(File file) throws IOException {
+        ArffLoader arffLoader = new ArffLoader();
+        arffLoader.setFile(file);
+        return arffLoader.getDataSet();
+
+    }
+
     public static Instances loadInstances(String arffFileName) throws IOException {        
         ArffLoader arffLoader = new ArffLoader();
         arffLoader.setFile(new File (arffFileName));
@@ -251,5 +260,13 @@ public class Util {
         }
         return builder.toString();
     }
-    
+
+    public static  List<String> getInstancesClassValues(Instances instances) {
+        List<String> classes = new ArrayList<>();
+        Enumeration e = instances.classAttribute().enumerateValues();
+        while(e.hasMoreElements()) {
+            classes.add( e.nextElement().toString());
+        }
+        return classes;
+    }
 }

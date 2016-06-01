@@ -4,8 +4,11 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.persistence.*;
 import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaDelete;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.CriteriaUpdate;
 import javax.persistence.metamodel.Metamodel;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -121,6 +124,16 @@ public class EntityManagerDelegate implements EntityManager{
       return entityManagerStore.get().createQuery(criteriaQuery);
    }
 
+   @Override
+   public Query createQuery(CriteriaUpdate criteriaUpdate) {
+      return entityManagerStore.get().createQuery(criteriaUpdate);
+   }
+
+   @Override
+   public Query createQuery(CriteriaDelete criteriaDelete) {
+      return entityManagerStore.get().createQuery(criteriaDelete);
+   }
+
    public <T> TypedQuery<T> createQuery(String qlString, Class<T> resultClass) {
       return entityManagerStore.get().createQuery(qlString, resultClass);
    }
@@ -145,8 +158,33 @@ public class EntityManagerDelegate implements EntityManager{
       return entityManagerStore.get().createNativeQuery(sqlString, resultSetMapping);
    }
 
+   @Override
+   public StoredProcedureQuery createNamedStoredProcedureQuery(String s) {
+      return entityManagerStore.get().createNamedStoredProcedureQuery(s);
+   }
+
+   @Override
+   public StoredProcedureQuery createStoredProcedureQuery(String s) {
+      return entityManagerStore.get().createStoredProcedureQuery(s);
+   }
+
+   @Override
+   public StoredProcedureQuery createStoredProcedureQuery(String s, Class... classes) {
+      return entityManagerStore.get().createStoredProcedureQuery(s,classes);
+   }
+
+   @Override
+   public StoredProcedureQuery createStoredProcedureQuery(String s, String... strings) {
+      return entityManagerStore.get().createStoredProcedureQuery(s,strings);
+   }
+
    public void joinTransaction() {
       entityManagerStore.get().joinTransaction();
+   }
+
+   @Override
+   public boolean isJoinedToTransaction() {
+      return false;
    }
 
    public <T> T unwrap(Class<T> cls) {
@@ -179,6 +217,26 @@ public class EntityManagerDelegate implements EntityManager{
 
    public Metamodel getMetamodel() {
       return entityManagerStore.get().getMetamodel();
+   }
+
+   @Override
+   public <T> EntityGraph<T> createEntityGraph(Class<T> aClass) {
+      return entityManagerStore.get().createEntityGraph(aClass);
+   }
+
+   @Override
+   public EntityGraph<?> createEntityGraph(String s) {
+      return entityManagerStore.get().createEntityGraph(s);
+   }
+
+   @Override
+   public EntityGraph<?> getEntityGraph(String s) {
+      return entityManagerStore.get().getEntityGraph(s);
+   }
+
+   @Override
+   public <T> List<EntityGraph<? super T>> getEntityGraphs(Class<T> aClass) {
+      return entityManagerStore.get().getEntityGraphs(aClass);
    }
 }
    

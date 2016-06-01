@@ -1,5 +1,6 @@
 package com.oncebil.tahmin.dao;
 
+import com.oncebil.tahmin.entity.AtKosu;
 import com.oncebil.tahmin.entity.ClassificationPrediction;
 import com.oncebil.tahmin.entity.RegressionPrediction;
 
@@ -9,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import java.util.ArrayList;
 import java.util.List;
 
 /**

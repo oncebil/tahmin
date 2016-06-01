@@ -14,13 +14,16 @@ import java.math.BigDecimal;
  */
 @Entity
 @Table(name = "AtKosu")
-@SequenceGenerator(name="AtKosu_GEN", sequenceName = "AtKosu_GEN",allocationSize = 1)
 public class AtKosu implements Serializable {
 
+    @Id
+    @Column(name = "KOSUKODUATKODU")
+    private String kosuKoduAtKodu;
+    @Column(name = "KOSUKODU")
+    private Long KOSUKODU;
+    @Column(name = "ATKODU")
+    private Long ATKODU;
 
-    @EmbeddedId
-    private
-    KosuIdAtId kosuIdAtId;
     @Column(name = "KOSUTARIHI")
     private String KOSUTARIHI;
     @Column(name = "HIPODROMKODU")
@@ -82,7 +85,7 @@ public class AtKosu implements Serializable {
     @Column(name = "DERECE")
     private Long DERECE;
     @Column(name = "GANYAN")
-    private Float GANYAN;
+    private BigDecimal GANYAN;
     @Column(name = "AtIkramiye")
     private Long AtIkramiye;
     //@Column(name = "AtinToplam3KosusundakiKazanciOrtalamasi")
@@ -114,8 +117,13 @@ public class AtKosu implements Serializable {
     private BigDecimal son7ucunculukYuzdesi;
     @Column(name = "son7bitirisOrtalamasi")
     private BigDecimal son7bitirisOrtalamasi;
-    @Column(name = "kosuKoduAtKodu")
-    private String kosuKoduAtkodu;
+
+//
+//    @OneToMany(fetch = FetchType.LAZY)
+//    @JoinColumns({
+//            @JoinColumn(name = "kosuKoduAtkodu", referencedColumnName = "instanceId",insertable = false,updatable = false)
+//    })
+//    private List<RegressionPrediction> regressionPrediction;
 
     /**
      * @return the KOSUTARIHI
@@ -187,24 +195,7 @@ public class AtKosu implements Serializable {
         this.KUM = KUM;
     }
 
-    /**
-     * @return the KOSUKODU
-     */
-    @Transient
-    public Long getKOSUKODU() {
-        return getKosuIdAtId().getKosuKodu();
-    }
 
-    /**
-     * @param KOSUKODU the KOSUKODU to set
-     */
-    public void setKOSUKODU(Long KOSUKODU) {
-        if (this.getKosuIdAtId() == null) {
-            this.setKosuIdAtId( new KosuIdAtId() );
-        }
-
-        this.getKosuIdAtId().setKosuKodu(KOSUKODU);
-    }
 
     /**
      * @return the KOSUNO
@@ -332,23 +323,7 @@ public class AtKosu implements Serializable {
         this.PISTUZUNADI = PISTUZUNADI;
     }
 
-    /**
-     * @return the ATKODU
-     */
-    @Transient
-    public Long getATKODU() {
-        return getKosuIdAtId().getAtKodu();
-    }
 
-    /**
-     * @param ATKODU the ATKODU to set
-     */
-    public void setATKODU(Long ATKODU) {
-        if (this.getKosuIdAtId() == null) {
-            this.setKosuIdAtId( new KosuIdAtId() );
-        }
-        this.getKosuIdAtId().setAtKodu(ATKODU);
-    }
 
     /**
      * @return the ATNO
@@ -563,14 +538,14 @@ public class AtKosu implements Serializable {
     /**
      * @return the GANYAN
      */
-    public Float getGANYAN() {
+    public BigDecimal getGANYAN() {
         return GANYAN;
     }
 
     /**
      * @param GANYAN the GANYAN to set
      */
-    public void setGANYAN(Float GANYAN) {
+    public void setGANYAN(BigDecimal GANYAN) {
         this.GANYAN = GANYAN;
     }
     
@@ -722,19 +697,31 @@ public class AtKosu implements Serializable {
         this.son7bitirisOrtalamasi = son7bitirisOrtalamasi;
     }
 
-    public KosuIdAtId getKosuIdAtId() {
-        return kosuIdAtId;
+
+
+
+
+    public String getKosuKoduAtKodu() {
+        return kosuKoduAtKodu;
     }
 
-    public void setKosuIdAtId(KosuIdAtId kosuIdAtId) {
-        this.kosuIdAtId = kosuIdAtId;
+    public void setKosuKoduAtKodu(String kosuKoduAtKodu) {
+        this.kosuKoduAtKodu = kosuKoduAtKodu;
     }
 
-    public String getKosuKoduAtkodu() {
-        return kosuKoduAtkodu;
+    public Long getKOSUKODU() {
+        return KOSUKODU;
     }
 
-    public void setKosuKoduAtkodu(String kosuKoduAtkodu) {
-        this.kosuKoduAtkodu = kosuKoduAtkodu;
+    public void setKOSUKODU(Long KOSUKODU) {
+        this.KOSUKODU = KOSUKODU;
+    }
+
+    public Long getATKODU() {
+        return ATKODU;
+    }
+
+    public void setATKODU(Long ATKODU) {
+        this.ATKODU = ATKODU;
     }
 }

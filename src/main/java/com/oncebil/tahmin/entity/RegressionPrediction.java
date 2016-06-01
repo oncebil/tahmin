@@ -1,6 +1,11 @@
 package com.oncebil.tahmin.entity;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
+
 import javax.persistence.*;
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 /**
@@ -9,7 +14,7 @@ import java.math.BigDecimal;
 @Entity
 @IdClass(ExperimentInstanceIdPK.class)
 @Table(name = "RegressionPrediction")
-public class RegressionPrediction {
+public class RegressionPrediction implements Serializable {
 
     @Id
     private String experiment;
@@ -21,10 +26,11 @@ public class RegressionPrediction {
     private BigDecimal predicted;
     @Column(name = "error")
     private BigDecimal error;
-    @OneToOne( fetch=FetchType.EAGER)
+    @ManyToOne(fetch =  FetchType.EAGER)
     @JoinColumns({
-            @JoinColumn(name = "instanceId", referencedColumnName = "KosuKoduAtKodu",insertable = false,updatable = false)
+            @JoinColumn(name = "instanceId",insertable = false,updatable = false)
     })
+    @NotFound(action= NotFoundAction.IGNORE)
     private AtKosu atKosu;
 
     public String getExperiment() {

@@ -14,6 +14,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.*;
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -24,15 +25,20 @@ import java.sql.SQLException;
 public class ExperimentAnalizTest {
     @Before
     public void before() throws Exception {
-        Base.insertTestData("test_son7kosu_kstar_predictions_data.xml");
+        //Base.insertTestData("test_son7kosu_kstar_predictions_data.xml");
     }
 
     @Test
     public void testExperimentAnaliz() throws Exception {
         RegressionPredictions predictions = RegressionPredictions.loadWithExperiment("test-son7kosu-kstar-experiment");
         Assert.assertTrue( predictions.getRegressionPredictions().size() > 0 );
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.writerWithDefaultPrettyPrinter().writeValue( new File(Base.getTestFilesPath() + File.separator + "son7kosu_predictions_with_atkosu_obj.json") ,predictions);
+        ExperimentAnalyze analyze = new ExperimentAnalyze();
+        ExperimentAnalyzeResults analyzeResults = analyze.analyze(predictions,new BigDecimal("2.1"));
+        ExperimentAnalyzeResults.ThresholdResult thresholdResult =
+                analyzeResults.getThresholdResults(new BigDecimal("2.1"));
+        ExperimentAnalyzeResults.GanyanKazanc ganyanKazanc = thresholdResult.getGanyanKazanc();
+        Assert.assertEquals(new BigDecimal("23.10"), ganyanKazanc.getToplamKazanc());
+
     }
 
     @Test
@@ -57,7 +63,7 @@ public class ExperimentAnalizTest {
                         "  order by b.KosuKodu desc, predicted asc ");
 
         partialDataSet.addTable("AtKosu",
-                "   select '800' || id id ,\n" +
+                "   select " +
                         "  '2001-03-28' kosutarihi,\n" +
                         "  hipodromkodu, hipodromyeri, cim, kum, \n" +
                         "  '800' || kosukodu kosukodu, \n" +

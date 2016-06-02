@@ -34,5 +34,5 @@ public class AtKosuDAOTest extends Base {
     public void testSelectByKosuKodu() {
         Assert.assertNotNull( atKosuDAO.getAtKosu(80048955L,80024494L) );
     }
-    
+
 }

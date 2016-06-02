@@ -1,6 +1,7 @@
 package com.oncebil.tahmin.otamasyon.task;
 
 import com.oncebil.tahmin.entity.AtKosu;
+import com.oncebil.tahmin.entity.Kosu;
 import com.oncebil.tahmin.entity.RegressionPrediction;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -17,8 +18,20 @@ import java.util.stream.Stream;
  * Created by erkinkarincaoglu on 31/05/2016.
  */
 public class ExperimentAnalyze {
-    public ExperimentAnalyzeResults analyze(RegressionPredictions predictions, BigDecimal threshold) {
+    public ExperimentAnalyzeResults analyze(List<Kosu> kosular, BigDecimal threshold) {
 
+        List<RegressionPrediction> all = new ArrayList<>();
+        for (Kosu kosu :  kosular) {
+            for (AtKosu atlar : kosu.getAtlar()) {
+                for (RegressionPrediction regressionPrediction : atlar.getRegressionPredictions()) {
+                    all.add(regressionPrediction);
+                }
+            }
+        }
+        System.out.println("regression predictions=" + all.size());
+        RegressionPredictions predictions = new RegressionPredictions();
+        predictions.setRegressionPredictions(all);
+        System.out.println("size=" + predictions.getRegressionPredictions().size());
         Stream<RegressionPrediction> regressionPredictions = predictions.getRegressionPredictions().stream().
                 filter( p -> p.getAtKosu().getSONUCNO() == 1 && p.getPredicted().compareTo( threshold) <=0);
 

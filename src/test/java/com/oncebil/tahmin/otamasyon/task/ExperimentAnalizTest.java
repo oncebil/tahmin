@@ -2,6 +2,9 @@ package com.oncebil.tahmin.otamasyon.task;
 
 import com.oncebil.tahmin.ApplicationConstants;
 import com.oncebil.tahmin.Base;
+import com.oncebil.tahmin.WeldGlobal;
+import com.oncebil.tahmin.dao.KosuDAO;
+import com.oncebil.tahmin.entity.Kosu;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.dbunit.DatabaseUnitException;
 import org.dbunit.database.DatabaseConnection;
@@ -18,22 +21,26 @@ import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.List;
 
 /**
  * Created by erkinkarincaoglu on 30/05/2016.
  */
 public class ExperimentAnalizTest {
+    KosuDAO kosuDAO;
     @Before
     public void before() throws Exception {
-        //Base.insertTestData("test_son7kosu_kstar_predictions_data.xml");
+        kosuDAO = WeldGlobal.get(KosuDAO.class);
+        Base.insertTestData("test_son7kosu_kstar_predictions_data.xml");
     }
 
     @Test
     public void testExperimentAnaliz() throws Exception {
-        RegressionPredictions predictions = RegressionPredictions.loadWithExperiment("test-son7kosu-kstar-experiment");
-        Assert.assertTrue( predictions.getRegressionPredictions().size() > 0 );
+//        RegressionPredictions predictions = RegressionPredictions.loadWithExperiment("test-son7kosu-kstar-experiment");
+//        Assert.assertEquals( 1181, predictions.getRegressionPredictions().size()  );
+        List<Kosu> kosular = kosuDAO.findbyExperimentName("test-son7kosu-kstar-experiment");
         ExperimentAnalyze analyze = new ExperimentAnalyze();
-        ExperimentAnalyzeResults analyzeResults = analyze.analyze(predictions,new BigDecimal("2.1"));
+        ExperimentAnalyzeResults analyzeResults = analyze.analyze(kosular,new BigDecimal("2.1"));
         ExperimentAnalyzeResults.ThresholdResult thresholdResult =
                 analyzeResults.getThresholdResults(new BigDecimal("2.1"));
         ExperimentAnalyzeResults.GanyanKazanc ganyanKazanc = thresholdResult.getGanyanKazanc();
@@ -75,6 +82,24 @@ public class ExperimentAnalizTest {
                         "  where experiment = 'KStar'  \n" +
                         "  and a.instanceId = b.KosuKoduAtKodu \n" +
                         "  order by b.KosuKodu desc, predicted asc ");
+
+        // Bahisleri sonradan ekledik
+        partialDataSet.addTable("Bahisler" ,
+                "select '800' || id id,\n" +
+                        "'800' || kosukodu kosukodu,\n" +
+                        "bahistipkodu ,bahistipadi ,tutar ,sonuc ,aciklama ,cikan1atlatutar ,cikan2atlatutar ,cikan3atlatutar ,farklar ,\n" +
+                        "'2001-03-28' kosutarihi,\n" +
+                        "hipodromkodu ,hipodromyeri\n" +
+                        "from Bahisler where kosukodu::varchar(255) in (\n" +
+                        "select substring(kosukodu::varchar(255) from 4 for length(kosukodu::varchar(255)) -3 )    from (\n" +
+                        "select kosukodu from \n" +
+                        "(\n" +
+                        "select distinct b.kosukodu from  AtKosu b, RegressionPrediction c \n" +
+                        "where b.kosukoduatkodu = c.instanceid\n" +
+                        "and c.experiment= 'test-son7kosu-kstar-experiment'\n" +
+                        ") e \n" +
+                        " )  f ) \n" +
+                        "order by kosukodu desc, bahistipkodu");
 
         String filename = Base.getTestFilesPath() + "/test_son7kosu_kstar_predictions_data.xml";
         FlatXmlDataSet.write(partialDataSet,

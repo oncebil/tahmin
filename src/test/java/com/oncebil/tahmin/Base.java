@@ -9,11 +9,13 @@ import org.dbunit.operation.DatabaseOperation;
 
 import java.io.*;
 import java.util.Scanner;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Created by erkinkarincaoglu on 28/05/2016.
  */
 public class Base {
+    public  static AtomicBoolean testDataSetup = new AtomicBoolean(false);
     public Base() {
         ApplicationConstants.repositoryPath = getTestFilesPath() + File.separator;
         ApplicationConstants.repositoryOut = ApplicationConstants.repositoryPath + File.separator;
@@ -32,11 +34,13 @@ public class Base {
     }
 
     public static void insertTestData(String file) throws Exception {
-        IDataSet dataset = new FlatXmlDataSetBuilder().setColumnSensing(true).build(getTestFile(file));
-        IDatabaseTester databaseTester = new JdbcDatabaseTester(ApplicationConstants.driverClass,
-                ApplicationConstants.jdbcUrl, ApplicationConstants.username, ApplicationConstants.password);
-        databaseTester.setSetUpOperation(DatabaseOperation.REFRESH);
-        databaseTester.setDataSet(dataset);
-        databaseTester.onSetup();
+        if (testDataSetup.compareAndSet(false, true) ) {
+            IDataSet dataset = new FlatXmlDataSetBuilder().setColumnSensing(true).build(getTestFile(file));
+            IDatabaseTester databaseTester = new JdbcDatabaseTester(ApplicationConstants.driverClass,
+                    ApplicationConstants.jdbcUrl, ApplicationConstants.username, ApplicationConstants.password);
+            databaseTester.setSetUpOperation(DatabaseOperation.REFRESH);
+            databaseTester.setDataSet(dataset);
+            databaseTester.onSetup();
+        }
     }
 }

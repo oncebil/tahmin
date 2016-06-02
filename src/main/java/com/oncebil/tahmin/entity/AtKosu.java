@@ -7,6 +7,8 @@ package com.oncebil.tahmin.entity;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.List;
+import java.util.Set;
 
 /**
  *
@@ -118,12 +120,13 @@ public class AtKosu implements Serializable {
     @Column(name = "son7bitirisOrtalamasi")
     private BigDecimal son7bitirisOrtalamasi;
 
+
 //
-//    @OneToMany(fetch = FetchType.LAZY)
-//    @JoinColumns({
-//            @JoinColumn(name = "kosuKoduAtkodu", referencedColumnName = "instanceId",insertable = false,updatable = false)
-//    })
-//    private List<RegressionPrediction> regressionPrediction;
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumns({
+            @JoinColumn(name = "instanceId", insertable = false,updatable = false)
+    })
+    private Set<RegressionPrediction> regressionPredictions;
 
     /**
      * @return the KOSUTARIHI
@@ -723,5 +726,14 @@ public class AtKosu implements Serializable {
 
     public void setATKODU(Long ATKODU) {
         this.ATKODU = ATKODU;
+    }
+
+
+    public Set<RegressionPrediction> getRegressionPredictions() {
+        return regressionPredictions;
+    }
+
+    public void setRegressionPredictions(Set<RegressionPrediction> regressionPredictions) {
+        this.regressionPredictions = regressionPredictions;
     }
 }

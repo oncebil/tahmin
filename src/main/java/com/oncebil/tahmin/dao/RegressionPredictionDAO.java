@@ -28,7 +28,8 @@ public class RegressionPredictionDAO {
 
     @Transactional
     public List<RegressionPrediction> findbyExperimentName(String experiment) {
-        Query q = manager.createQuery("select a from RegressionPrediction a where experiment=:experiment");
+        Query q = manager.createQuery("select  a from RegressionPrediction a " +
+                "where experiment=:experiment ");
         q.setParameter("experiment",experiment);
         return (List<RegressionPrediction>)q.getResultList();
     }

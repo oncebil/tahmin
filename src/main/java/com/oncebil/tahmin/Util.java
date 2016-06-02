@@ -10,6 +10,7 @@ import weka.core.converters.ArffLoader;
 import weka.core.converters.ArffSaver;
 
 import java.io.*;
+import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -101,6 +102,14 @@ public class Util {
         }
         return out.toString();
 
+    }
+
+    public static BigDecimal getBigDecimalListAVG(List<BigDecimal> values) {
+        List<Integer> integers = new ArrayList<>();
+        for (BigDecimal val : values) {
+            integers.add(val.intValue());
+        }
+        return new BigDecimal(getListAVG(integers)).setScale(2);
     }
 
     public static Double getListAVG(List<Integer> values) {
@@ -268,5 +277,9 @@ public class Util {
             classes.add( e.nextElement().toString());
         }
         return classes;
+    }
+
+    public static int getIkiliCombination(int size) {
+        return (size * (size-1))/2;
     }
 }

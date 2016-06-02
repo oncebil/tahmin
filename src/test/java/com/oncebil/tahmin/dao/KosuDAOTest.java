@@ -32,6 +32,9 @@ public class KosuDAOTest {
         AtKosu ilkat = ilkkosu.getAtlar().iterator().next();
         Assert.assertNotNull(ilkat);
         Assert.assertTrue(ilkat.getRegressionPredictions().size() > 0);
+        Assert.assertNotNull(ilkat.getRegressionPredictions().iterator().next().getAtKosu());
+
+
 
 
 

@@ -1,55 +1,23 @@
 package com.oncebil.tahmin.otamasyon.task;
 
+import org.slf4j.LoggerFactory;
+
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by erkinkarincaoglu on 31/05/2016.
  */
 public class ExperimentAnalyzeResults {
 
-    HashMap<BigDecimal, ThresholdResult> thresholdResults = new HashMap<>();
+    private static org.slf4j.Logger logger = LoggerFactory.getLogger(ExperimentAnalyzeResults.class);
 
-    public ThresholdResult getThresholdResults(BigDecimal threshold) {
-        return thresholdResults.get(threshold);
-    }
-
-    public ThresholdResult createAndAddThresholdResult(BigDecimal threshold,BigDecimal kazanc) {
-        ThresholdResult thresholdResult = new ThresholdResult(threshold).createNewGanyanKazanc(kazanc);
-        thresholdResults.put( threshold, thresholdResult);
-        return thresholdResult;
-    }
+    List<KazancGanyan> ganyanKazanclari = new ArrayList<>();
+    List<KazancIkili> ikiliKazanclari = new ArrayList<>();
+    List<KazancSiraliIkili> siraliIkiliKazanclari = new ArrayList<>();
 
 
 
-    public static class ThresholdResult {
-        final BigDecimal threshold;
-        GanyanKazanc ganyanKazanc;
-
-        public ThresholdResult(BigDecimal threshold) {
-            this.threshold = threshold;
-        }
-
-        public ThresholdResult createNewGanyanKazanc(BigDecimal kazanc) {
-            ganyanKazanc = new GanyanKazanc(kazanc);
-            return this;
-        }
-
-        public GanyanKazanc getGanyanKazanc() {
-            return ganyanKazanc;
-        }
-    }
-
-    public static class GanyanKazanc {
-
-        final BigDecimal kazanc;
-
-        public GanyanKazanc(BigDecimal kazanc) {
-            this.kazanc = kazanc;
-        }
-
-        public BigDecimal getToplamKazanc() {
-            return kazanc;
-        }
-    }
 }

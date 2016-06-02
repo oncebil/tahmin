@@ -24,7 +24,7 @@ import java.util.List;
  */
 public class AtKosuDAO {
 
-    private org.slf4j.Logger logger = LoggerFactory.getLogger(AtKosuDAO.class);
+    private static org.slf4j.Logger logger = LoggerFactory.getLogger(AtKosuDAO.class);
     @Inject
     private EntityManager manager;
 

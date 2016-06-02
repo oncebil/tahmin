@@ -4,6 +4,7 @@ import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -57,4 +58,20 @@ public class Kosu {
     public void setAtlar(Set<AtKosu> atlar) {
         this.atlar = atlar;
     }
+
+    /**
+     * This method assumes that atlar has filled with regression predictions already
+     * Normally at has one regression prediction when kosular is selected with regression experiment
+     * So only the first regression is selected
+     * @return
+     */
+    @Transient
+    public List<RegressionPrediction> getAtlarWithRegressionPredictions() {
+        List<RegressionPrediction> regressionPredictions = new ArrayList<>();
+        for (AtKosu at : getAtlar()) {
+            regressionPredictions.add( at.getRegressionPredictions().iterator().next());
+        }
+        return regressionPredictions;
+    }
+
 }

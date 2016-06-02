@@ -5,7 +5,6 @@ import com.oncebil.tahmin.Base;
 import com.oncebil.tahmin.WeldGlobal;
 import com.oncebil.tahmin.dao.KosuDAO;
 import com.oncebil.tahmin.entity.Kosu;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.dbunit.DatabaseUnitException;
 import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.IDatabaseConnection;
@@ -36,15 +35,25 @@ public class ExperimentAnalizTest {
 
     @Test
     public void testExperimentAnaliz() throws Exception {
-//        RegressionPredictions predictions = RegressionPredictions.loadWithExperiment("test-son7kosu-kstar-experiment");
-//        Assert.assertEquals( 1181, predictions.getRegressionPredictions().size()  );
         List<Kosu> kosular = kosuDAO.findbyExperimentName("test-son7kosu-kstar-experiment");
         ExperimentAnalyze analyze = new ExperimentAnalyze();
-        ExperimentAnalyzeResults analyzeResults = analyze.analyze(kosular,new BigDecimal("2.1"));
-        ExperimentAnalyzeResults.ThresholdResult thresholdResult =
-                analyzeResults.getThresholdResults(new BigDecimal("2.1"));
-        ExperimentAnalyzeResults.GanyanKazanc ganyanKazanc = thresholdResult.getGanyanKazanc();
-        Assert.assertEquals(new BigDecimal("23.10"), ganyanKazanc.getToplamKazanc());
+        ExperimentAnalyzeResults analyzeResults = analyze.analyze(kosular);
+
+        KazancGanyan kazancGanyan = analyzeResults.ganyanKazanclari.get(0);
+        System.out.println(kazancGanyan);
+        Assert.assertEquals(new BigDecimal("23.10"), kazancGanyan.kacliraKazanirdik);
+        Assert.assertEquals(new BigDecimal("21.00"), kazancGanyan.neKadarVerirdik);
+
+        KazancIkili ikiliKazanc = analyzeResults.ikiliKazanclari.get(0);
+        System.out.println(ikiliKazanc);
+        Assert.assertEquals(new BigDecimal("71.20"), ikiliKazanc.kacliraKazanirdik);
+        Assert.assertEquals(new BigDecimal("35.00"), ikiliKazanc.neKadarVerirdik);
+
+        KazancSiraliIkili siraliIkili = analyzeResults.siraliIkiliKazanclari.get(0);
+        System.out.println(siraliIkili);
+        Assert.assertEquals(new BigDecimal("78.10"), siraliIkili.kacliraKazanirdik);
+        Assert.assertEquals(new BigDecimal("18.00"), siraliIkili.neKadarVerirdik);
+
 
     }
 
@@ -56,6 +65,8 @@ public class ExperimentAnalizTest {
         // and changed kosutarihi to 2001-03-28
         // And we created RegressionPrediction and AtKosu test rows.
         // we will save them to test resources
+        // experiment in kullanildigi kosu araligi AND KOSUTARIHI<='2011-08-01' AND KOSUTARIHI>='2011-05-01'
+
         Connection jdbcConnection = DriverManager.getConnection(
                 ApplicationConstants.jdbcUrl, ApplicationConstants.username, ApplicationConstants.password);
         IDatabaseConnection connection = new DatabaseConnection(jdbcConnection);

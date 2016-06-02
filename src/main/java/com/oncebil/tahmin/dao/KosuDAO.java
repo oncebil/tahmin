@@ -28,7 +28,8 @@ public class KosuDAO {
                 "inner join fetch a.bahisler d " +
                 "where a.KOSUKODU = b.KOSUKODU " +
                 "and b.kosuKoduAtKodu = c.instanceId " +
-                "and c.experiment=:experiment ");
+                "and c.experiment=:experiment " +
+                "order by a.KOSUKODU desc ");
 
         q.setParameter("experiment",experiment);
         return (List<Kosu>)q.getResultList();

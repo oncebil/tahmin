@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 public class KazancGanyan extends KazancAbstract {
 
     private static org.slf4j.Logger logger = LoggerFactory.getLogger(KazancGanyan.class);
-    List<BigDecimal> bilinenGanyanlar = new ArrayList<>();
+
     public KazancGanyan(List<Kosu> kosular, BigDecimal threshold) {
         super(kosular,threshold);
         if (kacKosuVardi == 0) {
@@ -41,7 +41,7 @@ public class KazancGanyan extends KazancAbstract {
 
             if (!bildik.isEmpty()) {
                 RegressionPrediction regressionPrediction = bildik.get(0);
-                bilinenGanyanlar.add(regressionPrediction.getAtKosu().getGANYAN().setScale(2, RoundingMode.HALF_UP));
+                kazancOranlari.add(regressionPrediction.getAtKosu().getGANYAN().setScale(2, RoundingMode.HALF_UP));
                 kacKosudaBilirdik++;
                 hangiKosulardaBilirdik.add(kosu.getKOSUKODU());
                 kacliraKazanirdik = kacliraKazanirdik.add(regressionPrediction.getAtKosu().getGANYAN());
@@ -61,11 +61,12 @@ public class KazancGanyan extends KazancAbstract {
                 ", kazancOraninKacOlurdu=" + kazancOraninKacOlurdu +
                 ", yuzdeKacindaOynardik=" + yuzdeKacindaOynardik +
                 ", kacKosudaBilirdik=" + kacKosudaBilirdik +
+                ", yuzdeKacindaBilirdik=" + yuzdeKacindaBilirdik +
                 ", kacliraKazanirdik=" + kacliraKazanirdik +
                 ", neKadarVerirdik=" + neKadarVerirdik +
                 ", threshold=" + threshold +
                 ", hangiKosulardaBilirdik=" + hangiKosulardaBilirdik +
-                ", bilinenGanyanlar=" + bilinenGanyanlar +
+                ", kazancOranlari=" + kazancOranlari +
                 '}';
     }
 

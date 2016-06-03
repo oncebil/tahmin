@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 public class KazancSiraliIkili extends  KazancAbstract {
     private static org.slf4j.Logger logger = LoggerFactory.getLogger(KazancSiraliIkili.class);
 
-    List<BigDecimal> bilinenSiraliIkililer = new ArrayList<>();
+
 
     private final static int SIRALI_IKILI_BAHISTIP_KODU = 8;
 
@@ -57,7 +57,7 @@ public class KazancSiraliIkili extends  KazancAbstract {
                 kacliraKazanirdik = kacliraKazanirdik.add(bahisler.get(0).getTutar());
                 kacKosudaBilirdik++;
                 hangiKosulardaBilirdik.add(kosu.getKOSUKODU());
-                bilinenSiraliIkililer.add(bahisler.get(0).getTutar());
+                kazancOranlari.add(bahisler.get(0).getTutar());
             }
         }
         setCommonValues();
@@ -72,11 +72,12 @@ public class KazancSiraliIkili extends  KazancAbstract {
                 ", kazancOraninKacOlurdu=" + kazancOraninKacOlurdu +
                 ", yuzdeKacindaOynardik=" + yuzdeKacindaOynardik +
                 ", kacKosudaBilirdik=" + kacKosudaBilirdik +
+                ", yuzdeKacindaBilirdik=" + yuzdeKacindaBilirdik +
                 ", kacliraKazanirdik=" + kacliraKazanirdik +
                 ", neKadarVerirdik=" + neKadarVerirdik +
                 ", threshold=" + threshold +
                 ", hangiKosulardaBilirdik=" + hangiKosulardaBilirdik +
-                ", bilinenSiraliIkililer=" + bilinenSiraliIkililer +
+                ", kazancOranlari=" + kazancOranlari +
                 '}';
     }
 }

@@ -1,8 +1,10 @@
 package com.oncebil.tahmin.otamasyon.task;
 
+import com.oncebil.tahmin.Util;
 import com.oncebil.tahmin.entity.AtKosu;
 import com.oncebil.tahmin.entity.Kosu;
 import com.oncebil.tahmin.entity.RegressionPrediction;
+import org.apache.commons.math3.stat.descriptive.moment.Variance;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -24,10 +26,69 @@ public class ExperimentAnalyze {
         results.ikiliKazanclari.add(new KazancIkili(kosular,new BigDecimal("3.0")));
         results.siraliIkiliKazanclari.add(new KazancSiraliIkili(kosular,new BigDecimal("3.0")));
 
+
+        dynamicAnalysis( kosular,new KazancFactory("ganyan"));
+        dynamicAnalysis( kosular,new KazancFactory("ikili"));
+        dynamicAnalysis( kosular,new KazancFactory("siraliikili"));
+
+
         return results;
-
-
         //return analyzeOld(kosular,threshold);
+    }
+    private static class KazancFactory {
+        String type = "";
+
+        KazancFactory(String type) {
+            this.type = type;
+
+        }
+        KazancAbstract createKazancAbstract(BigDecimal threshold,List<Kosu> kosular) {
+            switch (type) {
+                case "ganyan" : return new KazancGanyan(kosular,threshold);
+                case "ikili" : return new KazancIkili(kosular,threshold);
+                case "siraliikili" : return new KazancSiraliIkili(kosular,threshold);
+
+            }
+            throw new RuntimeException("unknown type");
+
+        }
+    }
+    public void dynamicAnalysis(List<Kosu> kosular,KazancFactory kazancFactory) {
+        Set<BigDecimal> predictions = new HashSet<>();
+        for (Kosu k : kosular) {
+            for (RegressionPrediction rp : k.getAtlarWithRegressionPredictions() ) {
+                predictions.add(rp.getPredicted());
+            }
+        }
+        System.out.println("regressionPredictions=" + predictions.size());
+        List<BigDecimal> sorted = new ArrayList<>(predictions);
+        Collections.sort(sorted);
+        System.out.println("sorted=" + sorted.size());
+        BigDecimal previousKazanc = BigDecimal.ZERO;
+        int index = sorted.size() / 2;
+        int max = 12;
+        int count = 0;
+        while (true) {
+            BigDecimal  median = sorted.get( index );
+            System.out.println("index=" + index + " median=" + median);
+            KazancAbstract kazanc = kazancFactory.createKazancAbstract(median,kosular);
+
+            if ( kazanc.kazancOraninKacOlurdu.compareTo( new BigDecimal(1.0)) >= 0 ){
+                index = (int)(index * 0.90);
+            } else if (kazanc.kazancOraninKacOlurdu.compareTo( new BigDecimal(0.90)) >= 0) {
+                index =  (int)(index * 0.80);
+            }else if (kazanc.kazancOraninKacOlurdu.compareTo( new BigDecimal(0.80)) >= 0) {
+                index =  (int)(index * 0.70);
+            }else {
+                index =  (int)(index * 0.5);
+            }
+            previousKazanc = new BigDecimal(kazanc.kazancOraninKacOlurdu.toString());
+            System.out.println("new index=" + index + " kacanc=" + kazanc);
+            count++;
+            if (count == max){
+                break;
+            }
+        }
     }
 
 //    public ExperimentAnalyzeResults analyzeOld(List<Kosu> kosular, BigDecimal threshold) {

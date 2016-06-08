@@ -480,4 +480,230 @@ and actual =1
   CREATE UNIQUE INDEX AtKosu_KosuKoduAtKodu on atkosu(KosuKoduAtKodu);
 
   select version();
-  
+
+
+
+  select bahistipkodu, bahistipadi  from bahisler group by bahistipkodu, bahistipadi;
+
+  select * from Bahisler;
+
+  select '800' || a.kosukodu ,
+  a.bahistipkodu ,a.bahistipadi ,a.tutar ,a.sonuc ,a.aciklama ,a.cikan1atlatutar ,a.cikan2atlatutar ,a.cikan3atlatutar ,a.farklar ,a.kosutarihi ,a.hipodromkodu ,a.hipodromyeri
+  from Bahisler a, AtKosu b, RegressionPrediction c
+  where a.kosukodu || '' = substring(b.kosukoduatkodu from 4 for position('_' in b.kosukoduatkodu) -4 )
+  and b.kosukoduatkodu = c.instanceid
+  and c.experiment= 'test-son7kosu-kstar-experiment'
+  order by b.KosuKodu desc, predicted asc ,bahistipkodu
+
+
+
+  select '800' || id id,
+  '800' || kosukodu kosukodu,
+  bahistipkodu ,bahistipadi ,tutar ,sonuc ,aciklama ,cikan1atlatutar ,cikan2atlatutar ,cikan3atlatutar ,farklar ,
+  '2001-03-28' kosutarihi,
+  hipodromkodu ,hipodromyeri
+  from Bahisler where kosukodu::varchar(255) in (
+  select substring(kosukodu::varchar(255) from 4 for length(kosukodu::varchar(255)) -3 )    from (
+  select kosukodu from
+  (
+  select distinct b.kosukodu from  AtKosu b, RegressionPrediction c
+  where b.kosukoduatkodu = c.instanceid
+  and c.experiment= 'test-son7kosu-kstar-experiment'
+  ) e
+   )  f )
+  order by kosukodu desc, bahistipkodu
+
+
+
+
+  select substring(kosukoduatkodu from 4 for position('_' in kosukoduatkodu) -4 )  from AtKosu
+
+  select concat(column_name) || ',' from
+    (select column_name from information_schema.columns where
+  table_name='bahisler') a;
+
+  select column_name from information_schema.columns where
+  table_name='bahisler'
+
+
+
+    select sum(genyen) from (
+    select  ganyan genyen , a.*,b.* from RegressionPrediction a, AtKosu b
+    where experiment = 'test-son7kosu-kstar-experiment'
+    and a.instanceId = b.KosuKoduAtKodu
+    and predicted < 2.1
+  and actual =1
+    order by b.KosuKodu desc, predicted asc
+     ) a
+
+
+
+    select sum(genyen) from (
+    select c.tutar, substring(a.instanceid from 4 for position('_' in instanceid) -4 ), ganyan genyen , a.*,b.* from RegressionPrediction a, AtKosu b, Bahisler c
+    where experiment = 'test-son7kosu-kstar-experiment'
+    and a.instanceId = b.KosuKoduAtKodu
+    and predicted < 3
+   and c.Kosukodu || '' = substring(a.instanceid from 4 for position('_' in instanceid) -4 )
+  -- and (c.bahistipadi = 'İKİLİ' or c.bahistipadi = 'SIRALI İKİLİ' )
+  and c.bahistipadi = 'İKİLİ'
+  --and actual =1
+  and b.kosukodu = 80048862
+    order by b.KosuKodu desc, predicted asc
+     ) a
+
+
+     select * from RegressionPrediction where experiment = 'test-son7kosu-kstar-experiment' order by substring(instanceid from 4 for position('_' in instanceid) -4 ), predicted
+
+     ALTER TABLE RegressionPrediction ADD CONSTRAINT RegressionPrediction_instance_id_fk FOREIGN KEY (instanceId) REFERENCES AtKosu (KosuKoduAtKodu) MATCH FULL;
+
+
+     select substring(instanceid from 1 for position('_' in instanceid)-1 ) from RegressionPrediction;
+
+
+     SELECT a  FROM RegressionPrediction AS a
+  LEFT JOIN a.children AS c
+  WHERE p.state = 1
+  ORDER BY p.modified
+
+
+  SELECT a.*,b.*
+      FROM RegressionPrediction a LEFT OUTER JOIN AtKosu b  ON (a.instanceId = b.KosuKoduAtKodu) where a.experiment = 'test-regression-predictions';
+
+
+      select * from AtKosu;
+
+      ALTER TABLE AtKosu DROP COLUMN id;
+
+      ALTER TABLE AtKosu ADD PRIMARY KEY (KosuKoduAtKodu);
+
+      alter table bahisler drop constraint fk_Bahisler_KOSUKODU
+
+
+      // ikili kazanc
+      select sum (tutar) from (
+      select tutar,kosukodu from (
+  	    select c.tutar , a.kosukodu, b.*  from AtKosu a, RegressionPrediction b, Bahisler c
+  	    where a.kosukoduatkodu = b.instanceid
+  	    and a.kosukodu in  (80049139, 80048862, 80048495, 80048422)
+  	    and experiment = 'test-son7kosu-kstar-experiment'
+  	    and c.kosukodu = a.kosukodu
+  	    and c.bahistipkodu = 7
+  	    and predicted < 3.0
+  	    order by a.kosukodu desc, predicted asc
+  	    ) b
+  	    group by kosukodu,tutar
+      )  a
+
+  // ne kadar verirdik
+  select sum (  (count * (count-1))/2 ) from (
+  	select * from (
+  		select a.kosukodu,count(*)  as count from AtKosu a, RegressionPrediction b, Bahisler c
+  		where a.kosukoduatkodu = b.instanceid
+  		and experiment = 'test-son7kosu-kstar-experiment'
+  		and predicted < 3.0
+  		and c.kosukodu = a.kosukodu
+  		and c.bahistipkodu = 7
+  		group by a.kosukodu
+  		order by a.kosukodu desc
+  		) a
+  		where count >= 2
+  		order by kosukodu
+  	) b
+
+  	select * from bahisler where kosukodu = 80048862;
+
+
+
+
+  select sum(genyen) from (
+  	select  ganyan genyen , a.*,b.* from RegressionPrediction a, AtKosu b
+  	where experiment = 'test-son7kosu-kstar-experiment'
+  	and a.instanceId = b.KosuKoduAtKodu
+  	and predicted < 2.1
+  	and actual =1
+  	order by b.KosuKodu desc, predicted asc
+  ) a
+
+  select count(*) from(
+  	select  ganyan genyen , a.*,b.* from RegressionPrediction a, AtKosu b
+  	where experiment = 'test-son7kosu-kstar-experiment'
+  	and a.instanceId = b.KosuKoduAtKodu
+  	and predicted < 2.1
+  	order by b.KosuKodu desc, predicted asc
+  ) a
+
+
+
+
+   select sum (tutar) from (
+  	 select tutar,kosukodu from (
+  		 select c.tutar , a.kosukodu, a.sonucno  from AtKosu a, RegressionPrediction b, Bahisler c
+  		 where a.kosukoduatkodu = b.instanceid
+  		 and experiment = 'test-son7kosu-kstar-experiment'
+  		 and c.kosukodu = a.kosukodu
+  		 and c.bahistipkodu = 7
+  		 and predicted < 3.0
+  		 order by a.kosukodu desc, predicted asc
+  	 ) b
+   group by kosukodu,tutar
+   )  a
+
+   // ikili kazanc
+   select sum(tutar) from Bahisler where kosukodu in(
+  	 select kosukodu from (
+  		 select kosukodu,count(*) count  from AtKosu a, RegressionPrediction b
+  		 where kosukoduatkodu = b.instanceid
+  		 and experiment = 'test-son7kosu-kstar-experiment'
+  		 and predicted < 3.0
+  		 and (sonucno =1 or sonucno =2)
+  		 group by kosukodu
+  		 order by kosukodu desc
+  		 ) a
+  		 where count =2
+  	)
+  	and bahistipkodu = 7
+
+
+  	     select sum (  (count * (count-1))/2 ) from (
+       select * from (
+       select a.kosukodu,count(*)  as count from AtKosu a, RegressionPrediction b, Bahisler c
+       where a.kosukoduatkodu = b.instanceid
+       and experiment = 'test-son7kosu-kstar-experiment'
+       and predicted < 3.0
+       and c.kosukodu = a.kosukodu
+       and c.bahistipkodu = 7
+       group by a.kosukodu
+       order by a.kosukodu desc
+       ) a
+       where count >= 2
+       order by kosukodu
+       ) b
+
+
+  		     select count(*) from(
+       select  ganyan genyen , a.*,b.* from RegressionPrediction a, AtKosu b
+       where experiment = 'test-son7kosu-kstar-experiment'
+       and a.instanceId = b.KosuKoduAtKodu
+       and predicted < 2.1
+       order by b.KosuKodu desc, predicted asc
+       ) a
+
+       select * from Bahisler where kosukodu = 47947;
+
+       		 select  c.*  from AtKosu a, Bahisler c
+  		 where c.kosukodu = a.kosukodu
+  		 and c.bahistipkodu = 12
+  		 and a.kosukodu = 47947
+  		 		 order by a.kosukodu desc
+
+
+  select * from AtKosu where kosuKodu = 49078;
+
+   select  a.*  from AtKosu a, Bahisler c
+  where c.kosukodu = a.kosukodu
+  and c.bahistipkodu = 12
+  --and a.kosukodu = 49078
+  and a.KOSUTARIHI<='2011-08-01'
+   AND a.KOSUTARIHI>='2011-05-01'
+  order by a.kosukodu desc
+  		 

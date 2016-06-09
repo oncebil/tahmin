@@ -9,7 +9,10 @@ package com.oncebil.tahmin.otamasyon.task;
 import com.oncebil.tahmin.ApplicationConstants;
 import com.oncebil.tahmin.TahminException;
 import com.oncebil.tahmin.Util;
+import com.oncebil.tahmin.WeldGlobal;
+import com.oncebil.tahmin.dao.KosuDAO;
 import com.oncebil.tahmin.entity.ClassificationPrediction;
+import com.oncebil.tahmin.entity.Kosu;
 import com.oncebil.tahmin.entity.RegressionPrediction;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
@@ -124,6 +127,11 @@ public class WekaEvaluation extends AbstractTask {
                             predsBuff.toString(),Util.getInstancesClassValues(instances) ).save();
                 } else {
                     RegressionPredictions.createFromPredictionsOutput( getName() , predsBuff.toString() ).save();
+
+                    KosuDAO kosuDAO = WeldGlobal.get(KosuDAO.class);
+                    List<Kosu> kosular = kosuDAO.findbyExperimentName(getName());
+                    ExperimentAnalyze analyze = new ExperimentAnalyze();
+                    ExperimentAnalyzeResults analyzeResults = analyze.analyze2(kosular);
 
                 }
 

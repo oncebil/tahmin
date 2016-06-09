@@ -60,7 +60,6 @@ public class Project {
             lastoutput = output;
             abstractTask = null;
             it.remove();
-            System.gc();
         }
     }
 

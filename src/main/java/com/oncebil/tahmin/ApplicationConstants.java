@@ -20,10 +20,13 @@ public class ApplicationConstants {
     public static String jdbcUrl = "jdbc:postgresql://localhost/KOSUTAHMIN";
     public static String username = "postgres";
     public static String password = "";
+    // where from load the projects
+    public static  String repositoryPath = System.getProperty("user.dir") + File.separatorChar  +  "tahminmodel";
+
 
     public static String repositoryFolder = "/Users/erkinkarincaoglu/Documents/code/repository/";
     public static String repositoryOut = "/Users/erkinkarincaoglu/Documents/code/repository/";
-  
+
     public static final String TRUE = "true";
     public static final String FALSE = "false";
     
@@ -36,7 +39,7 @@ public class ApplicationConstants {
     
     public static final List<String> idAttributes = Arrays.asList( new String[]  { KosuIdAttribute, AtIdAttribute}  );
     
-    public static  String repositoryPath = System.getProperty("user.dir") + File.separatorChar  +  "tahminmodel";
+
     
 
     public static final ConcurrentHashMap<String,String> taskDefinitons = new ConcurrentHashMap<String,String>();

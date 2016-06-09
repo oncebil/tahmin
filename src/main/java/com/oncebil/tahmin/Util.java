@@ -146,7 +146,16 @@ public class Util {
         return Math.sqrt(var);
 
     }
-
+    public static void saveInstances(Instances instances,File file) {
+        ArffSaver saver = new ArffSaver();
+        saver.setInstances(instances);
+        try {
+            saver.setFile(file);
+            saver.writeBatch();
+        } catch (IOException ex) {
+            throw new TahminException(ex);
+        }
+    }
     public static int getHowManyCount(List<Integer> values, int findval) {
         int count = 0;
         for (Integer value : values) {

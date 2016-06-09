@@ -7,19 +7,24 @@ import com.oncebil.tahmin.entity.RegressionPrediction;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * Created by erkinkarincaoglu on 30/05/2016.
  */
 public class RegressionPredictions {
+    private final static Logger logger = Logger.getLogger(RegressionPredictions.class.getName());
     private RegressionPredictionDAO dao = WeldGlobal.get(RegressionPredictionDAO.class);
     private List<RegressionPrediction> regressionPredictions = new ArrayList<>();
+    private String experimentName;
 
     public static RegressionPredictions createFromPredictionsOutput(String experimentName,
                                                                     String predictionsOutput) {
 
+
         int i = 0;
         RegressionPredictions predictions = new RegressionPredictions();
+        predictions.experimentName = experimentName;
         String[] lines = predictionsOutput.split(System.getProperty("line.separator"));
         for (String line : lines) {
             i++;
@@ -44,6 +49,7 @@ public class RegressionPredictions {
 
     public void save() {
 
+        logger.info("Saving predictions experiment=" + experimentName + " size=" + regressionPredictions.size());
         for (RegressionPrediction p : getRegressionPredictions()) {
             dao.merge(p);
         }

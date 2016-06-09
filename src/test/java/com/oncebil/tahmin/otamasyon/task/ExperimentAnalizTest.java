@@ -34,25 +34,26 @@ public class ExperimentAnalizTest {
     }
 
     @Test
+    public void testExperimentAnaliz2() throws Exception {
+        List<Kosu> kosular = kosuDAO.findbyExperimentName("test-son7kosu-kstar-experiment");
+        ExperimentAnalyze analyze = new ExperimentAnalyze();
+        ExperimentAnalyzeResults analyzeResults = analyze.analyze2(kosular);
+        Assert.assertTrue( analyzeResults.ganyanKazanclari.size() > 0);
+        Assert.assertTrue( analyzeResults.ikiliKazanclari.size() > 0);
+        Assert.assertTrue( analyzeResults.siraliIkiliKazanclari.size() > 0);
+
+
+    }
+
+    @Test
     public void testExperimentAnaliz() throws Exception {
         List<Kosu> kosular = kosuDAO.findbyExperimentName("test-son7kosu-kstar-experiment");
         ExperimentAnalyze analyze = new ExperimentAnalyze();
         ExperimentAnalyzeResults analyzeResults = analyze.analyze(kosular);
+        Assert.assertTrue( analyzeResults.ganyanKazanclari.size() > 0);
+        Assert.assertTrue( analyzeResults.ikiliKazanclari.size() > 0);
+        Assert.assertTrue( analyzeResults.siraliIkiliKazanclari.size() > 0);
 
-        KazancGanyan kazancGanyan = analyzeResults.ganyanKazanclari.get(0);
-        System.out.println(kazancGanyan);
-        Assert.assertEquals(new BigDecimal("23.10"), kazancGanyan.kacliraKazanirdik);
-        Assert.assertEquals(new BigDecimal("21.00"), kazancGanyan.neKadarVerirdik);
-
-        KazancIkili ikiliKazanc = analyzeResults.ikiliKazanclari.get(0);
-        System.out.println(ikiliKazanc);
-        Assert.assertEquals(new BigDecimal("71.20"), ikiliKazanc.kacliraKazanirdik);
-        Assert.assertEquals(new BigDecimal("35.00"), ikiliKazanc.neKadarVerirdik);
-
-        KazancSiraliIkili siraliIkili = analyzeResults.siraliIkiliKazanclari.get(0);
-        System.out.println(siraliIkili);
-        Assert.assertEquals(new BigDecimal("78.10"), siraliIkili.kacliraKazanirdik);
-        Assert.assertEquals(new BigDecimal("18.00"), siraliIkili.neKadarVerirdik);
 
 
     }

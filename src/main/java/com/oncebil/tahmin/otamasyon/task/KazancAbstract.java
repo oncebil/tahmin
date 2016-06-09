@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * Created by erkinkarincaoglu on 02/06/2016.
  */
-public class KazancAbstract {
+public abstract  class KazancAbstract {
     int kacKosuVardi = 0;
     BigDecimal threshold;
     int kacKosudaOynardik = 0;
@@ -23,16 +23,25 @@ public class KazancAbstract {
     List<Long> hangiKosulardaBilirdik = new ArrayList<>();
     int kacKosudaOynanabilirdi = 0;
     List<BigDecimal> kazancOranlari = new ArrayList<>(); //  ganyan , ikili vs.. degeri
+    List<Kosu> kosular;
+    List<Kosu> oynanabilirKosular = new ArrayList<>();
 
-    public KazancAbstract (List<Kosu> kosular, BigDecimal threshold) {
+    public abstract  List<BigDecimal> getOynanabilirKosulardakiMinumumPrediction();
+
+    public abstract  void analyze(BigDecimal threshold);
+
+    public KazancAbstract (List<Kosu> kosular) {
+        this.kosular = kosular;
         kacKosuVardi = kosular.size();
-        this.threshold = threshold;
     }
     void setCommonValues() {
         neKadarVerirdik = neKadarVerirdik.setScale(2, RoundingMode.HALF_UP);
         kacliraKazanirdik = kacliraKazanirdik.setScale(2, RoundingMode.HALF_UP);
         if (kacKosudaOynanabilirdi > 0) {
             yuzdeKacindaOynardik = new BigDecimal((100 * kacKosudaOynardik) / kacKosudaOynanabilirdi).setScale(2);
+
+        }
+        if (kacKosudaOynardik>0) {
             yuzdeKacindaBilirdik = new BigDecimal((100 * kacKosudaBilirdik) / kacKosudaOynardik).setScale(2);
         }
         if (kacliraKazanirdik.compareTo(BigDecimal.ZERO) > 0) {

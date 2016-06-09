@@ -20,40 +20,71 @@ import java.util.stream.Stream;
  */
 public class ExperimentAnalyze {
     public ExperimentAnalyzeResults analyze(List<Kosu> kosular) {
-
         ExperimentAnalyzeResults results = new ExperimentAnalyzeResults();
-        results.ganyanKazanclari.add(new KazancGanyan(kosular,new BigDecimal("2.1")));
-        results.ikiliKazanclari.add(new KazancIkili(kosular,new BigDecimal("3.0")));
-        results.siraliIkiliKazanclari.add(new KazancSiraliIkili(kosular,new BigDecimal("3.0")));
-
-
-        dynamicAnalysis( kosular,new KazancFactory("ganyan"));
-        dynamicAnalysis( kosular,new KazancFactory("ikili"));
-        dynamicAnalysis( kosular,new KazancFactory("siraliikili"));
-
+        dynamicAnalysis( kosular,new KazancFactory(results,"ganyan"));
+        dynamicAnalysis( kosular,new KazancFactory(results,"ikili"));
+        dynamicAnalysis( kosular,new KazancFactory(results,"siraliikili"));
 
         return results;
-        //return analyzeOld(kosular,threshold);
     }
-    private static class KazancFactory {
-        String type = "";
+    public ExperimentAnalyzeResults analyze2(List<Kosu> kosular) {
+        ExperimentAnalyzeResults results = new ExperimentAnalyzeResults();
+        dynamicAnalysis2(kosular, new KazancFactory(results,"ganyan"));
+        dynamicAnalysis2( kosular,new KazancFactory(results,"ikili"));
+        dynamicAnalysis2( kosular,new KazancFactory(results,"siraliikili"));
 
-        KazancFactory(String type) {
+        return results;
+    }
+
+
+    private static class KazancFactory {
+        String type;
+        ExperimentAnalyzeResults results;
+
+        KazancFactory(ExperimentAnalyzeResults results,String type) {
             this.type = type;
+            this.results =results;
 
         }
-        KazancAbstract createKazancAbstract(BigDecimal threshold,List<Kosu> kosular) {
+        KazancAbstract createKazancAbstract(List<Kosu> kosular) {
             switch (type) {
-                case "ganyan" : return new KazancGanyan(kosular,threshold);
-                case "ikili" : return new KazancIkili(kosular,threshold);
-                case "siraliikili" : return new KazancSiraliIkili(kosular,threshold);
+                case "ganyan" :
+                    KazancGanyan kazancGanyan = new KazancGanyan(kosular);
+                    results.ganyanKazanclari.add(kazancGanyan);
+                    return kazancGanyan;
+                case "ikili" :
+                    KazancIkili kazancIkili = new KazancIkili(kosular);
+                    results.ikiliKazanclari.add(kazancIkili);
+                    return kazancIkili;
+
+                case "siraliikili" :
+                    KazancSiraliIkili kazancSiraliIkili =  new KazancSiraliIkili(kosular);
+                    results.siraliIkiliKazanclari.add(kazancSiraliIkili);
+                    return kazancSiraliIkili;
 
             }
             throw new RuntimeException("unknown type");
 
         }
     }
-    public void dynamicAnalysis(List<Kosu> kosular,KazancFactory kazancFactory) {
+    public void dynamicAnalysis2( List<Kosu> kosular,KazancFactory kazancFactory) {
+        KazancAbstract kazancAbstract = kazancFactory.createKazancAbstract(kosular);
+        List<BigDecimal> minumumPredictions = kazancAbstract.getOynanabilirKosulardakiMinumumPrediction();
+        Collections.sort(minumumPredictions, Collections.reverseOrder());
+        System.out.println(minumumPredictions.size());
+        for (int i = 0 ; i<minumumPredictions.size()  ; i = i + (minumumPredictions.size() / 10)) {
+            // create new one for each threshold. first one is already created
+            if (i > 0) {
+                kazancAbstract = kazancFactory.createKazancAbstract(kosular);
+            }
+            BigDecimal threshold = minumumPredictions.get( i   );
+            KazancAbstract kazanc = kazancFactory.createKazancAbstract(kosular);
+            kazanc.analyze(threshold);
+            System.out.println( "i=" + i + " threshold=" + threshold + " kacanc=" + kazanc);
+        }
+
+    }
+    public void dynamicAnalysis( List<Kosu> kosular,KazancFactory kazancFactory) {
         Set<BigDecimal> predictions = new HashSet<>();
         for (Kosu k : kosular) {
             for (RegressionPrediction rp : k.getAtlarWithRegressionPredictions() ) {
@@ -68,11 +99,13 @@ public class ExperimentAnalyze {
         int index = sorted.size() / 2;
         int max = 12;
         int count = 0;
+        // select median as threshold and play all the ats whose value is higher than this value
+        BigDecimal  threshold = sorted.get( index );
         while (true) {
-            BigDecimal  median = sorted.get( index );
-            System.out.println("index=" + index + " median=" + median);
-            KazancAbstract kazanc = kazancFactory.createKazancAbstract(median,kosular);
-
+           
+            System.out.println("index=" + index + " median=" + threshold);
+            KazancAbstract kazanc = kazancFactory.createKazancAbstract(kosular);
+            kazanc.analyze(threshold);
             if ( kazanc.kazancOraninKacOlurdu.compareTo( new BigDecimal(1.0)) >= 0 ){
                 index = (int)(index * 0.90);
             } else if (kazanc.kazancOraninKacOlurdu.compareTo( new BigDecimal(0.90)) >= 0) {

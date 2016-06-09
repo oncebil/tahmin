@@ -22,20 +22,36 @@ public class KazancSiraliIkili extends  KazancAbstract {
 
     private final static int SIRALI_IKILI_BAHISTIP_KODU = 8;
 
-    public KazancSiraliIkili(List<Kosu> kosular, BigDecimal threshold) {
-        super(kosular,threshold);
-        this.threshold = threshold;
-        kacKosuVardi = kosular.size();
-        if (kacKosuVardi == 0) {
-            logger.warn("ikili kazanci kosu count is 0");
-            return;
-        }
+    public KazancSiraliIkili(List<Kosu> kosular) {
+        super(kosular);
         for (Kosu kosu : kosular) {
             List<Bahis> bahisler = kosu.getBahisler().stream().
                     filter(bahis -> bahis.getBahisTipKodu() == SIRALI_IKILI_BAHISTIP_KODU).collect(Collectors.toList());
             if (bahisler.isEmpty()) {
                 continue;
             }
+            oynanabilirKosular.add(kosu);
+        }
+    }
+
+    @Override
+    public List<BigDecimal> getOynanabilirKosulardakiMinumumPrediction() {
+        List<BigDecimal> minumumPredictions = oynanabilirKosular.stream().map(k -> k.getSecondMinumumRegressionPredicted()).collect(Collectors.toList());
+        Collections.sort(minumumPredictions, Collections.reverseOrder());
+        return minumumPredictions;
+    }
+
+    @Override
+    public void analyze(BigDecimal threshold) {
+        this.threshold = threshold;
+        kacKosuVardi = kosular.size();
+        if (kacKosuVardi == 0) {
+            logger.warn("ikili kazanci kosu count is 0");
+            return;
+        }
+        for (Kosu kosu : oynanabilirKosular) {
+            Bahis bahis = kosu.getBahisler().stream().
+                    filter(b -> b.getBahisTipKodu() == SIRALI_IKILI_BAHISTIP_KODU).collect(Collectors.toList()).get(0);
             kacKosudaOynanabilirdi++;
             List<RegressionPrediction> regressionPredictions =
                     kosu.getAtlarWithRegressionPredictions();
@@ -54,14 +70,16 @@ public class KazancSiraliIkili extends  KazancAbstract {
                 bildik=true;
             }
             if (bildik) {
-                kacliraKazanirdik = kacliraKazanirdik.add(bahisler.get(0).getTutar());
+                kacliraKazanirdik = kacliraKazanirdik.add(bahis.getTutar());
                 kacKosudaBilirdik++;
                 hangiKosulardaBilirdik.add(kosu.getKOSUKODU());
-                kazancOranlari.add(bahisler.get(0).getTutar());
+                kazancOranlari.add(bahis.getTutar());
             }
         }
         setCommonValues();
     }
+
+
 
     @Override
     public String toString() {

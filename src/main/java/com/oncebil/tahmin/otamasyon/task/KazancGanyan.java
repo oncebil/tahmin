@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,14 +19,28 @@ public class KazancGanyan extends KazancAbstract {
 
     private static org.slf4j.Logger logger = LoggerFactory.getLogger(KazancGanyan.class);
 
-    public KazancGanyan(List<Kosu> kosular, BigDecimal threshold) {
-        super(kosular,threshold);
+    public KazancGanyan(List<Kosu> kosular) {
+        super(kosular);
+        oynanabilirKosular.addAll(kosular);
+    }
+
+    @Override
+    public List<BigDecimal> getOynanabilirKosulardakiMinumumPrediction() {
+        List<BigDecimal> minumumPredictions = oynanabilirKosular.stream().map( k -> k.getMinumumRegressionPredicted() ).collect(Collectors.toList());
+        Collections.sort(minumumPredictions, Collections.reverseOrder());
+        return  minumumPredictions;
+
+    }
+
+    @Override
+    public void analyze(BigDecimal threshold) {
+        this.threshold = threshold;
         if (kacKosuVardi == 0) {
             logger.warn("ganyan kazanci kosu count is 0");
             return;
         }
-        kacKosudaOynanabilirdi = kosular.size();
-        for (Kosu kosu : kosular) {
+        kacKosudaOynanabilirdi = oynanabilirKosular.size();
+        for (Kosu kosu : oynanabilirKosular) {
             List<RegressionPrediction> regressionPredictions = kosu.getAtlarWithRegressionPredictions();
             long kacAtaOynardik = regressionPredictions.
                     stream().filter(regressionPrediction -> regressionPrediction.getPredicted().compareTo(threshold) <= 0).
@@ -51,6 +66,7 @@ public class KazancGanyan extends KazancAbstract {
         setCommonValues();
 
     }
+
 
     @Override
     public String toString() {

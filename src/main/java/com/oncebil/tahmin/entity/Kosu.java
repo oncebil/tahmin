@@ -4,6 +4,7 @@ import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -72,6 +73,19 @@ public class Kosu {
             regressionPredictions.add( at.getRegressionPredictions().iterator().next());
         }
         return regressionPredictions;
+    }
+
+    @Transient
+    public BigDecimal getMinumumRegressionPredicted() {
+        List<RegressionPrediction> regressionPredictions = getAtlarWithRegressionPredictions();
+        regressionPredictions.sort((p1, p2) -> p1.getPredicted().compareTo(p2.getPredicted()));
+        return regressionPredictions.get(0).getPredicted();
+    }
+    @Transient
+    public BigDecimal getSecondMinumumRegressionPredicted() {
+        List<RegressionPrediction> regressionPredictions = getAtlarWithRegressionPredictions();
+        regressionPredictions.sort((p1, p2) -> p1.getPredicted().compareTo(p2.getPredicted()));
+        return regressionPredictions.get(1).getPredicted();
     }
 
 }

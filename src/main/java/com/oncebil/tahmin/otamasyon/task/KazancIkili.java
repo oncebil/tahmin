@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,27 +18,38 @@ import java.util.stream.Collectors;
  */
 public class KazancIkili extends  KazancAbstract {
     private static org.slf4j.Logger logger = LoggerFactory.getLogger(KazancIkili.class);
-
-
-
     private final static int IKILI_BAHISTIP_KODU = 7;
 
-
-    public KazancIkili(List<Kosu> kosular, BigDecimal threshold) {
-        super(kosular,threshold);
-        this.threshold = threshold;
-        kacKosuVardi = kosular.size();
-        if (kacKosuVardi == 0) {
-            logger.warn("ikili kazanci kosu count is 0");
-            return;
-        }
+    public KazancIkili(List<Kosu> kosular) {
+        super(kosular);
         for (Kosu kosu : kosular) {
             List<Bahis> bahisler = kosu.getBahisler().stream().
                     filter(bahis -> bahis.getBahisTipKodu() == IKILI_BAHISTIP_KODU).collect(Collectors.toList());
             if (bahisler.isEmpty()) {
                 continue;
             }
+            oynanabilirKosular.add(kosu);
+        }
+    }
 
+    @Override
+    public List<BigDecimal> getOynanabilirKosulardakiMinumumPrediction() {
+        List<BigDecimal> minumumPredictions = oynanabilirKosular.stream().map(k -> k.getSecondMinumumRegressionPredicted()).collect(Collectors.toList());
+        Collections.sort(minumumPredictions, Collections.reverseOrder());
+        return minumumPredictions;
+    }
+
+    @Override
+    public void analyze(BigDecimal threshold) {
+        this.threshold = threshold;
+        kacKosuVardi = kosular.size();
+        if (kacKosuVardi == 0) {
+            logger.warn("ikili kazanci kosu count is 0");
+            return;
+        }
+        for (Kosu kosu : oynanabilirKosular) {
+            Bahis bahis = kosu.getBahisler().stream().
+                    filter(b -> b.getBahisTipKodu() == IKILI_BAHISTIP_KODU).collect(Collectors.toList()).get(0);
             kacKosudaOynanabilirdi++;
             List<RegressionPrediction> regressionPredictions =
                     kosu.getAtlarWithRegressionPredictions();
@@ -59,15 +71,18 @@ public class KazancIkili extends  KazancAbstract {
                 }
             }
             if (birinciBildik && ikincibildik) {
-                kacliraKazanirdik = kacliraKazanirdik.add(bahisler.get(0).getTutar());
+                kacliraKazanirdik = kacliraKazanirdik.add(bahis.getTutar());
                 kacKosudaBilirdik++;
                 hangiKosulardaBilirdik.add(kosu.getKOSUKODU());
-                kazancOranlari.add(bahisler.get(0).getTutar());
+                kazancOranlari.add(bahis.getTutar());
 
             }
         }
         setCommonValues();
     }
+
+
+
 
     @Override
     public String toString() {

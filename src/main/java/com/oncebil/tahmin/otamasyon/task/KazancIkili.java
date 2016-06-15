@@ -115,7 +115,7 @@ public class KazancIkili extends  KazancAbstract {
      group by kosukodu
      order by kosukodu desc
      ) a
-     where count =2
+     where count >=2
      )
      and bahistipkodu = 7
 
@@ -133,6 +133,43 @@ public class KazancIkili extends  KazancAbstract {
      ) a
      where count >= 2
      order by kosukodu
+     ) b
+
+     // classification
+     // ne kadar kazanirdik
+     select sum(tutar) from Bahisler where kosukodu in(
+     select kosukodu from (
+     select c.kosukodu,count(*) count from ClassificationPrediction  a, Distribution b, AtKosu c
+     where a.experiment = 'test-son7kosu-nominal-kstar-experiment'
+     and a.experiment = b.experiment
+     and a.instanceid = b.instanceid
+     and c.KosuKoduAtKodu = a.instanceId
+     and b.distribution > (1 - 0.91600001)
+     and (sonucno =1 or sonucno =2)
+     and b.classificationclass = 'Y'
+     group by kosukodu
+     order by kosukodu desc
+     ) a where count >=2
+     )
+     and bahistipkodu = 7
+
+
+     // ne kadar verirdik
+     select sum (  (count * (count-1))/2 ) from (
+     select kosukodu,count from (
+     select c.kosukodu,count(*) count from ClassificationPrediction  a, Distribution b, AtKosu c,Bahisler d
+     where a.experiment = 'test-son7kosu-nominal-kstar-experiment'
+     and a.experiment = b.experiment
+     and a.instanceid = b.instanceid
+     and c.KosuKoduAtKodu = a.instanceId
+     and b.distribution > (1 - 0.91600001)
+     --	     and (sonucno =1 or sonucno =2)
+     and b.classificationclass = 'Y'
+     and d.kosukodu = c.kosukodu
+     and bahistipkodu = 7
+     group by c.kosukodu
+     order by c.kosukodu desc
+     ) a where count >=2
      ) b
 
      */

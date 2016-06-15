@@ -32,4 +32,17 @@ public class KazancIkiliTest {
 
 
     }
+
+
+    @Test
+    public void testIkiliKazancClassification() {
+        List<Kosu> kosular = kosuDAO.
+                findbyExperimentWithClassificationPredictions("test-son7kosu-nominal-kstar-experiment");
+        KazancIkili kazancIkili = new KazancIkili(kosular);
+        kazancIkili.analyze(new BigDecimal("0.91600001"));
+        Assert.assertEquals(new BigDecimal("491.20"), kazancIkili.kacliraKazanirdik);
+        Assert.assertEquals(new BigDecimal("837.00"), kazancIkili.neKadarVerirdik);
+
+
+    }
 }

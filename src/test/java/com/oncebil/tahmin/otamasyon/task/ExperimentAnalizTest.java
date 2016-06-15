@@ -34,7 +34,7 @@ public class ExperimentAnalizTest {
     }
 
     @Test
-    public void testExperimentAnaliz3() throws Exception {
+    public void testExperimentAnalizClassification() throws Exception {
         List<Kosu> kosular = kosuDAO.findbyExperimentWithClassificationPredictions("test-son7kosu-nominal-kstar-experiment");
         ExperimentAnalyze analyze = new ExperimentAnalyze();
         ExperimentAnalyzeResults analyzeResults = analyze.analyze2(kosular);
@@ -46,7 +46,7 @@ public class ExperimentAnalizTest {
     }
 
     @Test
-    public void testExperimentAnaliz2() throws Exception {
+    public void testExperimentAnalizRegression() throws Exception {
         List<Kosu> kosular = kosuDAO.findbyExperimentWithRegressionPredictions("test-son7kosu-kstar-experiment");
         ExperimentAnalyze analyze = new ExperimentAnalyze();
         ExperimentAnalyzeResults analyzeResults = analyze.analyze2(kosular);

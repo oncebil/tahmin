@@ -112,5 +112,31 @@ public class KazancGanyan extends KazancAbstract {
      21
 
 
+     classification
+     // ganyan kazanc
+     select sum(ganyan) from ClassificationPrediction  a, Distribution b, AtKosu c
+     where a.experiment = 'test-son7kosu-nominal-kstar-experiment'
+     and a.experiment = b.experiment
+     and a.instanceid = b.instanceid
+     and c.KosuKoduAtKodu = a.instanceId
+     and b.classificationclass = 'Y'
+     and b.distribution > (1 - 0.84600002)
+     and actual = 'Y'
+
+     // oynanabilir kosular
+     select count (*) from (
+     select distinct KosuKodu from
+     (
+     select * from ClassificationPrediction  a, Distribution b, AtKosu c
+     where a.experiment = 'test-son7kosu-nominal-kstar-experiment'
+     and a.experiment = b.experiment
+     and a.instanceid = b.instanceid
+     and c.KosuKoduAtKodu = a.instanceId
+     and b.classificationclass = 'Y'
+     and b.distribution > (1 - 0.84600002)
+     order by c.KosuKodu, b.distribution desc
+     ) b
+     ) c
+
      */
 }

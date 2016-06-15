@@ -35,10 +35,13 @@ public class KazancGanyanTest {
     }
 
     @Test
-    public void testGanyanKazancNominal() {
-        List<Kosu> kosular = kosuDAO.findbyExperimentWithRegressionPredictions("test-son7kosu-nominal-kstar-experiment");
+    public void testGanyanKazancClassification() {
+        List<Kosu> kosular = kosuDAO.
+                findbyExperimentWithClassificationPredictions("test-son7kosu-nominal-kstar-experiment");
         KazancGanyan kazancGanyan = new KazancGanyan(kosular);
-        // todo
+        kazancGanyan.analyze(new BigDecimal("0.84600002"));
+        Assert.assertEquals(new BigDecimal("218.80"), kazancGanyan.kacliraKazanirdik);
+        Assert.assertEquals(new BigDecimal("373.00"), kazancGanyan.neKadarVerirdik);
 
 
     }

@@ -10,7 +10,7 @@ public class Prediction {
     private RegressionPrediction regressionPrediction;
     private ClassificationPrediction classificationPrediction;
 
-    private final static String BIRINCI_CLASS = "Y";
+    private final static String BIRINCI_DEGIL_CLASS = "N";
     public static Prediction create(RegressionPrediction regressionPrediction) {
         Prediction p = new Prediction();
         p.regressionPrediction = regressionPrediction;
@@ -35,7 +35,7 @@ public class Prediction {
     public BigDecimal getPredicted() {
         if (regressionPrediction == null) {
             return classificationPrediction.getDistributions().stream().
-                    filter( d -> d.getClassificationClass().equals(BIRINCI_CLASS)).
+                    filter( d -> d.getClassificationClass().equals(BIRINCI_DEGIL_CLASS)).
                     collect(Collectors.toList()).get(0).getDistribution();
         }
         else {

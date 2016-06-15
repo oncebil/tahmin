@@ -126,10 +126,11 @@ public class WekaEvaluation extends AbstractTask {
                     ClassificationPredictions.createFromPredictionsOutput( getName(),
                             predsBuff.toString(),Util.getInstancesClassValues(instances) ).save();
                 } else {
-                    RegressionPredictions.createFromPredictionsOutput( getName() , predsBuff.toString() ).save();
+                    RegressionPredictions.createFromPredictionsOutput
+                            ( getName() , predsBuff.toString() ).save();
 
                     KosuDAO kosuDAO = WeldGlobal.get(KosuDAO.class);
-                    List<Kosu> kosular = kosuDAO.findbyExperimentName(getName());
+                    List<Kosu> kosular = kosuDAO.findbyExperimentWithRegressionPredictions(getName());
                     ExperimentAnalyze analyze = new ExperimentAnalyze();
                     ExperimentAnalyzeResults analyzeResults = analyze.analyze2(kosular);
 

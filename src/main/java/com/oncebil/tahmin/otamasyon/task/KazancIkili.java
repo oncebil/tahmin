@@ -3,12 +3,10 @@ package com.oncebil.tahmin.otamasyon.task;
 import com.oncebil.tahmin.Util;
 import com.oncebil.tahmin.entity.Bahis;
 import com.oncebil.tahmin.entity.Kosu;
-import com.oncebil.tahmin.entity.RegressionPrediction;
+import com.oncebil.tahmin.entity.Prediction;
 import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,7 +32,8 @@ public class KazancIkili extends  KazancAbstract {
 
     @Override
     public List<BigDecimal> getOynanabilirKosulardakiMinumumPrediction() {
-        List<BigDecimal> minumumPredictions = oynanabilirKosular.stream().map(k -> k.getSecondMinumumRegressionPredicted()).collect(Collectors.toList());
+        List<BigDecimal> minumumPredictions = oynanabilirKosular.stream().
+                map(k -> k.getSecondMinumumPredicted()).collect(Collectors.toList());
         Collections.sort(minumumPredictions, Collections.reverseOrder());
         return minumumPredictions;
     }
@@ -51,9 +50,9 @@ public class KazancIkili extends  KazancAbstract {
             Bahis bahis = kosu.getBahisler().stream().
                     filter(b -> b.getBahisTipKodu() == IKILI_BAHISTIP_KODU).collect(Collectors.toList()).get(0);
             kacKosudaOynanabilirdi++;
-            List<RegressionPrediction> regressionPredictions =
-                    kosu.getAtlarWithRegressionPredictions();
-            List<RegressionPrediction> filtered = regressionPredictions.
+            List<Prediction> predictions =
+                    kosu.getAtlarWithPredictions();
+            List<Prediction> filtered = predictions.
                     stream().filter(rp -> rp.getPredicted().compareTo(threshold) <= 0).
                     collect(Collectors.toList());
             if (filtered.size() < 2) {
@@ -62,7 +61,7 @@ public class KazancIkili extends  KazancAbstract {
             kacKosudaOynardik++;
             neKadarVerirdik = neKadarVerirdik.add(new BigDecimal(Util.getIkiliCombination(filtered.size())));
             boolean birinciBildik = false, ikincibildik = false;
-            for (RegressionPrediction rp : filtered) {
+            for (Prediction rp : filtered) {
                 if (rp.getAtKosu().getSONUCNO() == 1) {
                     birinciBildik = true;
                 }

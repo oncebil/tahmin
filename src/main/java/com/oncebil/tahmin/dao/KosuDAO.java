@@ -21,14 +21,30 @@ public class KosuDAO {
 
 
     @Transactional
-    public List<Kosu> findbyExperimentName(String experiment) {
+    public List<Kosu> findbyExperimentWithRegressionPredictions(String experiment) {
         Query q = manager.createQuery("select distinct a from Kosu a " +
                 "inner join  fetch a.atlar b  " +
-                "inner join fetch b.regressionPredictions c " +
-                "inner join fetch a.bahisler d " +
+                "inner join fetch a.bahisler c " +
+                "left outer join fetch b.regressionPredictions d " +
                 "where a.KOSUKODU = b.KOSUKODU " +
-                "and b.kosuKoduAtKodu = c.instanceId " +
-                "and c.experiment=:experiment " +
+                "and b.kosuKoduAtKodu = d.instanceId " +
+                "and d.experiment=:experiment " +
+                "order by a.KOSUKODU desc ");
+
+        q.setParameter("experiment",experiment);
+        return (List<Kosu>)q.getResultList();
+    }
+
+    @Transactional
+    public List<Kosu> findbyExperimentWithClassificationPredictions(String experiment) {
+        Query q = manager.createQuery("select distinct a from Kosu a " +
+                "inner join  fetch a.atlar b  " +
+                "inner join fetch a.bahisler c " +
+                "left outer join fetch b.classificationPredictions d " +
+                "left outer join fetch d.distributions f " +
+                "where a.KOSUKODU = b.KOSUKODU " +
+                "and b.kosuKoduAtKodu = d.instanceId " +
+                "and d.experiment=:experiment " +
                 "order by a.KOSUKODU desc ");
 
         q.setParameter("experiment",experiment);

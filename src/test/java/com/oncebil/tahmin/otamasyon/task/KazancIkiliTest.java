@@ -24,7 +24,7 @@ public class KazancIkiliTest {
 
     @Test
     public void testIkiliKazanc() {
-        List<Kosu> kosular = kosuDAO.findbyExperimentName("test-son7kosu-kstar-experiment");
+        List<Kosu> kosular = kosuDAO.findbyExperimentWithRegressionPredictions("test-son7kosu-kstar-experiment");
         KazancIkili kazancIkili = new KazancIkili(kosular);
         kazancIkili.analyze(new BigDecimal("3.0"));
         Assert.assertEquals(new BigDecimal("71.20"), kazancIkili.kacliraKazanirdik);

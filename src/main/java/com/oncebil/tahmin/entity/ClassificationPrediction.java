@@ -1,8 +1,13 @@
 package com.oncebil.tahmin.entity;
 
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
+
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by erkinkarincaoglu on 30/05/2016.
@@ -31,13 +36,20 @@ public class ClassificationPrediction {
             @JoinColumn(name = "experiment", referencedColumnName = "experiment"),
             @JoinColumn(name = "instanceId", referencedColumnName = "instanceId")
     })
-    private List<Distribution> distributions = new ArrayList<>();
+    private Set<Distribution> distributions = new HashSet<>();
 
-    public List<Distribution> getDistributions() {
+    @ManyToOne(fetch =  FetchType.EAGER)
+    @JoinColumns({
+            @JoinColumn(name = "instanceId",insertable = false,updatable = false)
+    })
+    @NotFound(action= NotFoundAction.IGNORE)
+    private AtKosu atKosu;
+
+    public Set<Distribution> getDistributions() {
         return distributions;
     }
 
-    public void setDistributions(List<Distribution> distributions) {
+    public void setDistributions(Set<Distribution> distributions) {
         this.distributions = distributions;
     }
 
@@ -95,5 +107,13 @@ public class ClassificationPrediction {
 
     public void setPredictedIndex(int predictedIndex) {
         this.predictedIndex = predictedIndex;
+    }
+
+    public AtKosu getAtKosu() {
+        return atKosu;
+    }
+
+    public void setAtKosu(AtKosu atKosu) {
+        this.atKosu = atKosu;
     }
 }

@@ -9,19 +9,23 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * Created by erkinkarincaoglu on 30/05/2016.
  */
 public class ClassificationPredictions {
+    private final static Logger logger = Logger.getLogger(ClassificationPredictions.class.getName());
     List<ClassificationPrediction> classificationPredictions = new ArrayList<>();
     ClassificationPredictionDAO dao = WeldGlobal.get(ClassificationPredictionDAO.class);
+    private String experimentName;
 
     public static ClassificationPredictions createFromPredictionsOutput(String experimentName,
                                                                         String predictionsOutput,
                                                                         List<String> classes) throws IOException {
         int i = 0;
         ClassificationPredictions predictions = new ClassificationPredictions();
+        predictions.experimentName = experimentName;
         String[] lines = predictionsOutput.split(System.getProperty("line.separator"));
         for (String line : lines) {
             i++;
@@ -64,7 +68,7 @@ public class ClassificationPredictions {
 
 
     public void save() {
-
+        logger.info("Saving predictions experiment=" + experimentName + " size=" + classificationPredictions.size());
 
         for (ClassificationPrediction classificationPrediction : classificationPredictions) {
             dao.merge(classificationPrediction);

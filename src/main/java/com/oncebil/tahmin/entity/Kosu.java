@@ -1,13 +1,8 @@
 package com.oncebil.tahmin.entity;
 
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
-
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by erkinkarincaoglu on 02/06/2016.
@@ -61,31 +56,98 @@ public class Kosu {
     }
 
     /**
-     * This method assumes that atlar has filled with regression predictions already
-     * Normally at has one regression prediction when kosular is selected with regression experiment
-     * So only the first regression is selected
+     * This method assumes that atlar has filled with regression or classification predictions already
+     * Normally at has one regression prediction (or classification prediction)
+     * when kosular is selected with  experiment
      * @return
      */
     @Transient
-    public List<RegressionPrediction> getAtlarWithRegressionPredictions() {
-        List<RegressionPrediction> regressionPredictions = new ArrayList<>();
+    public List<Prediction> getAtlarWithPredictions() {
+        List<Prediction> predictions = new ArrayList<>();
         for (AtKosu at : getAtlar()) {
-            regressionPredictions.add( at.getRegressionPredictions().iterator().next());
+            predictions.add( at.getPrediction() );
         }
-        return regressionPredictions;
+        return predictions;
+    }
+
+
+    @Transient
+    public BigDecimal getMinumumPredicted() {
+        List<Prediction> predictions = getAtlarWithPredictions();
+        predictions.sort((p1, p2) -> p1.getPredicted().compareTo(p2.getPredicted()));
+        return predictions.get(0).getPredicted();
+    }
+    @Transient
+    public BigDecimal getSecondMinumumPredicted() {
+        List<Prediction> predictions = getAtlarWithPredictions();
+        predictions.sort((p1, p2) -> p1.getPredicted().compareTo(p2.getPredicted()));
+        return predictions.get(1).getPredicted();
     }
 
     @Transient
-    public BigDecimal getMinumumRegressionPredicted() {
-        List<RegressionPrediction> regressionPredictions = getAtlarWithRegressionPredictions();
-        regressionPredictions.sort((p1, p2) -> p1.getPredicted().compareTo(p2.getPredicted()));
-        return regressionPredictions.get(0).getPredicted();
-    }
-    @Transient
-    public BigDecimal getSecondMinumumRegressionPredicted() {
-        List<RegressionPrediction> regressionPredictions = getAtlarWithRegressionPredictions();
-        regressionPredictions.sort((p1, p2) -> p1.getPredicted().compareTo(p2.getPredicted()));
-        return regressionPredictions.get(1).getPredicted();
+    public static Kosu createWithAtKosular(List<AtKosu> atkosular) {
+        Kosu kosu = new Kosu();
+        kosu.atlar = new HashSet<>(atkosular);
+        return kosu;
     }
 
+    @Transient
+    public static List<Kosu> createKosular(List<AtKosu> atlar) {
+        Map<Long,List<AtKosu>> kosular = new HashMap<>();
+        for (AtKosu atKosu : atlar) {
+            if (!kosular.containsKey( atKosu.getKOSUKODU()) ) {
+                kosular.put(atKosu.getKOSUKODU(), new ArrayList<>());
+            }
+            kosular.get(atKosu.getKOSUKODU() ).add(atKosu);
+        }
+        List<Kosu> kosulist = new ArrayList<>();
+        kosular.forEach((k,v) -> kosulist.add( Kosu.createWithAtKosular(v)) );
+        return kosulist;
+
+
+    }
+
+    @Transient
+    public static void addDynamicRelativeAttributeToAtlar(List<Kosu> kosular,
+                                                          String newDynamicValue, String sourceDynamicValue) {
+
+        //Set<BigDecimal> uniquevalues = new TreeSet<>();
+        List<BigDecimal> values = new ArrayList<>();
+        for (Kosu k : kosular) {
+            for (AtKosu at : k.getAtlar()) {
+                values.add(at.getDynamicValue(sourceDynamicValue));
+            }
+        }
+
+
+        Collections.sort(values);
+        System.out.println (values.size() );
+        System.out.println (values.indexOf(new BigDecimal("0.00")) );
+        System.out.println (values.indexOf(new BigDecimal("0.00")) );
+        System.out.println (values.indexOf(new BigDecimal("14.29")) );
+        System.out.println (values.indexOf(new BigDecimal("28.58")) );
+        System.out.println (values.indexOf(new BigDecimal("42.86")) );
+        System.out.println (values.indexOf(new BigDecimal("42.87")) );
+        System.out.println (values.indexOf(new BigDecimal("57.15")) );
+        // values=son3yuzdesi. 0, 12,12, 25 ,25, 47....
+
+        System.out.println("values="+values);
+        for (Kosu k : kosular) {
+
+            int maximum = Integer.MIN_VALUE;
+            for (AtKosu at : k.getAtlar()) {
+                int index = values.indexOf(at.getDynamicValue(sourceDynamicValue));
+                if (index > maximum) {
+                    maximum = index;
+                }
+            }
+            for (AtKosu at : k.getAtlar()) {
+                int index = values.indexOf(at.getDynamicValue(sourceDynamicValue));
+                Integer dynamicValue = maximum - index;
+                at.addDynamicValue(newDynamicValue, new BigDecimal(dynamicValue));
+            }
+        }
+
+
+    }
 }

@@ -34,8 +34,20 @@ public class ExperimentAnalizTest {
     }
 
     @Test
+    public void testExperimentAnaliz3() throws Exception {
+        List<Kosu> kosular = kosuDAO.findbyExperimentWithClassificationPredictions("test-son7kosu-nominal-kstar-experiment");
+        ExperimentAnalyze analyze = new ExperimentAnalyze();
+        ExperimentAnalyzeResults analyzeResults = analyze.analyze2(kosular);
+        Assert.assertTrue( analyzeResults.ganyanKazanclari.size() > 0);
+        Assert.assertTrue( analyzeResults.ikiliKazanclari.size() > 0);
+        Assert.assertTrue( analyzeResults.siraliIkiliKazanclari.size() > 0);
+
+
+    }
+
+    @Test
     public void testExperimentAnaliz2() throws Exception {
-        List<Kosu> kosular = kosuDAO.findbyExperimentName("test-son7kosu-kstar-experiment");
+        List<Kosu> kosular = kosuDAO.findbyExperimentWithRegressionPredictions("test-son7kosu-kstar-experiment");
         ExperimentAnalyze analyze = new ExperimentAnalyze();
         ExperimentAnalyzeResults analyzeResults = analyze.analyze2(kosular);
         Assert.assertTrue( analyzeResults.ganyanKazanclari.size() > 0);
@@ -47,7 +59,7 @@ public class ExperimentAnalizTest {
 
     @Test
     public void testExperimentAnaliz() throws Exception {
-        List<Kosu> kosular = kosuDAO.findbyExperimentName("test-son7kosu-kstar-experiment");
+        List<Kosu> kosular = kosuDAO.findbyExperimentWithRegressionPredictions("test-son7kosu-kstar-experiment");
         ExperimentAnalyze analyze = new ExperimentAnalyze();
         ExperimentAnalyzeResults analyzeResults = analyze.analyze(kosular);
         Assert.assertTrue( analyzeResults.ganyanKazanclari.size() > 0);
@@ -112,6 +124,25 @@ public class ExperimentAnalizTest {
                         ") e \n" +
                         " )  f ) \n" +
                         "order by kosukodu desc, bahistipkodu");
+
+
+        partialDataSet.addTable("ClassificationPrediction",
+                " select 'test-son7kosu-nominal-kstar-experiment' experiment , " +
+                        " '800'|| b.KosuKodu || '_' || '800' || b.AtKodu instanceId, " +
+                        " actual,actualindex,predicted,predictedindex,error from ClassificationPrediction a, AtKosu b  \n" +
+                        "  where experiment = 'KStarNominal'  \n" +
+                        "  and a.instanceId = b.KosuKoduAtKodu \n" +
+                        "  order by b.KosuKodu desc, predicted asc ");
+
+        partialDataSet.addTable("Distribution",
+                " select 'test-son7kosu-nominal-kstar-experiment' experiment , " +
+                        " '800'|| b.KosuKodu || '_' || '800' || b.AtKodu instanceId, " +
+                        " classificationclass,distribution from Distribution a, AtKosu b  \n" +
+                        "  where experiment = 'KStarNominal'  \n" +
+                        "  and a.instanceId = b.KosuKoduAtKodu \n" +
+                        "  order by b.KosuKodu desc, classificationclass asc ");
+
+
 
         String filename = Base.getTestFilesPath() + "/test_son7kosu_kstar_predictions_data.xml";
         FlatXmlDataSet.write(partialDataSet,

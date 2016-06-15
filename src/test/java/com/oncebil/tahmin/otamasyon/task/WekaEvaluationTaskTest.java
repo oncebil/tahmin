@@ -23,12 +23,21 @@ import java.io.IOException;
  */
 public class WekaEvaluationTaskTest extends Base {
 
+
     @Test
     public void runSon7Kosular() throws IOException, Exception {
         Project project = Project.loadProject("Son7Kosu");
         Assert.assertNotNull(project);
         project.run();
         Assert.assertTrue( new File(ApplicationConstants.repositoryOut+ "Son7Kosu" + File.separator + "KStar-Model.model").exists());
+    }
+
+    @Test
+    public void runSon7KosularNominal() throws IOException, Exception {
+        Project project = Project.loadProject("Son7KosuNominal");
+        Assert.assertNotNull(project);
+        project.run();
+        Assert.assertTrue( new File(ApplicationConstants.repositoryOut+ "Son7KosuNominal" + File.separator + "KStarNominal-Model.model").exists());
     }
 
     @Test

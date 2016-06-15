@@ -1,19 +1,10 @@
 package com.oncebil.tahmin.otamasyon.task;
 
-import com.oncebil.tahmin.Util;
-import com.oncebil.tahmin.entity.AtKosu;
 import com.oncebil.tahmin.entity.Kosu;
-import com.oncebil.tahmin.entity.RegressionPrediction;
-import org.apache.commons.math3.stat.descriptive.moment.Variance;
+import com.oncebil.tahmin.entity.Prediction;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Function;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * Created by erkinkarincaoglu on 31/05/2016.
@@ -87,11 +78,11 @@ public class ExperimentAnalyze {
     public void dynamicAnalysis( List<Kosu> kosular,KazancFactory kazancFactory) {
         Set<BigDecimal> predictions = new HashSet<>();
         for (Kosu k : kosular) {
-            for (RegressionPrediction rp : k.getAtlarWithRegressionPredictions() ) {
+            for (Prediction rp : k.getAtlarWithPredictions() ) {
                 predictions.add(rp.getPredicted());
             }
         }
-        System.out.println("regressionPredictions=" + predictions.size());
+        System.out.println("predictions=" + predictions.size());
         List<BigDecimal> sorted = new ArrayList<>(predictions);
         Collections.sort(sorted);
         System.out.println("sorted=" + sorted.size());

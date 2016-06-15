@@ -7,6 +7,7 @@ package com.oncebil.tahmin.entity;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
@@ -119,14 +120,31 @@ public class AtKosu implements Serializable {
     private BigDecimal son7ucunculukYuzdesi;
     @Column(name = "son7bitirisOrtalamasi")
     private BigDecimal son7bitirisOrtalamasi;
-
-
-//
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumns({
             @JoinColumn(name = "instanceId", insertable = false,updatable = false)
     })
     private Set<RegressionPrediction> regressionPredictions;
+
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumns({
+            @JoinColumn(name = "instanceId", insertable = false,updatable = false)
+    })
+    private Set<ClassificationPrediction> classificationPredictions;
+
+
+    @Transient
+    private HashMap<String,BigDecimal> dynamicValues = new HashMap<>();
+    @Transient
+    public void addDynamicValue(String key,BigDecimal value) {
+        dynamicValues.put(key,value);
+    }
+    @Transient
+    public BigDecimal getDynamicValue(String key) {
+        return dynamicValues.get(key);
+    }
+//
+
 
     /**
      * @return the KOSUTARIHI
@@ -735,5 +753,27 @@ public class AtKosu implements Serializable {
 
     public void setRegressionPredictions(Set<RegressionPrediction> regressionPredictions) {
         this.regressionPredictions = regressionPredictions;
+    }
+
+    public Set<ClassificationPrediction> getClassificationPredictions() {
+        return classificationPredictions;
+    }
+
+    public void setClassificationPredictions(Set<ClassificationPrediction> classificationPredictions) {
+        this.classificationPredictions = classificationPredictions;
+    }
+
+    /**
+     * If a prediction is  AtKosu is either has regression or classification prediction
+     * @return
+     */
+    @Transient
+    public Prediction getPrediction() {
+
+        if (!org.hibernate.Hibernate.isInitialized(regressionPredictions)) {
+            return  Prediction.create(getClassificationPredictions().iterator().next());
+        } else {
+            return  Prediction.create(getRegressionPredictions().iterator().next());
+        }
     }
 }

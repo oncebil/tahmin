@@ -1,13 +1,11 @@
 package com.oncebil.tahmin.otamasyon.task;
 
-import com.oncebil.tahmin.Util;
 import com.oncebil.tahmin.entity.Kosu;
-import com.oncebil.tahmin.entity.RegressionPrediction;
+import com.oncebil.tahmin.entity.Prediction;
 import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,7 +24,8 @@ public class KazancGanyan extends KazancAbstract {
 
     @Override
     public List<BigDecimal> getOynanabilirKosulardakiMinumumPrediction() {
-        List<BigDecimal> minumumPredictions = oynanabilirKosular.stream().map( k -> k.getMinumumRegressionPredicted() ).collect(Collectors.toList());
+        List<BigDecimal> minumumPredictions = oynanabilirKosular.stream().
+                map( k -> k.getMinumumPredicted() ).collect(Collectors.toList());
         Collections.sort(minumumPredictions, Collections.reverseOrder());
         return  minumumPredictions;
 
@@ -41,25 +40,27 @@ public class KazancGanyan extends KazancAbstract {
         }
         kacKosudaOynanabilirdi = oynanabilirKosular.size();
         for (Kosu kosu : oynanabilirKosular) {
-            List<RegressionPrediction> regressionPredictions = kosu.getAtlarWithRegressionPredictions();
-            long kacAtaOynardik = regressionPredictions.
-                    stream().filter(regressionPrediction -> regressionPrediction.getPredicted().compareTo(threshold) <= 0).
+            List<Prediction> predictions = kosu.getAtlarWithPredictions();
+            long kacAtaOynardik = predictions.
+                    stream().filter(p ->
+                        p.getPredicted().compareTo(threshold) <= 0).
                     count();
             if (kacAtaOynardik == 0) {
                 continue;
             }
             kacKosudaOynardik++;
             neKadarVerirdik = neKadarVerirdik.add(new BigDecimal(kacAtaOynardik));
-            List<RegressionPrediction> bildik = regressionPredictions.
-                    stream().filter(regressionPrediction -> regressionPrediction.getPredicted().compareTo(threshold) <= 0
-                    && regressionPrediction.getAtKosu().getSONUCNO() == 1).collect(Collectors.toList());
+            List<Prediction> bildik = predictions.
+                    stream().filter(
+                    p -> p.getPredicted().compareTo(threshold) <= 0
+                    && p.getAtKosu().getSONUCNO() == 1).collect(Collectors.toList());
 
             if (!bildik.isEmpty()) {
-                RegressionPrediction regressionPrediction = bildik.get(0);
-                kazancOranlari.add(regressionPrediction.getAtKosu().getGANYAN().setScale(2, RoundingMode.HALF_UP));
+                Prediction prediction = bildik.get(0);
+                kazancOranlari.add(prediction.getAtKosu().getGANYAN().setScale(2, RoundingMode.HALF_UP));
                 kacKosudaBilirdik++;
                 hangiKosulardaBilirdik.add(kosu.getKOSUKODU());
-                kacliraKazanirdik = kacliraKazanirdik.add(regressionPrediction.getAtKosu().getGANYAN());
+                kacliraKazanirdik = kacliraKazanirdik.add(prediction.getAtKosu().getGANYAN());
 
             }
         }

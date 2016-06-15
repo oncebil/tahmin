@@ -22,8 +22,9 @@ public class KosuDAOTest {
         Base.insertTestData("test_son7kosu_kstar_predictions_data.xml");
     }
     @Test
-    public void findKosularbyExperimentName() {
-        List<Kosu> kosular = kosuDAO.findbyExperimentName("test-son7kosu-kstar-experiment");
+    public void findKosularbyExperimentRegression() {
+        List<Kosu> kosular = kosuDAO.
+                findbyExperimentWithRegressionPredictions("test-son7kosu-kstar-experiment");
         Assert.assertEquals( 153, kosular.size());
         Kosu ilkkosu = kosular.get(0);
         Assert.assertNotNull(ilkkosu);
@@ -31,11 +32,25 @@ public class KosuDAOTest {
         Assert.assertTrue(ilkkosu.getBahisler().size() > 0);
         AtKosu ilkat = ilkkosu.getAtlar().iterator().next();
         Assert.assertNotNull(ilkat);
+        Assert.assertNotNull(ilkat.getRegressionPredictions());
         Assert.assertTrue(ilkat.getRegressionPredictions().size() > 0);
         Assert.assertNotNull(ilkat.getRegressionPredictions().iterator().next().getAtKosu());
+    }
 
-
-
+    @Test
+    public void findKosularbyExperimentClassification() {
+        List<Kosu> kosular = kosuDAO.
+                findbyExperimentWithClassificationPredictions("test-son7kosu-nominal-kstar-experiment");
+        Assert.assertEquals( 153, kosular.size());
+        Kosu ilkkosu = kosular.get(0);
+        Assert.assertNotNull(ilkkosu);
+        Assert.assertTrue(ilkkosu.getAtlar().size() > 0);
+        Assert.assertTrue(ilkkosu.getBahisler().size() > 0);
+        AtKosu ilkat = ilkkosu.getAtlar().iterator().next();
+        Assert.assertNotNull(ilkat);
+        Assert.assertNotNull(ilkat.getClassificationPredictions());
+        Assert.assertTrue(ilkat.getClassificationPredictions().size() > 0);
+        Assert.assertNotNull(ilkat.getClassificationPredictions().iterator().next().getAtKosu());
 
 
     }

@@ -24,12 +24,21 @@ public class KazancGanyanTest {
     }
 
     @Test
-    public void testGanyanKazanc() {
-        List<Kosu> kosular = kosuDAO.findbyExperimentName("test-son7kosu-kstar-experiment");
+    public void testGanyanKazancRegression() {
+        List<Kosu> kosular = kosuDAO.findbyExperimentWithRegressionPredictions("test-son7kosu-kstar-experiment");
         KazancGanyan kazancGanyan = new KazancGanyan(kosular);
         kazancGanyan.analyze(new BigDecimal("2.1"));
         Assert.assertEquals(new BigDecimal("23.10"), kazancGanyan.kacliraKazanirdik);
         Assert.assertEquals(new BigDecimal("21.00"), kazancGanyan.neKadarVerirdik);
+
+
+    }
+
+    @Test
+    public void testGanyanKazancNominal() {
+        List<Kosu> kosular = kosuDAO.findbyExperimentWithRegressionPredictions("test-son7kosu-nominal-kstar-experiment");
+        KazancGanyan kazancGanyan = new KazancGanyan(kosular);
+        // todo
 
 
     }

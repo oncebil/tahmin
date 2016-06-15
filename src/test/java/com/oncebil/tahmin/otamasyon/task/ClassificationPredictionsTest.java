@@ -43,8 +43,8 @@ public class ClassificationPredictionsTest {
         Assert.assertEquals( prediction.getPredictedIndex(), 2 );
         Assert.assertEquals( prediction.getPredicted(), "charcoal" );
         Assert.assertEquals( prediction.isError(), false );
-        Assert.assertEquals(new Distribution("326","test-classification-predictions","diaporthe-stem-canker",new BigDecimal(0.0)),prediction.getDistributions().get(0));
-        Assert.assertEquals(new Distribution("326","test-classification-predictions","charcoal-rot",new BigDecimal(1.0)),prediction.getDistributions().get(1));
+        Assert.assertTrue  ( prediction.getDistributions().contains(   new Distribution("326","test-classification-predictions","diaporthe-stem-canker",new BigDecimal(0.0)) ));
+        Assert.assertTrue  ( prediction.getDistributions().contains(   new Distribution("326","test-classification-predictions","charcoal-rot",new BigDecimal(1.0) )));
         Assert.assertTrue( prediction.getDistributions().size() == classes.size());
 
     }

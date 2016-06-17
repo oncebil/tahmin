@@ -1,6 +1,7 @@
 package com.oncebil.tahmin.dao;
 
 import com.oncebil.tahmin.Base;
+import com.oncebil.tahmin.RegressionClassificationDataTestBase;
 import com.oncebil.tahmin.WeldGlobal;
 import com.oncebil.tahmin.entity.AtKosu;
 import com.oncebil.tahmin.entity.Kosu;
@@ -14,19 +15,11 @@ import java.util.List;
 /**
  * Created by erkinkarincaoglu on 02/06/2016.
  */
-public class KosuDAOTest {
-    private KosuDAO kosuDAO;
-    @Before
-    public void before() throws Exception {
-        kosuDAO = WeldGlobal.get(KosuDAO.class);
-        Base.insertTestData("test_son7kosu_kstar_predictions_data.xml");
-    }
+public class KosuDAOTest extends RegressionClassificationDataTestBase {
     @Test
     public void findKosularbyExperimentRegression() {
-        List<Kosu> kosular = kosuDAO.
-                findbyExperimentWithRegressionPredictions("test-son7kosu-kstar-experiment");
-        Assert.assertEquals( 153, kosular.size());
-        Kosu ilkkosu = kosular.get(0);
+        Assert.assertEquals( 153, regressionKosular.size());
+        Kosu ilkkosu = regressionKosular.get(0);
         Assert.assertNotNull(ilkkosu);
         Assert.assertTrue(ilkkosu.getAtlar().size() > 0);
         Assert.assertTrue(ilkkosu.getBahisler().size() > 0);
@@ -39,10 +32,9 @@ public class KosuDAOTest {
 
     @Test
     public void findKosularbyExperimentClassification() {
-        List<Kosu> kosular = kosuDAO.
-                findbyExperimentWithClassificationPredictions("test-son7kosu-nominal-kstar-experiment");
-        Assert.assertEquals( 153, kosular.size());
-        Kosu ilkkosu = kosular.get(0);
+
+        Assert.assertEquals( 153, classificationKosular.size());
+        Kosu ilkkosu = classificationKosular.get(0);
         Assert.assertNotNull(ilkkosu);
         Assert.assertTrue(ilkkosu.getAtlar().size() > 0);
         Assert.assertTrue(ilkkosu.getBahisler().size() > 0);

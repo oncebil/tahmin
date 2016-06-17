@@ -33,14 +33,19 @@ public class Base {
         return new File(Base.class.getClassLoader().getResource(".").getFile()).getAbsolutePath();
     }
 
-    public static void insertTestData(String file) throws Exception {
-        if (testDataSetup.compareAndSet(false, true) ) {
-            IDataSet dataset = new FlatXmlDataSetBuilder().setColumnSensing(true).build(getTestFile(file));
-            IDatabaseTester databaseTester = new JdbcDatabaseTester(ApplicationConstants.driverClass,
-                    ApplicationConstants.jdbcUrl, ApplicationConstants.username, ApplicationConstants.password);
-            databaseTester.setSetUpOperation(DatabaseOperation.REFRESH);
-            databaseTester.setDataSet(dataset);
-            databaseTester.onSetup();
+    public static void insertTestData(String file)  {
+        try {
+            if (testDataSetup.compareAndSet(false, true)) {
+                IDataSet dataset = new FlatXmlDataSetBuilder().setColumnSensing(true).build(getTestFile(file));
+                IDatabaseTester databaseTester = new JdbcDatabaseTester(ApplicationConstants.driverClass,
+                        ApplicationConstants.jdbcUrl, ApplicationConstants.username, ApplicationConstants.password);
+                databaseTester.setSetUpOperation(DatabaseOperation.REFRESH);
+                databaseTester.setDataSet(dataset);
+                databaseTester.onSetup();
+            }
+        } catch(Exception e) {
+            throw  new RuntimeException(e);
         }
+
     }
 }

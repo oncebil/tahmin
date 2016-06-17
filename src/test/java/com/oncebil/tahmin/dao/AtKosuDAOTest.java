@@ -32,6 +32,7 @@ public class AtKosuDAOTest extends Base {
     @Test
     @Transactional
     public void testSelectByKosuKodu() {
+
         Assert.assertNotNull( atKosuDAO.getAtKosu(80048955L,80024494L) );
     }
 

@@ -9,6 +9,7 @@ package com.oncebil.tahmin.otamasyon.task;
 import com.oncebil.tahmin.ApplicationConstants;
 import com.oncebil.tahmin.Base;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
@@ -24,21 +25,7 @@ import java.io.IOException;
 public class WekaEvaluationTaskTest extends Base {
 
 
-    @Test
-    public void runSon7Kosular() throws IOException, Exception {
-        Project project = Project.loadProject("Son7Kosu");
-        Assert.assertNotNull(project);
-        project.run();
-        Assert.assertTrue( new File(ApplicationConstants.repositoryOut+ "Son7Kosu" + File.separator + "KStar-Model.model").exists());
-    }
 
-    @Test
-    public void runSon7KosularNominal() throws IOException, Exception {
-        Project project = Project.loadProject("Son7KosuNominal");
-        Assert.assertNotNull(project);
-        project.run();
-        Assert.assertTrue( new File(ApplicationConstants.repositoryOut+ "Son7KosuNominal" + File.separator + "KStarNominal-Model.model").exists());
-    }
 
     @Test
     public void testProject10TestRegression() throws IOException, Exception {
@@ -54,41 +41,24 @@ public class WekaEvaluationTaskTest extends Base {
         Assert.assertNotNull(project);
         project.run();
         Assert.assertTrue( new File(ApplicationConstants.repositoryOut+ "TestProject9TestEvaluation" + File.separator + "SimpleNaiveBayesClassifier-Model.model").exists());
-
-//        File f = new File(ApplicationConstants.repositoryOut + "data\\" + "TestCahitArfNaiveBayes1Data" + "\\" + "output-arff-file.arff");
-//        Assert.assertTrue(f.exists());
-//        String  evaluationResultsFileName = ApplicationConstants.repositoryOut+ "TestProject9TestEvaluation" + "\\" + "SimpleNaiveBayesClassifier-EvaluationResults.xml";
-//        f = new File( evaluationResultsFileName);
-//        Assert.assertTrue( f.exists()   );
-
-
         Serializer serializer = new Persister();
-//        NominalEvaluationResults result = serializer.read( NominalEvaluationResults.class, new File(evaluationResultsFileName) );
-//        double[][] confusionMatrix = new double[4][1];
+    }
+    @Test
+    @Ignore("It was needed to populate son7 kosu predictions in the database")
+    public void runSon7Kosular() throws IOException, Exception {
+        Project project = Project.loadProject("Son7Kosu");
+        Assert.assertNotNull(project);
+        project.run();
+        Assert.assertTrue( new File(ApplicationConstants.repositoryOut+ "Son7Kosu" + File.separator + "KStar-Model.model").exists());
+    }
 
-
-       /* confusionMatrix[0][0] = 593;
-        confusionMatrix[1][0] = 209;
-        confusionMatrix[2][0] = 56;
-        confusionMatrix[3][0] = 34;
-        Assert.assertArrayEquals( confusionMatrix, result.getConfusionMatrix());
-        Assert.assertEquals(  70.2914798206278, result.getPctCorrect(), 0.001);
-        Assert.assertEquals(  29.708520179372197, result.getPctIncorrect(), 0.001);
-        Assert.assertEquals(  627.0 , result.getCorrect(), 0.001);
-        Assert.assertEquals(  265.0, result.getIncorrect(), 0.001);
-        Assert.assertEquals(  892, result.getInstanceCount());
-        Assert.assertEquals(  0.4326666666666667, result.getGanyanOyunuKazanci().kazancOraninNeOlurdu(), 0.001);*/
-
-
-
-
-        // Check if model file exists and valid
-//        String modelFileName = ApplicationConstants.repositoryOut+ "TestProject9TestEvaluation" + "\\" + "SimpleNaiveBayesClassifier-Model.model";
-//        f = new File( modelFileName);
-//        Assert.assertTrue( f.exists()   );
-//        Classifier cls = (Classifier) weka.core.SerializationHelper.read(modelFileName);
-//        Assert.assertNotNull(cls);
-
+    @Test
+    @Ignore("It was needed to populate son7 kosu predictions in the database")
+    public void runSon7KosularNominal() throws IOException, Exception {
+        Project project = Project.loadProject("Son7KosuNominal");
+        Assert.assertNotNull(project);
+        project.run();
+        Assert.assertTrue( new File(ApplicationConstants.repositoryOut+ "Son7KosuNominal" + File.separator + "KStarNominal-Model.model").exists());
     }
     
   /*@Test

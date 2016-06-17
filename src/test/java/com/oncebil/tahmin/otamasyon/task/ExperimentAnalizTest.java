@@ -2,6 +2,7 @@ package com.oncebil.tahmin.otamasyon.task;
 
 import com.oncebil.tahmin.ApplicationConstants;
 import com.oncebil.tahmin.Base;
+import com.oncebil.tahmin.RegressionClassificationDataTestBase;
 import com.oncebil.tahmin.WeldGlobal;
 import com.oncebil.tahmin.dao.KosuDAO;
 import com.oncebil.tahmin.entity.Kosu;
@@ -25,31 +26,22 @@ import java.util.List;
 /**
  * Created by erkinkarincaoglu on 30/05/2016.
  */
-public class ExperimentAnalizTest {
-    KosuDAO kosuDAO;
-    @Before
-    public void before() throws Exception {
-        kosuDAO = WeldGlobal.get(KosuDAO.class);
-        Base.insertTestData("test_son7kosu_kstar_predictions_data.xml");
-    }
+public class ExperimentAnalizTest  extends RegressionClassificationDataTestBase {
 
     @Test
+
     public void testExperimentAnalizClassification() throws Exception {
-        List<Kosu> kosular = kosuDAO.findbyExperimentWithClassificationPredictions("test-son7kosu-nominal-kstar-experiment");
         ExperimentAnalyze analyze = new ExperimentAnalyze();
-        ExperimentAnalyzeResults analyzeResults = analyze.analyze2(kosular);
+        ExperimentAnalyzeResults analyzeResults = analyze.analyze2(classificationKosular);
         Assert.assertTrue( analyzeResults.ganyanKazanclari.size() > 0);
         Assert.assertTrue( analyzeResults.ikiliKazanclari.size() > 0);
         Assert.assertTrue( analyzeResults.siraliIkiliKazanclari.size() > 0);
-
-
     }
 
     @Test
     public void testExperimentAnalizRegression() throws Exception {
-        List<Kosu> kosular = kosuDAO.findbyExperimentWithRegressionPredictions("test-son7kosu-kstar-experiment");
         ExperimentAnalyze analyze = new ExperimentAnalyze();
-        ExperimentAnalyzeResults analyzeResults = analyze.analyze2(kosular);
+        ExperimentAnalyzeResults analyzeResults = analyze.analyze2(regressionKosular);
         Assert.assertTrue( analyzeResults.ganyanKazanclari.size() > 0);
         Assert.assertTrue( analyzeResults.ikiliKazanclari.size() > 0);
         Assert.assertTrue( analyzeResults.siraliIkiliKazanclari.size() > 0);
@@ -59,15 +51,11 @@ public class ExperimentAnalizTest {
 
     @Test
     public void testExperimentAnaliz() throws Exception {
-        List<Kosu> kosular = kosuDAO.findbyExperimentWithRegressionPredictions("test-son7kosu-kstar-experiment");
         ExperimentAnalyze analyze = new ExperimentAnalyze();
-        ExperimentAnalyzeResults analyzeResults = analyze.analyze(kosular);
+        ExperimentAnalyzeResults analyzeResults = analyze.analyze(regressionKosular);
         Assert.assertTrue( analyzeResults.ganyanKazanclari.size() > 0);
         Assert.assertTrue( analyzeResults.ikiliKazanclari.size() > 0);
         Assert.assertTrue( analyzeResults.siraliIkiliKazanclari.size() > 0);
-
-
-
     }
 
     @Test

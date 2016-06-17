@@ -33,6 +33,9 @@ public class KazancGanyan extends KazancAbstract {
 
     @Override
     public void analyze(BigDecimal threshold) {
+
+
+
         this.threshold = threshold;
         if (kacKosuVardi == 0) {
             logger.warn("ganyan kazanci kosu count is 0");
@@ -65,6 +68,7 @@ public class KazancGanyan extends KazancAbstract {
             }
         }
         setCommonValues();
+
 
     }
 

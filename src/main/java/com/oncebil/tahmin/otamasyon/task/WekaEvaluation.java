@@ -108,7 +108,13 @@ public class WekaEvaluation extends AbstractTask {
                 }
                 Classifier classifierObj = Classifier.forName(classifier, weka.core.Utils.splitOptions(options));
                 StringBuffer predsBuff = new StringBuffer();
-                Evaluation evaluation = (costMatrix == null)  ? new Evaluation(instances): new Evaluation(instances, costMatrix);
+                Evaluation evaluation;
+                // kosuid based cross validation
+                if (instances.attribute(0).name().equals(Util.KOSUID_ATID_ATTRIBUTE)) {
+                    evaluation = (costMatrix == null)  ? new EvaluationNew(instances): new EvaluationNew(instances, costMatrix);
+                } else {
+                    evaluation = (costMatrix == null)  ? new Evaluation(instances): new Evaluation(instances, costMatrix);
+                }
                 boolean classification = (instances.classAttribute().isNominal()) ? true : false;
                 evaluation.crossValidateModel(classifierObj, instances, 10, new Random(1), predsBuff, new Range(attributesToOutput), true);
                 if (writePredictions) {

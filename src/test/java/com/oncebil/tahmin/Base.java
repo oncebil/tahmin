@@ -39,7 +39,7 @@ public class Base {
                 IDataSet dataset = new FlatXmlDataSetBuilder().setColumnSensing(true).build(getTestFile("test_son7kosu_kstar_predictions_data.xml"));
                 IDatabaseTester databaseTester = new JdbcDatabaseTester(ApplicationConstants.driverClass,
                         ApplicationConstants.jdbcUrl, ApplicationConstants.username, ApplicationConstants.password);
-                databaseTester.setSetUpOperation(DatabaseOperation.REFRESH);
+                databaseTester.setSetUpOperation(DatabaseOperation.UPDATE);
                 databaseTester.setDataSet(dataset);
                 databaseTester.onSetup();
                 IDataSet dataset2 = new FlatXmlDataSetBuilder().setColumnSensing(true).build(getTestFile("experiment_result.xml"));

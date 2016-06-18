@@ -941,6 +941,8 @@ PRIMARY KEY  ( id )
 
  alter table Kazanc add CONSTRAINT fk_Kazanc_experiment Foreign key (experiment) references ExperimentResult(experiment);
 
+ ALTER TABLE Kazanc ADD CONSTRAINT Kazanc_unique_constraint UNIQUE (experiment,type,gameType,index);
+
  CREATE INDEX Kazanc_experiment on Kazanc(experiment);
  
  
@@ -955,6 +957,8 @@ PRIMARY KEY  ( id )
  CREATE INDEX BilinenKosu_kazanc_id on BilinenKosu(kazanc_id);
  
  alter table BilinenKosu add CONSTRAINT fk_BilinenKosu_kazancid Foreign key (kazanc_id) references Kazanc(id);
+
+ ALTER TABLE BilinenKosu ADD CONSTRAINT BilinenKosu_unique_constraint UNIQUE (kazanc_id,KOSUKODU);
  
 select  * from  ExperimentResult a, Kazanc b, BilinenKosu c
 where a.experiment = b.experiment

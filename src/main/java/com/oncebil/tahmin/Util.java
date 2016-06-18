@@ -5,6 +5,7 @@
 package com.oncebil.tahmin;
 
 
+import weka.core.Instance;
 import weka.core.Instances;
 import weka.core.converters.ArffLoader;
 import weka.core.converters.ArffSaver;
@@ -286,6 +287,12 @@ public class Util {
             classes.add( e.nextElement().toString());
         }
         return classes;
+    }
+
+    public static String KOSUID_ATID_ATTRIBUTE = "KosuId_AtId";
+    public static  String getKosuIdFromKosuId_AtId(String kosuIdAtId) {
+        return kosuIdAtId.substring( 0,kosuIdAtId.indexOf("_") );
+
     }
 
     public static int getIkiliCombination(int size) {

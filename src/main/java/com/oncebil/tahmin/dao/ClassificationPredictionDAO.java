@@ -20,8 +20,11 @@ public class ClassificationPredictionDAO {
     private EntityManager manager;
 
     @Transactional
-    public void merge(ClassificationPrediction classificationPrediction) {
-        manager.merge(classificationPrediction);
+    public void merge(List<ClassificationPrediction> classificationPredictions) {
+        for (ClassificationPrediction classificationPrediction : classificationPredictions) {
+            manager.merge(classificationPrediction);
+        }
+
     }
     @Transactional
     public List<ClassificationPrediction> findByExperimentName(String experiment) {

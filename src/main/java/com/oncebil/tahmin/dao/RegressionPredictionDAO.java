@@ -22,8 +22,10 @@ public class RegressionPredictionDAO {
     private EntityManager manager;
 
     @Transactional
-    public void merge(RegressionPrediction regressionPrediction) {
-        manager.merge(regressionPrediction);
+    public void merge(List<RegressionPrediction> regressionPredictions) {
+        for (RegressionPrediction regressionPrediction : regressionPredictions) {
+            manager.merge(regressionPrediction);
+        }
     }
 
     @Transactional

@@ -48,11 +48,8 @@ public class RegressionPredictions {
     }
 
     public void save() {
-
         logger.info("Saving predictions experiment=" + experimentName + " size=" + regressionPredictions.size());
-        for (RegressionPrediction p : getRegressionPredictions()) {
-            dao.merge(p);
-        }
+        dao.merge(getRegressionPredictions());
     }
 
     public static RegressionPredictions loadWithExperiment(String experiment) {

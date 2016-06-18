@@ -69,10 +69,8 @@ public class ClassificationPredictions {
 
     public void save() {
         logger.info("Saving predictions experiment=" + experimentName + " size=" + classificationPredictions.size());
+        dao.merge(classificationPredictions);
 
-        for (ClassificationPrediction classificationPrediction : classificationPredictions) {
-            dao.merge(classificationPrediction);
-        }
     }
     public static ClassificationPredictions loadWithExperiment(String experiment) {
         ClassificationPredictions predictions = new ClassificationPredictions();

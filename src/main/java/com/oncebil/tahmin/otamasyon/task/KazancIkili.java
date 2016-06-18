@@ -18,8 +18,8 @@ public class KazancIkili extends  KazancAbstract {
     private static org.slf4j.Logger logger = LoggerFactory.getLogger(KazancIkili.class);
     private final static int IKILI_BAHISTIP_KODU = 7;
 
-    public KazancIkili(List<Kosu> kosular) {
-        super(kosular);
+    public KazancIkili(List<Kosu> kosular, int index) {
+        super(kosular,index);
         for (Kosu kosu : kosular) {
             List<Bahis> bahisler = kosu.getBahisler().stream().
                     filter(bahis -> bahis.getBahisTipKodu() == IKILI_BAHISTIP_KODU).collect(Collectors.toList());
@@ -81,6 +81,10 @@ public class KazancIkili extends  KazancAbstract {
     }
 
 
+    @Override
+    public String getGameType() {
+        return GameType.KazancIkili.toString();
+    }
 
 
     @Override

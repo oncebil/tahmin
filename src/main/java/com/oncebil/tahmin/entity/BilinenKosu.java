@@ -52,12 +52,15 @@ public class BilinenKosu  implements Serializable {
 
         BilinenKosu that = (BilinenKosu) o;
 
-        return id != null ? id.equals(that.id) : that.id == null;
+        if (kazanc != null ? !kazanc.equals(that.kazanc) : that.kazanc != null) return false;
+        return KOSUKODU != null ? KOSUKODU.equals(that.KOSUKODU) : that.KOSUKODU == null;
 
     }
 
     @Override
     public int hashCode() {
-        return id != null ? id.hashCode() : 0;
+        int result = kazanc != null ? kazanc.hashCode() : 0;
+        result = 31 * result + (KOSUKODU != null ? KOSUKODU.hashCode() : 0);
+        return result;
     }
 }

@@ -23,14 +23,18 @@ public class ExperimentResultDAO {
     private EntityManager manager;
 
     @Transactional
-    public void persist(ExperimentResult experimentResult) {
+    public void removeAndInsert(ExperimentResult experimentResult) {
+        ExperimentResult previous = manager.find(ExperimentResult.class, experimentResult.getExperiment());
+        if (previous != null) {
+            manager.remove(previous);
+        }
         for (Kazanc kazanc : experimentResult.getKazanclar()) {
             kazanc.setExperimentResult(experimentResult);
             for (BilinenKosu bilinenKosu : kazanc.getBilinenKosular()) {
                 bilinenKosu.setKazanc(kazanc);
             }
         }
-        manager.persist(experimentResult);
+        manager.merge(experimentResult);
     }
 
     @Transactional

@@ -4,24 +4,20 @@ import com.oncebil.tahmin.ApplicationConstants;
 import com.oncebil.tahmin.Base;
 import com.oncebil.tahmin.RegressionClassificationDataTestBase;
 import com.oncebil.tahmin.WeldGlobal;
-import com.oncebil.tahmin.dao.KosuDAO;
-import com.oncebil.tahmin.entity.Kosu;
+import com.oncebil.tahmin.entity.ExperimentResult;
 import org.dbunit.DatabaseUnitException;
 import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.database.QueryDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSet;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.*;
-import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.List;
 
 /**
  * Created by erkinkarincaoglu on 30/05/2016.
@@ -29,33 +25,17 @@ import java.util.List;
 public class ExperimentAnalizTest  extends RegressionClassificationDataTestBase {
 
     @Test
-
     public void testExperimentAnalizClassification() throws Exception {
-        ExperimentAnalyze analyze = new ExperimentAnalyze();
-        ExperimentAnalyzeResults analyzeResults = analyze.analyze2(classificationKosular);
-        Assert.assertTrue( analyzeResults.ganyanKazanclari.size() > 0);
-        Assert.assertTrue( analyzeResults.ikiliKazanclari.size() > 0);
-        Assert.assertTrue( analyzeResults.siraliIkiliKazanclari.size() > 0);
+        ExperimentAnalyze analyze = WeldGlobal.get( ExperimentAnalyze.class);
+        ExperimentResult results = analyze.analyze(classificationKosular,"test-son7kosu-nominal-kstar-experiment",true, null);
+        Assert.assertNotNull( results);
     }
 
     @Test
     public void testExperimentAnalizRegression() throws Exception {
-        ExperimentAnalyze analyze = new ExperimentAnalyze();
-        ExperimentAnalyzeResults analyzeResults = analyze.analyze2(regressionKosular);
-        Assert.assertTrue( analyzeResults.ganyanKazanclari.size() > 0);
-        Assert.assertTrue( analyzeResults.ikiliKazanclari.size() > 0);
-        Assert.assertTrue( analyzeResults.siraliIkiliKazanclari.size() > 0);
-
-
-    }
-
-    @Test
-    public void testExperimentAnaliz() throws Exception {
-        ExperimentAnalyze analyze = new ExperimentAnalyze();
-        ExperimentAnalyzeResults analyzeResults = analyze.analyze(regressionKosular);
-        Assert.assertTrue( analyzeResults.ganyanKazanclari.size() > 0);
-        Assert.assertTrue( analyzeResults.ikiliKazanclari.size() > 0);
-        Assert.assertTrue( analyzeResults.siraliIkiliKazanclari.size() > 0);
+        ExperimentAnalyze analyze = WeldGlobal.get( ExperimentAnalyze.class);
+        ExperimentResult results = analyze.analyze(regressionKosular,"test-son7kosu-kstar-experiment", false, null);
+        Assert.assertNotNull(results);
     }
 
     @Test

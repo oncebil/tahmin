@@ -17,10 +17,12 @@ public class KazancGanyan extends KazancAbstract {
 
     private static org.slf4j.Logger logger = LoggerFactory.getLogger(KazancGanyan.class);
 
-    public KazancGanyan(List<Kosu> kosular) {
-        super(kosular);
+    public KazancGanyan(List<Kosu> kosular, int index) {
+        super(kosular,index);
         oynanabilirKosular.addAll(kosular);
     }
+
+
 
     @Override
     public List<BigDecimal> getOynanabilirKosulardakiMinumumPrediction() {
@@ -33,9 +35,6 @@ public class KazancGanyan extends KazancAbstract {
 
     @Override
     public void analyze(BigDecimal threshold) {
-
-
-
         this.threshold = threshold;
         if (kacKosuVardi == 0) {
             logger.warn("ganyan kazanci kosu count is 0");
@@ -90,6 +89,13 @@ public class KazancGanyan extends KazancAbstract {
                 ", kazancOranlari=" + kazancOranlari +
                 '}';
     }
+
+    @Override
+    public String getGameType() {
+        return GameType.KazancGanyan.toString();
+    }
+
+
 
     /*** test SQLS
      *

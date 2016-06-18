@@ -143,7 +143,7 @@ public class Project {
             }
         }
 
-        // process overriden tasks. merge them with overriden task and keep the position of the overidden task
+        // process overriden tasks. removeAndInsert them with overriden task and keep the position of the overidden task
         Iterator<TaskDefinition> it = finalTaskDefinitions.iterator();        
         while (it.hasNext()) {
             TaskDefinition td = it.next();

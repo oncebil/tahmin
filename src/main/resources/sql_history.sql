@@ -706,4 +706,258 @@ and actual =1
   and a.KOSUTARIHI<='2011-08-01'
    AND a.KOSUTARIHI>='2011-05-01'
   order by a.kosukodu desc
-  		 
+  
+  
+  
+  
+  
+  select * from RegressionPrediction where experiment = 'KStarNominal'
+
+
+select distinct experiment from RegressionPrediction where experiment = 'KStar';
+
+select distinct experiment from ClassificationPrediction
+
+select * from ClassificationPrediction where experiment = 'KStarNominal' order 
+
+select * from Distribution where experiment = 'KStarNominal'
+
+
+
+select * from Distribution where experiment = 'test-son7kosu-nominal-kstar-experiment'
+
+select distinct experiment from Distribution;
+
+ id=80049189_80025209
+
+
+select * from ClassificationPrediction where instanceid = '80048027_80023003'
+
+select * from Distribution where instanceid = '80048027_80023003'
+
+
+delete from Distribution;
+
+
+
+// oynanabilir kosular 
+select count (*) from (
+	select distinct KosuKodu from 
+	(
+		select * from ClassificationPrediction  a, Distribution b, AtKosu c
+		where a.experiment = 'test-son7kosu-nominal-kstar-experiment'
+		and a.experiment = b.experiment
+		and a.instanceid = b.instanceid
+		and c.KosuKoduAtKodu = a.instanceId
+		and b.classificationclass = 'Y'
+		and b.distribution > (1 - 0.84600002)
+		order by c.KosuKodu, b.distribution desc
+	) b
+) c
+
+// kazanc ne olurdu 
+select  suganyan from 
+(
+		select sum(ganyan) from ClassificationPrediction  a, Distribution b, AtKosu c
+		where a.experiment = 'test-son7kosu-nominal-kstar-experiment'
+		and a.experiment = b.experiment
+		and a.instanceid = b.instanceid
+		and c.KosuKoduAtKodu = a.instanceId
+		and b.classificationclass = 'Y'
+		and b.distribution > (1 - 0.84600002)
+		and actual = 'Y'
+	
+) 
+		
+		
+		
+
+select * from  Distribution
+where experiment = 'test-son7kosu-nominal-kstar-experiment'
+and classificationclass = 'Y'
+order by distribution desc
+
+
+select sum (  (count * (count-1))/2 ) from (
+	select kosukodu,count from (
+		select c.kosukodu,count(*) count from ClassificationPrediction  a, Distribution b, AtKosu c
+		where a.experiment = 'test-son7kosu-nominal-kstar-experiment'
+		and a.experiment = b.experiment
+		and a.instanceid = b.instanceid
+		and c.KosuKoduAtKodu = a.instanceId
+		and b.distribution > (1 - 0.91600001)
+--		and (sonucno =1 or sonucno =2)
+		and b.classificationclass = 'Y'
+		group by kosukodu
+		order by kosukodu desc
+     ) a where count >=2
+) b
+
+    select sum(tutar) from Bahisler where kosukodu in(
+	     select kosukodu,count from (
+		     select c.kosukodu,count(*) count from ClassificationPrediction  a, Distribution b, AtKosu c
+		     where a.experiment = 'test-son7kosu-nominal-kstar-experiment'
+		     and a.experiment = b.experiment
+		     and a.instanceid = b.instanceid
+		     and c.KosuKoduAtKodu = a.instanceId
+		     and b.distribution > (1 - 0.91600001)
+	--	     and (sonucno =1 or sonucno =2)
+		     and b.classificationclass = 'Y'
+		     group by kosukodu
+		     order by kosukodu desc
+		     ) a where count >=2
+     )
+     and bahistipkodu = 7
+     
+     
+     
+select sum (  (count * (count-1))/2 ) from (
+	 select kosukodu,count from (
+		 select c.kosukodu,count(*) count from ClassificationPrediction  a, Distribution b, AtKosu c,Bahisler d
+		 where a.experiment = 'test-son7kosu-nominal-kstar-experiment'
+		 and a.experiment = b.experiment
+		 and a.instanceid = b.instanceid
+		 and c.KosuKoduAtKodu = a.instanceId
+		 and b.distribution > (1 - 0.91600001)
+		--	     and (sonucno =1 or sonucno =2)
+		 and b.classificationclass = 'Y'
+		 and d.kosukodu = c.kosukodu
+		 and bahistipkodu = 7
+		 group by c.kosukodu
+		 order by c.kosukodu desc
+	 ) a where count >=2
+ ) b
+
+
+     
+     
+     
+     	     select c.sonucno, c.atkodu,c.atadi,  * from ClassificationPrediction  a, Distribution b, AtKosu c
+	     where a.experiment = 'test-son7kosu-nominal-kstar-experiment'
+	     and a.experiment = b.experiment
+	     and a.instanceid = b.instanceid
+	     and c.KosuKoduAtKodu = a.instanceId
+	     and b.distribution > (1 - 0.91600001)
+	     and b.classificationclass = 'Y'
+
+	     order by kosukodu desc
+	     
+	     select * from atkosu where kosukodi = 
+	     
+	     
+
+
+		select c.sonucno, *  from ClassificationPrediction  a, Distribution b, AtKosu c
+		where a.experiment = 'test-son7kosu-nominal-kstar-experiment'
+		and a.experiment = b.experiment
+		and a.instanceid = b.instanceid
+		and c.KosuKoduAtKodu = a.instanceId
+		and b.distribution > (1 - 0.91600001)
+		and b.classificationclass = 'Y'
+		and (sonucno =1 or sonucno =2)
+		order by kosukodu desc
+     
+     
+     
+     
+          select sum(tutar) from Bahisler where kosukodu in(
+     select kosukodu from (
+     select kosukodu,count(*) count  from AtKosu a, RegressionPrediction b
+     where kosukoduatkodu = b.instanceid
+     and experiment = 'test-son7kosu-kstar-experiment'
+     and predicted < 4.2459998
+     and (sonucno =1 or sonucno =2)
+     group by kosukodu
+     order by kosukodu desc
+     ) a
+     where count >=2
+     )
+     and bahistipkodu = 7
+
+
+
+     select kosukodu,count(*) count  from AtKosu a, RegressionPrediction b
+     where kosukoduatkodu = b.instanceid
+     and experiment = 'test-son7kosu-kstar-experiment'
+     and predicted < 3.0
+     and (sonucno =1 or sonucno =2)
+   
+     order by kosukodu desc
+     
+drop table ExperimentResult;
+
+drop table Kazanc;
+
+drop table BilinenKosu;
+     
+     create table ExperimentResult (
+ experiment varchar(200) NOT NULL ,
+ classification boolean NOT NULL,
+correct real,
+pctCorrect real,
+incorrect real,
+pctIncorrect real,
+kappa real,
+totalCost real,
+avgCost real,
+KBRelativeInformation real,
+KBInformation real,
+KBMeanInformation real,
+SFPriorEntropy real,
+SFMeanPriorEntropy real,
+SFSchemeEntropy real,
+SFMeanSchemeEntropy real,
+SFEntropyGain real,
+SFMeanEntropyGain real,
+meanAbsoluteError real,
+rootMeanSquaredError real,
+relativeAbsoluteError real,
+rootRelativeSquaredError real,
+correlationCoefficient real,
+project text,
+arff bytea,
+ PRIMARY KEY  ( experiment ) ); 
+ 
+ CREATE INDEX ExperimentResult_experiment on ExperimentResult(experiment);
+ 
+create table Kazanc (
+id SERIAL ,
+kacKosuVardi integer NOT NULL ,
+threshold real,
+kacKosudaOynardik integer NOT NULL ,
+kacKosudaBilirdik integer NOT NULL , 
+neKadarVerirdik real  NOT NULL ,
+kazancOraninKacOlurdu real NOT NULL ,
+yuzdeKacindaOynardik real  check ( yuzdeKacindaOynardik >= 0.0 and yuzdeKacindaOynardik <=100.0 ),
+yuzdeKacindaBilirdik real  check ( yuzdeKacindaBilirdik >= 0.0 and yuzdeKacindaBilirdik <=100.0 ),
+kacliraKazanirdik real NOT NULL ,
+kacKosudaOynanabilirdi integer ,
+gameType varchar (100)  check ( gameType in ('KazancGanyan','KazancIkili','KazancSiraliIkili') ),
+type varchar (100)  check ( type in ('oynamayuzdesi-threshold') ),
+index int ,
+experiment varchar(200) NOT NULL  ,
+PRIMARY KEY  ( id )
+); 
+
+ alter table Kazanc add CONSTRAINT fk_Kazanc_experiment Foreign key (experiment) references ExperimentResult(experiment);
+
+ CREATE INDEX Kazanc_experiment on Kazanc(experiment);
+ 
+ 
+ create table BilinenKosu (
+id serial  ,
+kazanc_id integer NOT NULL,
+KOSUKODU numeric NOT NULL, 
+PRIMARY KEY  ( id )
+); 
+
+
+ CREATE INDEX BilinenKosu_kazanc_id on BilinenKosu(kazanc_id);
+ 
+ alter table BilinenKosu add CONSTRAINT fk_BilinenKosu_kazancid Foreign key (kazanc_id) references Kazanc(id);
+ 
+select  * from  ExperimentResult a, Kazanc b, BilinenKosu c
+where a.experiment = b.experiment
+and c.kazanc_id = b.id
+--and a.experiment = 'BPJtQ';
+

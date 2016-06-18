@@ -190,12 +190,20 @@ public class Kazanc implements Serializable {
 
         Kazanc kazanc = (Kazanc) o;
 
-        return id != null ? id.equals(kazanc.id) : kazanc.id == null;
+        if (experimentResult != null ? !experimentResult.equals(kazanc.experimentResult) : kazanc.experimentResult != null)
+            return false;
+        if (gameType != null ? !gameType.equals(kazanc.gameType) : kazanc.gameType != null) return false;
+        if (type != null ? !type.equals(kazanc.type) : kazanc.type != null) return false;
+        return index != null ? index.equals(kazanc.index) : kazanc.index == null;
 
     }
 
     @Override
     public int hashCode() {
-        return id != null ? id.hashCode() : 0;
+        int result = experimentResult != null ? experimentResult.hashCode() : 0;
+        result = 31 * result + (gameType != null ? gameType.hashCode() : 0);
+        result = 31 * result + (type != null ? type.hashCode() : 0);
+        result = 31 * result + (index != null ? index.hashCode() : 0);
+        return result;
     }
 }

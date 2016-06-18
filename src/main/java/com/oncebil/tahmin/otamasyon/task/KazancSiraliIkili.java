@@ -20,8 +20,8 @@ public class KazancSiraliIkili extends  KazancAbstract {
 
     private final static int SIRALI_IKILI_BAHISTIP_KODU = 8;
 
-    public KazancSiraliIkili(List<Kosu> kosular) {
-        super(kosular);
+    public KazancSiraliIkili(List<Kosu> kosular,int index) {
+        super(kosular,index);
         for (Kosu kosu : kosular) {
             List<Bahis> bahisler = kosu.getBahisler().stream().
                     filter(bahis -> bahis.getBahisTipKodu() == SIRALI_IKILI_BAHISTIP_KODU).collect(Collectors.toList());
@@ -76,6 +76,10 @@ public class KazancSiraliIkili extends  KazancAbstract {
             }
         }
         setCommonValues();
+    }
+    @Override
+    public String getGameType() {
+        return GameType.KazancSiraliIkili.toString();
     }
 
 

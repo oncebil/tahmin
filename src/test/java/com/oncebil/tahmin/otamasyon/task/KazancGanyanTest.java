@@ -19,7 +19,7 @@ public class KazancGanyanTest extends RegressionClassificationDataTestBase {
 
     @Test
     public void testGanyanKazancRegression() {
-        KazancGanyan kazancGanyan = new KazancGanyan(regressionKosular);
+        KazancGanyan kazancGanyan = new KazancGanyan(regressionKosular, 0);
         kazancGanyan.analyze(new BigDecimal("2.1"));
         Assert.assertEquals(new BigDecimal("23.10"), kazancGanyan.kacliraKazanirdik);
         Assert.assertEquals(new BigDecimal("21.00"), kazancGanyan.neKadarVerirdik);
@@ -27,7 +27,7 @@ public class KazancGanyanTest extends RegressionClassificationDataTestBase {
 
     @Test
     public void testGanyanKazancClassification() {
-        KazancGanyan kazancGanyan = new KazancGanyan(classificationKosular);
+        KazancGanyan kazancGanyan = new KazancGanyan(classificationKosular, 0);
         kazancGanyan.analyze(new BigDecimal("0.84600002"));
         Assert.assertEquals(new BigDecimal("218.80"), kazancGanyan.kacliraKazanirdik);
         Assert.assertEquals(new BigDecimal("373.00"), kazancGanyan.neKadarVerirdik);

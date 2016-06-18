@@ -19,7 +19,7 @@ public class KazancIkiliTest  extends RegressionClassificationDataTestBase {
 
     @Test
     public void testIkiliKazanc() {
-        KazancIkili kazancIkili = new KazancIkili(regressionKosular);
+        KazancIkili kazancIkili = new KazancIkili(regressionKosular,0);
         kazancIkili.analyze(new BigDecimal("3.0"));
         Assert.assertEquals(new BigDecimal("71.20"), kazancIkili.kacliraKazanirdik);
         Assert.assertEquals(new BigDecimal("35.00"), kazancIkili.neKadarVerirdik);
@@ -28,7 +28,7 @@ public class KazancIkiliTest  extends RegressionClassificationDataTestBase {
 
     @Test
     public void testIkiliKazancClassification() {
-        KazancIkili kazancIkili = new KazancIkili(classificationKosular);
+        KazancIkili kazancIkili = new KazancIkili(classificationKosular,0);
         kazancIkili.analyze(new BigDecimal("0.91600001"));
         Assert.assertEquals(new BigDecimal("491.20"), kazancIkili.kacliraKazanirdik);
         Assert.assertEquals(new BigDecimal("837.00"), kazancIkili.neKadarVerirdik);

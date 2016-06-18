@@ -321,4 +321,20 @@ public class ExperimentResult {
     public void setArff(byte[] arff) {
         this.arff = arff;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ExperimentResult that = (ExperimentResult) o;
+
+        return experiment != null ? experiment.equals(that.experiment) : that.experiment == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return experiment != null ? experiment.hashCode() : 0;
+    }
 }

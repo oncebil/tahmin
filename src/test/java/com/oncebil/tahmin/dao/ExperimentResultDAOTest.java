@@ -23,11 +23,15 @@ public class ExperimentResultDAOTest {
         experimentResultDAO = WeldGlobal.get(ExperimentResultDAO.class);
     }
 
+    // intermittenly fails
+    // javax.persistence.PersistenceException: org.hibernate.exception.ConstraintViolationException: could not execute statement
+
     @Test
     public void testSave() {
         EnhancedRandom enhancedRandom = EnhancedRandomBuilder.
                 aNewEnhancedRandomBuilder().maxCollectionSize(3).maxStringLength(5).build();
         ExperimentResult experimentResult = enhancedRandom.nextObject(ExperimentResult.class);
+        experimentResult.setExperiment("unit-test-experiment");
         for (Kazanc kazanc : experimentResult.getKazanclar()) {
             kazanc.setGameType("KazancGanyan");
             kazanc.setType("oynamayuzdesi-threshold");
@@ -36,10 +40,11 @@ public class ExperimentResultDAOTest {
                 bilinenKosu.setId(null);
             }
         }
-        experimentResultDAO.persist(experimentResult);
+        experimentResultDAO.removeAndInsert(experimentResult);
         List<ExperimentResult> results = experimentResultDAO.getExperimentResultByName( experimentResult.getExperiment());
         Assert.assertTrue( results.size() > 0 );
         Assert.assertTrue( results.get(0).getKazanclar().size() == experimentResult.getKazanclar().size());
         Assert.assertTrue( results.get(0).getKazanclar().iterator().next().getBilinenKosular().size() > 0);
+
     }
 }

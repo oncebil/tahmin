@@ -11,11 +11,7 @@ import com.oncebil.tahmin.TahminException;
 import com.oncebil.tahmin.Util;
 import com.oncebil.tahmin.WeldGlobal;
 import com.oncebil.tahmin.dao.KosuDAO;
-import com.oncebil.tahmin.entity.ClassificationPrediction;
 import com.oncebil.tahmin.entity.Kosu;
-import com.oncebil.tahmin.entity.RegressionPrediction;
-import org.simpleframework.xml.Serializer;
-import org.simpleframework.xml.core.Persister;
 import weka.classifiers.Classifier;
 import weka.classifiers.CostMatrix;
 import weka.classifiers.Evaluation;
@@ -23,7 +19,6 @@ import weka.classifiers.Evaluation;
 import weka.core.Instances;
 import weka.core.Range;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.StringReader;
 import java.util.ArrayList;
@@ -132,7 +127,7 @@ public class WekaEvaluation extends AbstractTask {
                     KosuDAO kosuDAO = WeldGlobal.get(KosuDAO.class);
                     List<Kosu> kosular = kosuDAO.findbyExperimentWithRegressionPredictions(getName());
                     ExperimentAnalyze analyze = new ExperimentAnalyze();
-                    ExperimentAnalyzeResults analyzeResults = analyze.analyze2(kosular);
+                    //ExperimentAnalyzeResults analyzeResults = analyze.analyze(kosular);
 
                 }
 

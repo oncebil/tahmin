@@ -4,13 +4,13 @@ package com.oncebil.tahmin.dao;
 import com.oncebil.tahmin.entity.BilinenKosu;
 import com.oncebil.tahmin.entity.ExperimentResult;
 import com.oncebil.tahmin.entity.Kazanc;
-import com.oncebil.tahmin.entity.Kosu;
 import de.laliluna.transactions.Transactional;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import javax.persistence.Transient;
 import java.util.List;
 
 /**
@@ -47,5 +47,16 @@ public class ExperimentResultDAO {
 
         q.setParameter("experiment",experiment);
         return (List<ExperimentResult>)q.getResultList();
+    }
+
+    @Transactional
+    public List<Kazanc> findKazancGanyansOnThresholds(String experiment) {
+        Query q = manager.createQuery("select  k  from   Kazanc k\n" +
+                "where  k.experimentResult.experiment = :experiment \n" +
+                "and gametype = 'KazancGanyan'\n" +
+                "and index in (2,3,4,5,6)\n" +
+                "order by  yuzdekacindaoynardik desc");
+        q.setParameter("experiment",experiment);
+        return (List<Kazanc>)q.getResultList();
     }
 }

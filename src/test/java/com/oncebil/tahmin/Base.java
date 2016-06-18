@@ -33,14 +33,17 @@ public class Base {
         return new File(Base.class.getClassLoader().getResource(".").getFile()).getAbsolutePath();
     }
 
-    public static void insertTestData(String file)  {
+    public static void insertTestData()  {
         try {
             if (testDataSetup.compareAndSet(false, true)) {
-                IDataSet dataset = new FlatXmlDataSetBuilder().setColumnSensing(true).build(getTestFile(file));
+                IDataSet dataset = new FlatXmlDataSetBuilder().setColumnSensing(true).build(getTestFile("test_son7kosu_kstar_predictions_data.xml"));
                 IDatabaseTester databaseTester = new JdbcDatabaseTester(ApplicationConstants.driverClass,
                         ApplicationConstants.jdbcUrl, ApplicationConstants.username, ApplicationConstants.password);
                 databaseTester.setSetUpOperation(DatabaseOperation.REFRESH);
                 databaseTester.setDataSet(dataset);
+                databaseTester.onSetup();
+                IDataSet dataset2 = new FlatXmlDataSetBuilder().setColumnSensing(true).build(getTestFile("experiment_result.xml"));
+                databaseTester.setDataSet(dataset2);
                 databaseTester.onSetup();
             }
         } catch(Exception e) {

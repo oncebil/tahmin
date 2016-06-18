@@ -66,19 +66,20 @@ public class ExperimentAnalyze {
         }
     }
     public void dynamicAnalysis2( ExperimentResult experimentResult, List<Kosu> kosular,KazancFactory kazancFactory) {
-        KazancAbstract kazancAbstract = kazancFactory.createKazancAbstract(kosular, 0);
+        KazancAbstract kazancAbstract = kazancFactory.createKazancAbstract(kosular, 1);
         List<BigDecimal> minumumPredictions = kazancAbstract.getOynanabilirKosulardakiMinumumPrediction();
         Collections.sort(minumumPredictions, Collections.reverseOrder());
-        System.out.println(minumumPredictions.size());
+        int index = 1;
         for (int i = 0 ; i<minumumPredictions.size()  ; i = i + (minumumPredictions.size() / 10)) {
             // create new one for each threshold. first one is already created
             if (i > 0) {
-                kazancAbstract = kazancFactory.createKazancAbstract(kosular, i);
+                kazancAbstract = kazancFactory.createKazancAbstract(kosular, index);
             }
-            BigDecimal threshold = minumumPredictions.get( i   );
+            BigDecimal threshold = minumumPredictions.get( i );
             kazancAbstract.analyze(threshold);
             System.out.println( "i=" + i + " threshold=" + threshold + " kacanc=" + kazancAbstract);
             experimentResult.getKazanclar().add( kazancAbstract.toKazancEntity());
+            index ++;
 
         }
 

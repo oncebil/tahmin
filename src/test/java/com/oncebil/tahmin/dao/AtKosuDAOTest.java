@@ -26,7 +26,7 @@ public class AtKosuDAOTest extends Base {
     @Before
     public void before() throws Exception {
         atKosuDAO = WeldGlobal.get(AtKosuDAO.class);
-        Base.insertTestData("test_son7kosu_kstar_predictions_data.xml");
+        Base.insertTestData();
     }
 
     @Test

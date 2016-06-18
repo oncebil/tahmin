@@ -23,7 +23,7 @@ public class RegressionClassificationDataTestBase {
     public  static void  setup()  {
         if (testDataSetup.compareAndSet(false, true) ) {
             kosuDAO = WeldGlobal.get(KosuDAO.class);
-            Base.insertTestData("test_son7kosu_kstar_predictions_data.xml");
+            Base.insertTestData();
             regressionKosular = kosuDAO.
                     findbyExperimentWithRegressionPredictions("test-son7kosu-kstar-experiment");
             classificationKosular = kosuDAO.

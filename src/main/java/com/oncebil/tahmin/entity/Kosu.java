@@ -87,13 +87,13 @@ public class Kosu {
     @Transient
     public static Kosu createWithAtKosular(List<AtKosu> atkosular) {
         Kosu kosu = new Kosu();
-        kosu.atlar = new HashSet<>(atkosular);
+        kosu.atlar = new LinkedHashSet<>(atkosular);
         return kosu;
     }
 
     @Transient
     public static List<Kosu> createKosular(List<AtKosu> atlar) {
-        Map<Long,List<AtKosu>> kosular = new HashMap<>();
+        Map<Long,List<AtKosu>> kosular = new TreeMap<>();
         for (AtKosu atKosu : atlar) {
             if (!kosular.containsKey( atKosu.getKOSUKODU()) ) {
                 kosular.put(atKosu.getKOSUKODU(), new ArrayList<>());

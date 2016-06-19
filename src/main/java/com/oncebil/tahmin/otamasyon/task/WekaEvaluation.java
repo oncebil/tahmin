@@ -111,7 +111,9 @@ public class WekaEvaluation extends AbstractTask {
                 Evaluation evaluation;
                 // kosuid based cross validation
                 if (instances.attribute(0).name().equals(Util.KOSUID_ATID_ATTRIBUTE)) {
-                    evaluation = (costMatrix == null)  ? new EvaluationNew(instances): new EvaluationNew(instances, costMatrix);
+                    logger.log(Level.INFO, "Evaluation New");
+                    evaluation = (costMatrix == null)  ? new Evaluation(instances): new Evaluation(instances, costMatrix);
+                    //evaluation = (costMatrix == null)  ? new EvaluationNew(instances): new EvaluationNew(instances, costMatrix);
                 } else {
                     evaluation = (costMatrix == null)  ? new Evaluation(instances): new Evaluation(instances, costMatrix);
                 }
@@ -132,10 +134,12 @@ public class WekaEvaluation extends AbstractTask {
 
                     KosuDAO kosuDAO = WeldGlobal.get(KosuDAO.class);
                     List<Kosu> kosular = kosuDAO.findbyExperimentWithRegressionPredictions(getName());
-                    ExperimentAnalyze analyze = new ExperimentAnalyze();
+                    //ExperimentAnalyze analyze = new ExperimentAnalyze();
                     //ExperimentAnalyzeResults analyzeResults = analyze.analyze(kosular);
 
                 }
+                ExperimentAnalyze analyze = WeldGlobal.get(ExperimentAnalyze.class);
+                analyze.analyze( getName(),classification,evaluation);
 
 
                 //System.out.println("al=" + evaluation.predictions());

@@ -50,4 +50,11 @@ public class AtKosuDAO {
 
 
     }
+
+
+    @Transactional
+    public List<AtKosu> getAtKosularBySql(String sql) {
+        Query query = manager.createNativeQuery(sql, AtKosu.class);
+        return (List<AtKosu>) query.getResultList();
+    }
 }

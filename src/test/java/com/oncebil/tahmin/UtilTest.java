@@ -41,11 +41,9 @@ public class UtilTest {
         List<Kosu> kosular = Kosu.createKosular(WeldGlobal.get(AtKosuDAO.class).getAtKosularBySql(sql));
         List<Util.Row> values = new ArrayList<>();
         for (Kosu kosu : kosular) {
+            int atSayisi = kosu.getAtlar().size();
             for (AtKosu atKosu : kosu.getAtlar()) {
-                Double weight = null;
-                if (atKosu.getSONUCNO() == 1) {
-                    weight = 8.0;
-                }
+                Double weight = (atKosu.getSONUCNO() == 1)  ? (double) atSayisi : null;
                 values.add( new Util.Row(Arrays.asList(new Object[]{
                         atKosu.getKosuKoduAtKodu(),
                         atKosu.getSon7birincilikYuzdesi().doubleValue() + atKosu.getSon7ikincilikYuzdesi().doubleValue() + atKosu.getSon7ucunculukYuzdesi().doubleValue(),

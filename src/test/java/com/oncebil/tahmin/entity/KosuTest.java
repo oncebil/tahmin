@@ -41,60 +41,15 @@ public class KosuTest {
                 "relativeson7bitirisOrtalamasi",
                 Kosu.Sort.ASC);
 
-        Assert.assertEquals(new BigDecimal(414),kosular.get(0).getAtlar().iterator().next().getDynamicValue("relativeson7bitirisOrtalamasi") );
+        Assert.assertEquals(new BigDecimal(414), kosular.get(0).getAtlar().iterator().next().getDynamicValue("relativeson7bitirisOrtalamasi"));
 
         kosular.forEach(k -> k.getAtlar().
                 forEach(at -> System.out.println("" +
-                                " kosukodu_atkodu=" + at.getKosuKoduAtKodu() +
-                                " SONUCNO=" + at.getSONUCNO() +
-                                " son7bitirisOrtalamasi=" + at.getSon7bitirisOrtalamasi() +
-                                " relativeson7bitirisOrtalamasi=" + at.getDynamicValue("relativeson7bitirisOrtalamasi"))
-
-
+                        " kosukodu_atkodu=" + at.getKosuKoduAtKodu() +
+                        " SONUCNO=" + at.getSONUCNO() +
+                        " son7bitirisOrtalamasi=" + at.getSon7bitirisOrtalamasi() +
+                        " relativeson7bitirisOrtalamasi=" + at.getDynamicValue("relativeson7bitirisOrtalamasi"))
                 ));
-
-//        kosular.forEach(k ->
-//                k.getAtlar().stream().filter(atKosu -> atKosu.getSONUCNO() == 1 && atKosu.getDynamicValue("relativeson7bitirisOrtalamasi").doubleValue() > 700.0).
-//                        forEach(atKosu -> System.out.println(atKosu.getDynamicValue("relativeson7bitirisOrtalamasi"))));
-
-
-        List<Util.Row> values = new ArrayList<>();
-        for (Kosu kosu : kosular) {
-            int atSayisi = kosu.getAtlar().size();
-            for (AtKosu atKosu : kosu.getAtlar()) {
-
-                Double weight = null;
-                if (atKosu.getSONUCNO() == 1) {
-                    weight = (double)atSayisi;
-                }
-                values.add( new Util.Row(Arrays.asList(new Object[]{
-                        atKosu.getKosuKoduAtKodu(),
-                        atKosu.getSon7birincilikYuzdesi().doubleValue() + atKosu.getSon7ikincilikYuzdesi().doubleValue() + atKosu.getSon7ucunculukYuzdesi().doubleValue(),
-                        atKosu.getSon7bitirisOrtalamasi().doubleValue(),
-                        atKosu.getSon7DereceFarkiOrtalamasi().doubleValue(),
-                        atKosu.getSon3DereceFarkiOrtalamasi().doubleValue(),
-                        atKosu.getDynamicValue("relativeson7bitirisOrtalamasi"),
-                        (atKosu.getSONUCNO() == 1) ? "Y" : "N"
-                }),weight));
-            }
-        }
-
-        FastVector atts = new FastVector();
-        atts.addElement(new Attribute("KosuId_AtId", (FastVector) null));
-        atts.addElement(new Attribute("Son73egirisyuzdesi"));
-        atts.addElement(new Attribute("Son7BitirisOrtalamasi"));
-        atts.addElement(new Attribute("Son7DereceFarkiOrtalamasi"));
-        atts.addElement(new Attribute("Son3DereceFarkiOrtalamasi"));
-        atts.addElement(new Attribute("relativeson7bitirisOrtalamasi"));
-        FastVector attVals = new FastVector();
-        attVals.addElement("Y");
-        attVals.addElement("N");
-        atts.addElement(new Attribute("BirinciMi", attVals));
-
-        Instances data = Util.createInstances(atts, values);
-        Assert.assertEquals(1181, data.numInstances());
-        Util.saveInstances(data,
-                new File(Base.getTestFilesPath() + "/test-arff-utils.arff"));
 
     }
 }

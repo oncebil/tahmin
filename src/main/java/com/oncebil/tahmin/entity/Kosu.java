@@ -114,6 +114,16 @@ public class Kosu {
         ASC,
         DESC,
     }
+
+    /**
+     * Creates a new dynamic value in at by using the source field
+     * source value are sorted and dynamic value is set to position of the value relative to birinci in the kosu
+     *
+     * @param kosular
+     * @param source
+     * @param newDynamicValue
+     * @param sort
+     */
     @Transient
     public static void addValuePositionInKosu(List<Kosu> kosular,Field source,String newDynamicValue, Sort sort) {
         try {
@@ -145,49 +155,6 @@ public class Kosu {
         } catch (IllegalAccessException e) {
             throw new TahminException(e);
         }
-
-    }
-    @Transient
-    public static void addDynamicRelativeAttributeToAtlar(List<Kosu> kosular,
-                                                          String newDynamicValue, String sourceDynamicValue) {
-
-        //Set<BigDecimal> uniquevalues = new TreeSet<>();
-        List<BigDecimal> values = new ArrayList<>();
-        for (Kosu k : kosular) {
-            for (AtKosu at : k.getAtlar()) {
-                values.add(at.getDynamicValue(sourceDynamicValue));
-            }
-        }
-
-
-        Collections.sort(values);
-        System.out.println (values.size() );
-        System.out.println (values.indexOf(new BigDecimal("0.00")) );
-        System.out.println (values.indexOf(new BigDecimal("0.00")) );
-        System.out.println (values.indexOf(new BigDecimal("14.29")) );
-        System.out.println (values.indexOf(new BigDecimal("28.58")) );
-        System.out.println (values.indexOf(new BigDecimal("42.86")) );
-        System.out.println (values.indexOf(new BigDecimal("42.87")) );
-        System.out.println (values.indexOf(new BigDecimal("57.15")) );
-        // values=son3yuzdesi. 0, 12,12, 25 ,25, 47....
-
-        System.out.println("values="+values);
-        for (Kosu k : kosular) {
-
-            int maximum = Integer.MIN_VALUE;
-            for (AtKosu at : k.getAtlar()) {
-                int index = values.indexOf(at.getDynamicValue(sourceDynamicValue));
-                if (index > maximum) {
-                    maximum = index;
-                }
-            }
-            for (AtKosu at : k.getAtlar()) {
-                int index = values.indexOf(at.getDynamicValue(sourceDynamicValue));
-                Integer dynamicValue = maximum - index;
-                at.addDynamicValue(newDynamicValue, new BigDecimal(dynamicValue));
-            }
-        }
-
 
     }
 }

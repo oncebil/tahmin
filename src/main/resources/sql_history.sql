@@ -965,3 +965,15 @@ where a.experiment = b.experiment
 and c.kazanc_id = b.id
 --and a.experiment = 'BPJtQ';
 
+select  *  from   Kazanc k
+where  k.experiment = 'son7kosularheuristickstar'
+and gametype = 'KazancGanyan'
+and index in (2,3,4,5,6,7)
+order by  yuzdekacindaoynardik desc
+
+
+select  *  from   Kazanc k
+where  k.experiment = 'test-son7kosu-nominal-kstar-experiment'
+and gametype = 'KazancGanyan'
+and index in (2,3,4,5,6,7)
+order by  yuzdekacindaoynardik desc

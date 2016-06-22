@@ -1,6 +1,10 @@
 package com.oncebil.tahmin.entity;
 
+import com.oncebil.tahmin.TahminException;
+import org.hibernate.annotations.Sort;
+
 import javax.persistence.*;
+import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.util.*;
 
@@ -103,10 +107,46 @@ public class Kosu {
         List<Kosu> kosulist = new ArrayList<>();
         kosular.forEach((k,v) -> kosulist.add( Kosu.createWithAtKosular(v)) );
         return kosulist;
-
-
     }
 
+    enum Sort
+    {
+        ASC,
+        DESC,
+    }
+    @Transient
+    public static void addValuePositionInKosu(List<Kosu> kosular,Field source,String newDynamicValue, Sort sort) {
+        try {
+            source.setAccessible(true); //Additional line
+            List<BigDecimal> values = new ArrayList<>();
+            for (Kosu k : kosular) {
+                for (AtKosu at : k.getAtlar()) {
+                    values.add( (BigDecimal)source.get(at));
+                }
+            }
+            if (sort == Sort.ASC) {
+                Collections.sort(values);
+            } else {
+                Collections.sort(values, Collections.reverseOrder());
+            }
+            System.out.println( values);
+            for (Kosu k : kosular) {
+                int minumumIndex = Integer.MAX_VALUE;
+                for (AtKosu at : k.getAtlar()) {
+                    if (values.indexOf((BigDecimal)source.get(at)) < minumumIndex) {
+                        minumumIndex = values.indexOf((BigDecimal)source.get(at));
+                    }
+                }
+                for (AtKosu at : k.getAtlar()) {
+                    at.addDynamicValue(newDynamicValue,
+                            new BigDecimal(values.indexOf( (BigDecimal)source.get(at) ) - minumumIndex));
+                }
+            }
+        } catch (IllegalAccessException e) {
+            throw new TahminException(e);
+        }
+
+    }
     @Transient
     public static void addDynamicRelativeAttributeToAtlar(List<Kosu> kosular,
                                                           String newDynamicValue, String sourceDynamicValue) {

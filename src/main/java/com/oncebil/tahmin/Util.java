@@ -5,6 +5,8 @@
 package com.oncebil.tahmin;
 
 
+import weka.core.Attribute;
+import weka.core.FastVector;
 import weka.core.Instance;
 import weka.core.Instances;
 import weka.core.converters.ArffLoader;
@@ -294,6 +296,54 @@ public class Util {
         return kosuIdAtId.substring( 0,kosuIdAtId.indexOf("_") );
 
     }
+
+    public static class Row {
+        List<Object> values;
+        Double weight;
+
+        public Row(List<Object> values, Double weight) {
+            this.values = values;
+            this.weight = weight;
+        }
+    }
+
+    public static Instances createInstances(FastVector  attributes,
+                                     List<Row> allvalues) {
+
+        Instances data = new Instances("MyRelation", attributes, 0);
+        double[] vals;
+        for (Row row : allvalues) {
+            List<Object> values = row.values;
+            vals = new double[data.numAttributes()];
+            int i = 0;
+            if (values.size() != attributes.size()) {
+                throw new TahminException("values size in row doesn't match attributes size=" + attributes.size());
+            }
+            for (Object value : values) {
+
+                if (data.attribute(i).isString()) {
+                    vals[i] = data.attribute(i).addStringValue((String)value);
+                } else if (data.attribute(i).isNumeric()) {
+                    if (value instanceof BigDecimal) {
+                        vals[i] = ((BigDecimal)value).doubleValue();
+                    } else if (value instanceof Double) {
+                        vals[i] = ((Double)value).doubleValue();
+                    }
+                } else if (data.attribute(i).isNominal()) {
+                    vals[i] = data.attribute(i).indexOfValue((String)value);
+                }
+                i++;
+            }
+            Instance instance = new Instance(1.0, vals);
+            if (row.weight != null) {
+                instance.setWeight( row.weight);
+            }
+            data.add(instance);
+        }
+        return data;
+    }
+
+
 
     public static int getIkiliCombination(int size) {
         return (size * (size-1))/2;

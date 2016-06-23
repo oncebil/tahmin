@@ -4,6 +4,7 @@ import com.oncebil.tahmin.TahminException;
 import org.slf4j.LoggerFactory;
 import weka.classifiers.Evaluation;
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -15,7 +16,7 @@ import java.util.Set;
 @Entity
 @Table(name = "ExperimentResult")
 
-public class ExperimentResult {
+public class ExperimentResult implements Serializable{
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(ExperimentResult.class);
     @Id
     private String experiment;
@@ -46,7 +47,8 @@ public class ExperimentResult {
     private boolean classification;
     private String project;
     private byte[] arff;
-
+    @OneToMany( mappedBy = "experimentResult",cascade = CascadeType.ALL)
+    private Set<ExperimentKosu> experimentKosular = new HashSet<>();
 
 
     public void populateEvaluationResults(Evaluation evaluation, boolean classification) {
@@ -336,5 +338,13 @@ public class ExperimentResult {
     @Override
     public int hashCode() {
         return experiment != null ? experiment.hashCode() : 0;
+    }
+
+    public Set<ExperimentKosu> getExperimentKosular() {
+        return experimentKosular;
+    }
+
+    public void setExperimentKosular(Set<ExperimentKosu> experimentKosular) {
+        this.experimentKosular = experimentKosular;
     }
 }

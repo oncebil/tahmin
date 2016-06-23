@@ -2,6 +2,7 @@ package com.oncebil.tahmin.dao;
 
 
 import com.oncebil.tahmin.entity.BilinenKosu;
+import com.oncebil.tahmin.entity.ExperimentKosu;
 import com.oncebil.tahmin.entity.ExperimentResult;
 import com.oncebil.tahmin.entity.Kazanc;
 import de.laliluna.transactions.Transactional;
@@ -33,6 +34,9 @@ public class ExperimentResultDAO {
             for (BilinenKosu bilinenKosu : kazanc.getBilinenKosular()) {
                 bilinenKosu.setKazanc(kazanc);
             }
+        }
+        for (ExperimentKosu experimentKosu : experimentResult.getExperimentKosular()) {
+            experimentKosu.setExperimentResult(experimentResult);
         }
         manager.merge(experimentResult);
     }

@@ -2,6 +2,7 @@ package com.oncebil.tahmin.otamasyon.task;
 
 import com.oncebil.tahmin.dao.ExperimentResultDAO;
 import com.oncebil.tahmin.dao.KosuDAO;
+import com.oncebil.tahmin.entity.ExperimentKosu;
 import com.oncebil.tahmin.entity.ExperimentResult;
 import com.oncebil.tahmin.entity.Kosu;
 import weka.classifiers.Evaluation;
@@ -9,6 +10,7 @@ import weka.classifiers.Evaluation;
 import javax.inject.Inject;
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Created by erkinkarincaoglu on 31/05/2016.
@@ -29,6 +31,8 @@ public class ExperimentAnalyze {
     public ExperimentResult analyze(List<Kosu> kosular, String experiment, boolean classification, Evaluation evaluation) {
         ExperimentResult results = new ExperimentResult();
         results.setExperiment(experiment);
+        results.setExperimentKosular(kosular.stream().
+                map( kosu -> new ExperimentKosu(results,kosu.getKOSUKODU())).collect(Collectors.toSet()));
         dynamicAnalysis2( results, kosular, new KazancFactory( KazancAbstract.GameType.KazancGanyan ) );
         dynamicAnalysis2( results, kosular, new KazancFactory( KazancAbstract.GameType.KazancIkili ));
         dynamicAnalysis2( results, kosular, new KazancFactory(KazancAbstract.GameType.KazancSiraliIkili));

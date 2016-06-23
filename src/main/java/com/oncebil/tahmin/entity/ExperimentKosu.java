@@ -20,6 +20,15 @@ public class ExperimentKosu implements Serializable {
     @Column(name = "kosuKodu")
     private Long kosuKodu;
 
+
+    public ExperimentKosu(ExperimentResult experimentResult, Long kosuKodu) {
+        this.experimentResult = experimentResult;
+        this.kosuKodu = kosuKodu;
+    }
+
+    public ExperimentKosu() {
+    }
+
     public ExperimentResult getExperimentResult() {
         return experimentResult;
     }

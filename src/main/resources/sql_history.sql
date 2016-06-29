@@ -977,3 +977,98 @@ where  k.experiment = 'test-son7kosu-nominal-kstar-experiment'
 and gametype = 'KazancGanyan'
 and index in (2,3,4,5,6,7)
 order by  yuzdekacindaoynardik desc
+
+
+
+select  *  from   Kazanc k
+where  k.experiment = 'son7kosularheuristickstar'
+and gametype = 'KazancGanyan'
+and index in (2,3,4,5,6,7)
+order by  yuzdekacindaoynardik desc
+
+
+select  *  from   Kazanc k
+where  k.experiment = 'test-son7kosu-nominal-kstar-experiment'
+and gametype = 'KazancGanyan'
+and index in (2,3,4,5,6,7)
+order by  yuzdekacindaoynardik desc
+
+
+select * from experimentresult where experiment = 'son7kosularheuristickstar';
+
+select * from classificationprediction where experiment = 'son7kosularheuristickstar';
+
+select * from experimentkosu where experiment = 'son7kosularheuristickstar';
+
+select * from kazanc where experiment = 'son7kosularheuristickstar';
+
+
+
+
+
+select * from experimentresult;
+
+select * from bilinenkosu;
+
+drop table ExperimentKosu;
+
+create table ExperimentKosu (
+	experiment varchar(200) not null,
+	kosukodu numeric NOT NULL,
+	primary key (experiment,kosukodu)
+)
+
+CREATE INDEX ExperimentKosu_experiment on ExperimentKosu(experiment);
+
+CREATE INDEX ExperimentKosu_kosukodu on ExperimentKosu(kosukodu);
+
+
+alter table ExperimentKosu add CONSTRAINT fk_ExperimentKosu_experiment Foreign key (experiment) references ExperimentResult(experiment);
+
+
+delete from experimentkosu;
+
+select * from experimentkosu;
+
+
+
+select hipodromyeri,count(*) from (
+select hipodromyeri,a.kosukodu from atkosu a, experimentkosu b
+where a.kosukodu = b.kosukodu
+and b.experiment = 'test-son7kosu-nominal-kstar-experiment'
+group by hipodromyeri, a.kosukodu) c
+group by hipodromyeri
+order by hipodromyeri
+
+select * from AtKosu;
+
+select kosucinsdetayadi,count(*) count from (
+select kosucinsdetayadi,a.kosukodu from atkosu a, experimentkosu b
+where a.kosukodu = b.kosukodu
+and b.experiment = 'test-son7kosu-nominal-kstar-experiment'
+group by kosucinsdetayadi, a.kosukodu) c
+group by kosucinsdetayadi
+order by count desc
+
+
+
+
+select hipodromyeri,count(*) from (
+select hipodromyeri,a.kosukodu from atkosu a, bilinenkosu b
+where a.kosukodu = b.kosukodu
+and b.kazanc_id = 1943
+group by hipodromyeri, a.kosukodu) c
+group by hipodromyeri
+
+
+
+select kosucinsdetayadi,count(*) count from (
+select kosucinsdetayadi,a.kosukodu from atkosu a, bilinenkosu b
+where a.kosukodu = b.kosukodu
+and b.kazanc_id = 1943
+group by kosucinsdetayadi, a.kosukodu) c
+group by kosucinsdetayadi
+order by count desc
+
+
+

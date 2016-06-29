@@ -127,10 +127,10 @@ public class WekaEvaluation extends AbstractTask {
                 }
                 if (classification) {
                     ClassificationPredictions.createFromPredictionsOutput( getName(),
-                            predsBuff.toString(),Util.getInstancesClassValues(instances) ).save();
+                            predsBuff.toString(),Util.getInstancesClassValues(instances) ).deleteAndInsert();
                 } else {
                     RegressionPredictions.createFromPredictionsOutput
-                            ( getName() , predsBuff.toString() ).save();
+                            ( getName() , predsBuff.toString() ).deleteAndInsert();
 
                     KosuDAO kosuDAO = WeldGlobal.get(KosuDAO.class);
                     List<Kosu> kosular = kosuDAO.findbyExperimentWithRegressionPredictions(getName());
@@ -166,14 +166,14 @@ public class WekaEvaluation extends AbstractTask {
 //                long end = System.nanoTime();
 //                NominalEvaluationResults evaluationResults = new NominalEvaluationResults(getProjectName(),
 //                        getName() + "-" + i, instances.numInstances() , evaluation,analiz,(double)(end -start) / 1000000000.0 / 60.0,classification);
-//                // save evaluation results
+//                // deleteAndInsert evaluation results
 
 
 //                Serializer serializer = new Persister();
 //                File source = new File(filename);
 //                serializer.write(evaluationResults, source);
 
-                // save model
+                // deleteAndInsert model
 
                 Classifier classifierObj2 = Classifier.forName(classifier, weka.core.Utils.splitOptions(options));
                 classifierObj2.buildClassifier(instances);

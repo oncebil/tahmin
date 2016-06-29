@@ -22,7 +22,10 @@ public class RegressionPredictionDAO {
     private EntityManager manager;
 
     @Transactional
-    public void merge(List<RegressionPrediction> regressionPredictions) {
+    public void deleteAndInsert(List<RegressionPrediction> regressionPredictions) {
+        Query query = manager.createQuery( "delete from RegressionPrediction where experiment=:experiment ");
+        query.setParameter("experiment", regressionPredictions.get(0).getExperiment());
+        query.executeUpdate();
         for (RegressionPrediction regressionPrediction : regressionPredictions) {
             manager.merge(regressionPrediction);
         }

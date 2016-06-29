@@ -45,7 +45,7 @@ public class ExperimentAnalizTest  extends RegressionClassificationDataTestBase 
         // out of these we select from RegressionPrediction and AtKosu and appended 800 to kosu and at ids
         // and changed kosutarihi to 2001-03-28
         // And we created RegressionPrediction and AtKosu test rows.
-        // we will save them to test resources
+        // we will deleteAndInsert them to test resources
         // experiment in kullanildigi kosu araligi AND KOSUTARIHI<='2011-08-01' AND KOSUTARIHI>='2011-05-01'
 
         Connection jdbcConnection = DriverManager.getConnection(

@@ -4,7 +4,6 @@ import com.oncebil.tahmin.Base;
 import com.oncebil.tahmin.entity.RegressionPrediction;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.FileNotFoundException;
@@ -39,7 +38,7 @@ public class RegressionPredictionsTest {
 
     @Test
     public void testSave () {
-        predictions.save();
+        predictions.deleteAndInsert();
         RegressionPredictions loadedPredicitons = RegressionPredictions.loadWithExperiment("test-regression-predictions");
         Assert.assertTrue( loadedPredicitons.getRegressionPredictions().size() > 0);
     }

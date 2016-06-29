@@ -20,7 +20,11 @@ public class ClassificationPredictionDAO {
     private EntityManager manager;
 
     @Transactional
-    public void merge(List<ClassificationPrediction> classificationPredictions) {
+    public void deleteAndInsert(List<ClassificationPrediction> classificationPredictions) {
+
+        Query query = manager.createQuery( "delete from ClassificationPrediction where experiment=:experiment ");
+        query.setParameter("experiment", classificationPredictions.get(0).getExperiment());
+        query.executeUpdate();
         for (ClassificationPrediction classificationPrediction : classificationPredictions) {
             manager.merge(classificationPrediction);
         }

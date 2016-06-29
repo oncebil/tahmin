@@ -42,7 +42,7 @@ public class ProjectRunner {
 
 
     }
-    private void run() {
+    private void run() throws NoSuchFieldException {
 
         createProjectData();
         Project project = Project.loadProject("son7kosular-heuristic-analysis");
@@ -52,7 +52,7 @@ public class ProjectRunner {
 
 
     @Transactional
-    void createProjectData() {
+    void createProjectData() throws NoSuchFieldException {
         String sql = "   select * from AtKosu where KosuKodu in (\n" +
                 "    select B.kosukodu from\n" +
                 "    (select kosukodu,count(*) as atcount from AtKosu group by kosukodu) A,\n" +
@@ -60,9 +60,10 @@ public class ProjectRunner {
                 "    where A.kosukodu = B.kosukodu\n" +
                 "    AND A.atcount = B.atcount " +
                 "    AND A.atcount > 6  AND A.atcount < 10)\n" +
-                "    AND KOSUTARIHI<='2011-08-01'\n" +
-                "    AND KOSUTARIHI>='2011-05-01'\n" +
+                "    AND KOSUTARIHI<='2012-01-01'\n" +
+                "    AND KOSUTARIHI>='2011-01-01'\n" +
                 "    AND BirinciIleDereceFarki is not null" +
+                //"    AND kosucinsdetayadi NOT IN ('Handikap 16') " +
                 "    order by KosuKodu asc,SonucNo asc ";
 
         Query query = manager.createNativeQuery(sql, AtKosu.class);
@@ -72,6 +73,7 @@ public class ProjectRunner {
         // relativeSon7BitirisOrtalamasi daha da kotu oldU
         // addd additional relativeSon7BitirisOrtalamasi daha da bok
         List<Kosu> kosular = Kosu.createKosular(WeldGlobal.get(AtKosuDAO.class).getAtKosularBySql(sql));
+        Kosu.addValuePositionInKosu(kosular,AtKosu.class.getDeclaredField("son7bitirisOrtalamasi"),"relativeson7bitirisOrtalamasi", Kosu.Sort.ASC);
         List<Util.Row> values = new ArrayList<>();
         for (Kosu kosu : kosular) {
             int atSayisi = kosu.getAtlar().size();
@@ -83,6 +85,7 @@ public class ProjectRunner {
                         atKosu.getSon7bitirisOrtalamasi().doubleValue(),
                         atKosu.getSon7DereceFarkiOrtalamasi().doubleValue(),
                         atKosu.getSon3DereceFarkiOrtalamasi().doubleValue(),
+
                         (atKosu.getSONUCNO() == 1) ? "Y" : "N"
                 }),weight));
             }
@@ -94,6 +97,7 @@ public class ProjectRunner {
         atts.addElement(new Attribute("Son7BitirisOrtalamasi") );
         atts.addElement(new Attribute("Son7DereceFarkiOrtalamasi") );
         atts.addElement(new Attribute("Son3DereceFarkiOrtalamasi") );
+
         FastVector attVals = new FastVector();
         attVals.addElement("Y");
         attVals.addElement("N");

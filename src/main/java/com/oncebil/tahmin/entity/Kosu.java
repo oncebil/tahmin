@@ -109,7 +109,7 @@ public class Kosu {
         return kosulist;
     }
 
-    enum Sort
+    public enum Sort
     {
         ASC,
         DESC,

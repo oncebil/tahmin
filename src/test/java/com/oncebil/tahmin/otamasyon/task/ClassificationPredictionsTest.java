@@ -12,7 +12,6 @@ import weka.core.Instances;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -53,7 +52,7 @@ public class ClassificationPredictionsTest {
 
     @Test
     public void testSavePredictions() {
-        predictions.save();
+        predictions.deleteAndInsert();
         ClassificationPredictions loadedPredicitons = ClassificationPredictions.loadWithExperiment("test-classification-predictions");
         Assert.assertTrue( loadedPredicitons.classificationPredictions.size()>0);
         Assert.assertTrue( loadedPredicitons.classificationPredictions.get(0).getDistributions().size() > 0);

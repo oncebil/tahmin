@@ -47,9 +47,9 @@ public class RegressionPredictions {
         return predictions;
     }
 
-    public void save() {
+    public void deleteAndInsert() {
         logger.info("Saving predictions experiment=" + experimentName + " size=" + regressionPredictions.size());
-        dao.merge(getRegressionPredictions());
+        dao.deleteAndInsert(getRegressionPredictions());
     }
 
     public static RegressionPredictions loadWithExperiment(String experiment) {
